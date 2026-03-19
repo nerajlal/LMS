@@ -39,11 +39,8 @@ Route::middleware('auth')->group(function () {
     // Admissions
     Route::resource('admissions', AdmissionController::class)->only(['index', 'create', 'store']);
 
-    // Enrollments
-    Route::resource('enrollments', EnrollmentController::class)->only(['index']);
-    Route::get('/enrollments', function () {
-        return Inertia::render('Admissions/Index');
-    })->name('enrollments.index');
+    // Enrollments (Aliases for Admissions)
+    Route::get('/enrollments', [AdmissionController::class, 'index'])->name('enrollments.index');
 
     // Live Classes
     Route::get('/live-classes', [LiveClassController::class, 'index'])->name('live-classes.index');
