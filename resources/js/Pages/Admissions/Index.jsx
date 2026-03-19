@@ -34,36 +34,36 @@ export default function AdmissionsIndex({ auth, admissions }) {
             <div className="container-fluid py-4">
                 <div className="d-flex align-items-center justify-content-between mb-4">
                     <div>
-                        <h1 className="fw-bold text-slate-800 mb-1" style={{ fontSize: '28px' }}>My Admissions</h1>
-                        <p className="text-muted mb-0">Track your course application status and history</p>
+                        <h1 className="fw-bold mb-1" style={{ fontSize: '28px', color: '#1e293b' }}>My Admissions</h1>
+                        <p className="mb-0" style={{ color: '#64748b' }}>Track your course application status and history</p>
                     </div>
                 </div>
 
-                <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div className="card border-0 shadow-sm rounded-4 overflow-hidden" style={{ background: '#fff' }}>
                     <div className="card-body p-0">
                         {list.length > 0 ? (
                             <div className="table-responsive">
                                 <table className="table table-hover align-middle mb-0">
-                                    <thead className="bg-light">
+                                    <thead style={{ background: '#f8fafc' }}>
                                         <tr>
-                                            <th className="ps-4 py-3 text-uppercase text-muted fw-bold" style={{ fontSize: '11px' }}>Course Name</th>
-                                            <th className="py-3 text-uppercase text-muted fw-bold" style={{ fontSize: '11px' }}>Batch</th>
-                                            <th className="py-3 text-uppercase text-muted fw-bold" style={{ fontSize: '11px' }}>Applied Date</th>
-                                            <th className="py-3 text-uppercase text-muted fw-bold" style={{ fontSize: '11px' }}>Status</th>
-                                            <th className="pe-4 py-3 text-end text-uppercase text-muted fw-bold" style={{ fontSize: '11px' }}>Details</th>
+                                            <th className="ps-4 py-3 text-uppercase fw-bold" style={{ fontSize: '11px', color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Course Name</th>
+                                            <th className="py-3 text-uppercase fw-bold" style={{ fontSize: '11px', color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Batch</th>
+                                            <th className="py-3 text-uppercase fw-bold" style={{ fontSize: '11px', color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Applied Date</th>
+                                            <th className="py-3 text-uppercase fw-bold" style={{ fontSize: '11px', color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Status</th>
+                                            <th className="pe-4 py-3 text-end text-uppercase fw-bold" style={{ fontSize: '11px', color: '#64748b', borderBottom: '1px solid #e2e8f0' }}>Details</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {list.map((item) => (
-                                            <tr key={item.id} style={{ transition: 'all 0.2s' }}>
+                                            <tr key={item.id} style={{ transition: 'all 0.2s', borderBottom: '1px solid #f1f5f9' }}>
                                                 <td className="ps-4 py-3">
-                                                    <div className="fw-bold text-slate-700">{item.course}</div>
-                                                    <div className="text-muted small">Application ID: #ADM-{item.id.toString().padStart(5, '0')}</div>
+                                                    <div className="fw-bold" style={{ color: '#1e293b' }}>{item.course}</div>
+                                                    <div style={{ color: '#94a3b8', fontSize: '12px' }}>Application ID: #ADM-{item.id.toString().padStart(5, '0')}</div>
                                                 </td>
-                                                <td className="py-3 text-slate-600 fw-medium">
-                                                    {item.batch || <span className="text-muted italic small">Not Assigned</span>}
+                                                <td className="py-3 fw-medium" style={{ color: '#475569' }}>
+                                                    {item.batch || <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '12px' }}>Not Assigned</span>}
                                                 </td>
-                                                <td className="py-3 text-slate-500">
+                                                <td className="py-3" style={{ color: '#64748b' }}>
                                                     {item.submitted_at}
                                                 </td>
                                                 <td className="py-3">
@@ -82,10 +82,10 @@ export default function AdmissionsIndex({ auth, admissions }) {
                         ) : (
                             <div className="text-center py-5">
                                 <div className="mb-3">
-                                    <i className="bi bi-journal-text text-muted display-4"></i>
+                                    <i className="bi bi-journal-text display-4" style={{ color: '#94a3b8' }}></i>
                                 </div>
-                                <h4 className="fw-bold text-slate-700">No Admissions Found</h4>
-                                <p className="text-muted mb-4">You haven't applied for any courses yet.</p>
+                                <h4 className="fw-bold" style={{ color: '#1e293b' }}>No Admissions Found</h4>
+                                <p className="mb-4" style={{ color: '#64748b' }}>You haven't applied for any courses yet.</p>
                                 <Link 
                                     href={route('courses.index')} 
                                     className="btn btn-primary rounded-pill px-4"

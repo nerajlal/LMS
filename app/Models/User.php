@@ -48,4 +48,24 @@ class User extends Authenticatable
             'is_admin' => 'boolean',
         ];
     }
+
+    public function admissions()
+    {
+        return $this->hasMany(\App\Models\Admission::class);
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(\App\Models\Enrollment::class);
+    }
+
+    public function fees()
+    {
+        return $this->hasMany(\App\Models\Fee::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\Payment::class);
+    }
 }
