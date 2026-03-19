@@ -108,19 +108,25 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // ── Fee records for student ──────────────────
-        if (isset($courseModels[0])) {
-            Fee::firstOrCreate(
-                ['user_id' => $student->id, 'course_id' => $courseModels[0]->id],
-                [
-                    'user_id' => $student->id,
-                    'course_id' => $courseModels[0]->id,
-                    'total_amount' => 14999,
-                    'paid_amount' => 5000,
-                    'due_date' => now()->addDays(30),
-                    'status' => 'partially_paid',
-                ]
-            );
+        // Seed Live Classes & Materials
+        foreach ($courseModels as $course) {
+            \App\Models\LiveClass::create([
+                'course_id' => $course->id,
+                'title' => 'Advanced Session: ' . $course->title,
+                'instructor_name' => 'Dr. Arpit Rao',
+                'start_time' => now()->addDays(2)->format('Y-m-d 16:00:00'),
+                'duration' => '90 mins',
+                'zoom_link' => 'https://zoom.us/j/123456789',
+                'status' => 'upcoming',
+            ]);
+
+            \App\Models\StudyMaterial::create([
+                'course_id' => $course->id,
+                'title' => 'Mastering ' . $course->title . '.pdf',
+                'file_path' => '/storage/materials/sample.pdf',
+                'file_type' => 'PDF',
+                'file_size' => '2.4 MB',
+            ]);
         }
 
         $this->command->info('✅ EduLMS demo data seeded successfully!');

@@ -8,6 +8,8 @@ use App\Models\Course;
 use App\Models\Admission;
 use App\Models\Payment;
 use App\Models\Fee;
+use App\Models\LiveClass;
+use App\Models\StudyMaterial;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -21,6 +23,8 @@ class AdminController extends Controller
             'pending_admissions' => Admission::where('status', 'pending')->count(),
             'total_revenue'    => Payment::where('status', 'success')->sum('amount'),
             'total_fees_due'   => Fee::where('status', 'pending')->sum('total_amount'),
+            'live_classes_count' => LiveClass::count(),
+            'study_materials_count' => StudyMaterial::count(),
         ];
 
         $recentAdmissions = Admission::with(['user', 'course'])

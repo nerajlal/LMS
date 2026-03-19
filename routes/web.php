@@ -63,6 +63,8 @@ use App\Http\Controllers\Admin\AdminCourseController;
 use App\Http\Controllers\Admin\AdminStudentController;
 use App\Http\Controllers\Admin\AdminAdmissionController;
 use App\Http\Controllers\Admin\AdminFeeController;
+use App\Http\Controllers\Admin\AdminLiveClassController;
+use App\Http\Controllers\Admin\AdminStudyMaterialController;
 use App\Http\Middleware\AdminMiddleware;
 
 Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
@@ -89,6 +91,12 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     // Fees
     Route::get('fees', [AdminFeeController::class, 'index'])->name('fees.index');
     Route::post('fees/{fee}/mark-paid', [AdminFeeController::class, 'markPaid'])->name('fees.markPaid');
+
+    // Live Classes
+    Route::resource('live-classes', AdminLiveClassController::class);
+
+    // Study Materials
+    Route::resource('study-materials', AdminStudyMaterialController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -11,28 +11,7 @@ const cardStyle = {
 };
 
 export default function LiveClassesIndex({ auth, classes }) {
-    const liveClasses = classes || [
-        {
-            id: 1,
-            title: 'Mastering Advanced React Hooks & State Management',
-            course: 'Full Stack Web Development',
-            instructor: 'Dr. Arpit Rao',
-            start_time: '2026-03-20 16:00:00',
-            duration: '90 mins',
-            status: 'upcoming',
-            zoom_link: 'https://zoom.us/j/123456789',
-        },
-        {
-            id: 2,
-            title: 'Statistical Modeling & Hypothesis Testing',
-            course: 'Data Science & ML',
-            instructor: 'Prof. Sneha Sharma',
-            start_time: '2026-03-21 10:30:00',
-            duration: '120 mins',
-            status: 'upcoming',
-            zoom_link: 'https://zoom.us/j/987654321',
-        }
-    ];
+    const liveClasses = classes || [];
 
     return (
         <LmsLayout title="Live Class Schedule">
@@ -49,7 +28,7 @@ export default function LiveClassesIndex({ auth, classes }) {
                         <div style={cardStyle} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
                                 <div style={{ padding: '6px 14px', background: '#eff6ff', color: '#2563eb', borderRadius: '30px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                    {cls.course}
+                                    {cls.course?.title || 'Unknown Course'}
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontSize: '13px', fontWeight: 700 }}>
                                     <span style={{ width: '8px', height: '8px', background: '#10b981', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s infinite' }}></span>
@@ -62,7 +41,7 @@ export default function LiveClassesIndex({ auth, classes }) {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#64748b', fontSize: '14px' }}>
                                     <i className="bi bi-person-circle" style={{ color: '#2563eb' }}></i>
-                                    <span>Instructor: <strong style={{ color: '#1e293b' }}>{cls.instructor}</strong></span>
+                                    <span>Instructor: <strong style={{ color: '#1e293b' }}>{cls.instructor_name}</strong></span>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#64748b', fontSize: '14px' }}>
                                     <i className="bi bi-calendar3" style={{ color: '#2563eb' }}></i>

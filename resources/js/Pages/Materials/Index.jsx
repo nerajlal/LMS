@@ -10,11 +10,7 @@ const cardStyle = {
 };
 
 export default function MaterialsIndex({ auth, materials }) {
-    const allMaterials = materials || [
-        { id: 1, title: 'Introduction to React.pdf', type: 'PDF', size: '2.4 MB', course: 'Full Stack Web Development' },
-        { id: 2, title: 'Data Cleaning Handbook.docx', type: 'DOCX', size: '1.1 MB', course: 'Data Science & ML' },
-        { id: 3, title: 'UI Design Assets.zip', type: 'ZIP', size: '15.8 MB', course: 'UI/UX Design' },
-    ];
+    const allMaterials = materials || [];
 
     const getIcon = (type) => {
         switch(type) {
@@ -45,7 +41,7 @@ export default function MaterialsIndex({ auth, materials }) {
                                     </div>
                                     <div style={{ flex: 1, overflow: 'hidden' }}>
                                         <div style={{ fontSize: '15px', fontWeight: 700, color: '#1e293b', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title}</div>
-                                        <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '12px' }}>{item.course}</div>
+                                        <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '12px' }}>{item.course?.title || 'Unknown Course'}</div>
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                             <span style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8' }}>{item.type} • {item.size}</span>
                                             <button style={{ padding: '6px 14px', background: '#f1f5f9', border: 'none', borderRadius: '8px', color: '#1e293b', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}>

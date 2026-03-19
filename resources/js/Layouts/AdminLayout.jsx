@@ -4,6 +4,8 @@ import { Link, usePage } from '@inertiajs/react';
 const ADMIN_NAV = [
     { label: 'Dashboard',   icon: 'bi-speedometer2',      href: 'admin.dashboard' },
     { label: 'Courses',     icon: 'bi-collection-play',   href: 'admin.courses.index' },
+    { label: 'Live Classes', icon: 'bi-camera-video',     href: 'admin.live-classes.index' },
+    { label: 'Resources',   icon: 'bi-file-earmark-text', href: 'admin.study-materials.index' },
     { label: 'Students',    icon: 'bi-people',             href: 'admin.students.index' },
     { label: 'Admissions',  icon: 'bi-person-check',       href: 'admin.admissions.index' },
     { label: 'Fees',        icon: 'bi-cash-stack',         href: 'admin.fees.index' },

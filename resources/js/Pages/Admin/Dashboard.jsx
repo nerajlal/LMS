@@ -59,8 +59,14 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
                 <div className="col-6 col-lg-3">
                     <StatCard icon="bi-person-check" label="Admissions" value={stats?.total_admissions ?? 0} color="#10b981" sub={`${stats?.pending_admissions ?? 0} pending`} />
                 </div>
-                <div className="col-6 col-lg-3">
+                <div className="col-12 col-lg-3">
                     <StatCard icon="bi-cash-coin" label="Total Revenue" value={`₹${(stats?.total_revenue ?? 0).toLocaleString()}`} color="#f59e0b" />
+                </div>
+                <div className="col-6 col-lg-3 pt-3 pt-lg-0">
+                    <StatCard icon="bi-camera-video" label="Live Classes" value={stats?.live_classes_count ?? 0} color="#ec4899" />
+                </div>
+                <div className="col-6 col-lg-3 pt-3 pt-lg-0">
+                    <StatCard icon="bi-file-earmark-text" label="Study Resources" value={stats?.study_materials_count ?? 0} color="#6366f1" />
                 </div>
             </div>
 
