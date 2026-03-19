@@ -8,6 +8,7 @@ use App\Http\Controllers\LiveClassController;
 use App\Http\Controllers\FeeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StudyMaterialController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,9 +24,7 @@ Route::get('/', function () {
 });
 
 // Dashboard
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Authenticated routes
 Route::middleware('auth')->group(function () {
@@ -47,24 +46,52 @@ Route::middleware('auth')->group(function () {
     })->name('enrollments.index');
 
     // Live Classes
-    Route::get('/live-classes', function () {
-        return Inertia::render('LiveClasses/Index');
-    })->name('live-classes.index');
+    Route::get('/live-classes', [LiveClassController::class, 'index'])->name('live-classes.index');
 
     // Study Materials
-    Route::get('/materials', function () {
-        return Inertia::render('Materials/Index');
-    })->name('materials.index');
+    Route::get('/materials', [StudyMaterialController::class, 'index'])->name('materials.index');
 
     // Fees
-    Route::get('/fees', function () {
-        return Inertia::render('Fees/Index');
-    })->name('fees.index');
+    Route::get('/fees', [FeeController::class, 'index'])->name('fees.index');
 
     // Payments (PhonePe)
     Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('/payments',       [PaymentController::class, 'store'])->name('payments.store');
     Route::get('/payments/callback', [PaymentController::class, 'callback'])->name('payments.callback');
+});
+
+// ── Admin Routes ────────────────────────────────────────────────────────────────
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminCourseController;
+use App\Http\Controllers\Admin\AdminStudentController;
+use App\Http\Controllers\Admin\AdminAdmissionController;
+use App\Http\Controllers\Admin\AdminFeeController;
+use App\Http\Middleware\AdminMiddleware;
+
+Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/',          [AdminController::class, 'index'])->name('dashboard');
+
+    // Courses CRUD
+    Route::resource('courses', AdminCourseController::class)->names([
+        'index'   => 'courses.index',
+        'create'  => 'courses.create',
+        'store'   => 'courses.store',
+        'edit'    => 'courses.edit',
+        'update'  => 'courses.update',
+        'destroy' => 'courses.destroy',
+    ]);
+
+    // Students
+    Route::get('students', [AdminStudentController::class, 'index'])->name('students.index');
+
+    // Admissions
+    Route::get('admissions', [AdminAdmissionController::class, 'index'])->name('admissions.index');
+    Route::post('admissions/{admission}/approve', [AdminAdmissionController::class, 'approve'])->name('admissions.approve');
+    Route::post('admissions/{admission}/reject',  [AdminAdmissionController::class, 'reject'])->name('admissions.reject');
+
+    // Fees
+    Route::get('fees', [AdminFeeController::class, 'index'])->name('fees.index');
+    Route::post('fees/{fee}/mark-paid', [AdminFeeController::class, 'markPaid'])->name('fees.markPaid');
 });
 
 require __DIR__.'/auth.php';

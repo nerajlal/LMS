@@ -11,7 +11,11 @@ class FeeController extends Controller
      */
     public function index()
     {
-        //
+        $fees = \App\Models\Fee::with('course')
+            ->where('user_id', auth()->id())
+            ->get();
+            
+        return \Inertia\Inertia::render('Fees/Index', compact('fees'));
     }
 
     /**

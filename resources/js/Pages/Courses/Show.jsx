@@ -2,140 +2,237 @@ import LmsLayout from '@/Layouts/LmsLayout';
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 
-const card = {
+const cardStyle = {
     background: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05)',
+    borderRadius: '16px',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+    border: '1px solid #f1f5f9',
 };
 
-export default function CourseShow({ auth, course }) {
+const TabButton = ({ active, children, onClick }) => (
+    <button onClick={onClick} style={{
+        padding: '12px 24px', background: 'transparent', border: 'none', cursor: 'pointer',
+        color: active ? '#2563eb' : '#64748b',
+        fontWeight: active ? 700 : 500,
+        fontSize: '14px',
+        borderBottom: active ? '3px solid #2563eb' : '3px solid transparent',
+        transition: 'all 0.2s',
+        marginBottom: '-1px',
+    }}>
+        {children}
+    </button>
+);
+
+export default function CourseShow({ auth, course, isEnrolled }) {
     const [activeTab, setActiveTab] = useState('overview');
-    const c = course || {
-        id: 1,
-        title: 'Full Stack Web Development',
-        description: 'A comprehensive course covering everything from HTML/CSS basics to advanced React, Node.js, and database management. Industry-ready full stack development skills.',
-        instructor_name: 'Prof. Rao',
-        price: 12000,
-        lessons: [
-            { id: 1, title: 'Introduction to HTML & CSS', video_url: 'https://www.youtube.com/embed/UB1O30fR-EE', order: 1 },
-            { id: 2, title: 'JavaScript Fundamentals', video_url: 'https://www.youtube.com/embed/W6NZfCO5SIk', order: 2 },
-            { id: 3, title: 'React for Beginners', video_url: 'https://www.youtube.com/embed/Ke90Tje7VS0', order: 3 },
-        ],
-    };
-    const [activeLesson, setActiveLesson] = useState(c.lessons?.[0] || null);
+    const [activeLesson, setActiveLesson] = useState(isEnrolled ? (course.lessons?.[0] || null) : null);
+
+    const lessons = course.lessons || [];
 
     return (
-        <LmsLayout title={c.title}>
-            <Head title={c.title} />
+        <LmsLayout title={course.title}>
+            <Head title={`${course.title} - Course Details`} />
+            
             <div className="row g-4">
-                {/* Main */}
-                <div className="col-12 col-lg-8">
-                    {/* Video */}
-                    {activeLesson && (
-                        <div style={{ ...card, marginBottom: '20px', overflow: 'hidden' }}>
-                            <iframe
-                                src={activeLesson.video_url}
-                                title={activeLesson.title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                style={{ width: '100%', height: '380px', border: 'none', display: 'block' }}
-                            ></iframe>
-                        </div>
-                    )}
-
-                    {/* Course info */}
-                    <div style={{ ...card, padding: '20px' }}>
-                        <h1 style={{ color: '#1f2937', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>{c.title}</h1>
-                        <div style={{ color: '#6b7280', fontSize: '13px', marginBottom: '16px' }}>
-                            <i className="bi bi-person-circle me-1"></i> {c.instructor_name}
-                        </div>
-
-                        {/* Tabs */}
-                        <div style={{ borderBottom: '1px solid #e5e7eb', marginBottom: '20px', display: 'flex', gap: '0' }}>
-                            {['overview', 'curriculum', 'materials'].map(tab => (
-                                <button key={tab} onClick={() => setActiveTab(tab)} style={{
-                                    padding: '10px 16px', background: 'transparent', border: 'none', cursor: 'pointer',
-                                    color: activeTab === tab ? '#2563eb' : '#6b7280',
-                                    fontWeight: activeTab === tab ? 600 : 400,
-                                    textTransform: 'capitalize', fontSize: '13px',
-                                    borderBottom: activeTab === tab ? '2px solid #2563eb' : '2px solid transparent',
-                                    marginBottom: '-1px',
-                                    transition: 'all 0.15s',
-                                }}>
-                                    {tab}
-                                </button>
-                            ))}
-                        </div>
-
-                        {activeTab === 'overview' && (
-                            <p style={{ color: '#374151', fontSize: '14px', lineHeight: 1.8, margin: 0 }}>{c.description}</p>
-                        )}
-
-                        {activeTab === 'curriculum' && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {c.lessons?.map((lesson, i) => (
-                                    <button key={lesson.id} onClick={() => setActiveLesson(lesson)} style={{
-                                        display: 'flex', alignItems: 'center', gap: '12px',
-                                        padding: '12px 14px', borderRadius: '6px', cursor: 'pointer', textAlign: 'left',
-                                        background: activeLesson?.id === lesson.id ? '#eff6ff' : '#f9fafb',
-                                        border: activeLesson?.id === lesson.id ? '1px solid #bfdbfe' : '1px solid #e5e7eb',
-                                        transition: 'all 0.15s',
-                                    }}>
-                                        <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: activeLesson?.id === lesson.id ? '#2563eb' : '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                            <i className="bi bi-play-fill" style={{ color: activeLesson?.id === lesson.id ? '#fff' : '#9ca3af', fontSize: '11px' }}></i>
-                                        </div>
-                                        <span style={{ color: '#1f2937', fontSize: '13px', fontWeight: 500 }}>Lesson {i + 1}: {lesson.title}</span>
-                                    </button>
-                                ))}
+                {/* Main Content Area */}
+                <div className="col-12 col-xl-8">
+                    {/* Video Player Section */}
+                    <div style={{ ...cardStyle, overflow: 'hidden', marginBottom: '32px', background: '#000' }}>
+                        {isEnrolled && activeLesson ? (
+                            <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+                                <iframe
+                                    src={`${activeLesson.video_url}?autoplay=0&rel=0`}
+                                    title={activeLesson.title}
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        ) : (
+                            <div style={{ height: '400px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', background: 'linear-gradient(45deg, #1e293b, #0f172a)', color: '#fff', padding: '40px' }}>
+                                <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px' }}>
+                                    <i className="bi bi-lock-fill" style={{ fontSize: '32px', color: '#f59e0b' }}></i>
+                                </div>
+                                <h3 style={{ fontSize: '22px', fontWeight: 800, marginBottom: '12px' }}>Content Locked</h3>
+                                <p style={{ fontSize: '15px', color: '#94a3b8', maxWidth: '400px', marginBottom: '24px' }}>
+                                    You need to be enrolled in this course to access the video lessons and study materials.
+                                </p>
+                                <Link href={route('admissions.create')} style={{ background: '#2563eb', color: '#fff', padding: '12px 32px', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, boxShadow: '0 10px 15px -3px rgba(37,99,235,0.4)' }}>
+                                    Enroll to Unlock
+                                </Link>
                             </div>
                         )}
-
-                        {activeTab === 'materials' && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {['Week 1 Notes.pdf', 'Week 2 Assignments.pdf', 'Reference Book.pdf'].map((f, i) => (
-                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '6px', background: '#f9fafb', border: '1px solid #e5e7eb' }}>
-                                        <i className="bi bi-file-earmark-pdf-fill" style={{ color: '#ef4444', fontSize: '20px' }}></i>
-                                        <span style={{ color: '#1f2937', fontSize: '13px', flex: 1 }}>{f}</span>
-                                        <a href="#" style={{ padding: '5px 12px', background: '#eff6ff', border: '1px solid #bfdbfe', color: '#2563eb', borderRadius: '5px', fontSize: '12px', textDecoration: 'none', fontWeight: 500 }}>
-                                            <i className="bi bi-download me-1"></i> Download
-                                        </a>
-                                    </div>
-                                ))}
+                        {isEnrolled && activeLesson && (
+                            <div style={{ padding: '16px 24px', background: '#fff', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>
+                                    <span style={{ color: '#64748b', fontWeight: 500, marginRight: '8px' }}>Now Playing:</span> 
+                                    {activeLesson.title}
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>
+                                    <i className="bi bi-clock me-1"></i> 14:20
+                                </div>
                             </div>
                         )}
                     </div>
+
+                    {/* Course Info Tabs */}
+                    <div style={{ ...cardStyle, padding: '0', overflow: 'hidden' }}>
+                        <div style={{ borderBottom: '1px solid #f1f5f9', padding: '0 24px', display: 'flex' }}>
+                            <TabButton active={activeTab === 'overview'} onClick={() => setActiveTab('overview')}>Overview</TabButton>
+                            <TabButton active={activeTab === 'curriculum'} onClick={() => setActiveTab('curriculum')}>Curriculum ({lessons.length})</TabButton>
+                            <TabButton active={activeTab === 'instructor'} onClick={() => setActiveTab('instructor')}>Instructor</TabButton>
+                        </div>
+
+                        <div style={{ padding: '32px' }}>
+                            {activeTab === 'overview' && (
+                                <div>
+                                    <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', marginBottom: '16px' }}>About this course</h3>
+                                    <p style={{ fontSize: '15px', lineHeight: '1.8', color: '#475569', marginBottom: '24px' }}>
+                                        {course.description || "No description available for this course."}
+                                    </p>
+                                    <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#1e293b', marginBottom: '12px' }}>What you'll learn</h4>
+                                    <div className="row g-3">
+                                        {["Master industry-standard tools", "Build real-world projects", "Hands-on coding exercises", "Lifetime access to updates"].map((item, i) => (
+                                            <div key={i} className="col-md-6">
+                                                <div style={{ display: 'flex', gap: '10px', alignItems: 'start', fontSize: '14px', color: '#475569' }}>
+                                                    <i className="bi bi-check-circle-fill" style={{ color: '#10b981', marginTop: '2px' }}></i>
+                                                    <span>{item}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'curriculum' && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {lessons.length === 0 ? (
+                                        <div style={{ textAlign: 'center', padding: '40px', color: '#94a3b8' }}>No lessons found for this course.</div>
+                                    ) : (
+                                        lessons.map((lesson, idx) => (
+                                            <div 
+                                                key={lesson.id}
+                                                onClick={() => isEnrolled && setActiveLesson(lesson)}
+                                                style={{
+                                                    display: 'flex', alignItems: 'center', gap: '16px',
+                                                    padding: '16px 20px', borderRadius: '12px',
+                                                    background: activeLesson?.id === lesson.id ? '#eff6ff' : '#f8fafc',
+                                                    border: activeLesson?.id === lesson.id ? '1px solid #bfdbfe' : '1px solid #f1f5f9',
+                                                    cursor: isEnrolled ? 'pointer' : 'default',
+                                                    transition: 'all 0.2s',
+                                                }}
+                                            >
+                                                <div style={{ 
+                                                    width: '32px', height: '32px', borderRadius: '50%', 
+                                                    background: activeLesson?.id === lesson.id ? '#2563eb' : '#fff',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    flexShrink: 0, boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                                    border: activeLesson?.id === lesson.id ? 'none' : '1px solid #e2e8f0'
+                                                }}>
+                                                    {isEnrolled ? (
+                                                        <i className={`bi ${activeLesson?.id === lesson.id ? 'bi-play-fill' : 'bi-play'}`} style={{ color: activeLesson?.id === lesson.id ? '#fff' : '#2563eb', fontSize: '14px' }}></i>
+                                                    ) : (
+                                                        <i className="bi bi-lock-fill" style={{ color: '#94a3b8', fontSize: '12px' }}></i>
+                                                    )}
+                                                </div>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ fontSize: '14px', fontWeight: 700, color: '#1e293b' }}>{idx + 1}. {lesson.title}</div>
+                                                    <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>Video Lesson • 12:45</div>
+                                                </div>
+                                                {isEnrolled && activeLesson?.id === lesson.id && (
+                                                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#2563eb', background: '#fff', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Playing</span>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            )}
+
+                            {activeTab === 'instructor' && (
+                                <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                                    <div style={{ width: '120px', height: '120px', borderRadius: '20px', background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                        <i className="bi bi-person-fill" style={{ fontSize: '64px', color: '#3b82f6' }}></i>
+                                    </div>
+                                    <div>
+                                        <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#1e293b', marginBottom: '4px' }}>{course.instructor_name || "Expert Instructor"}</h3>
+                                        <div style={{ color: '#2563eb', fontSize: '13px', fontWeight: 700, marginBottom: '12px' }}>Senior Developer & Educator</div>
+                                        <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.6', maxWidth: '400px' }}>
+                                            Join the most popular instructor on EduLMS. With over 10 years of experience in technical education, {course.instructor_name} makes complex topics easy to understand.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
-                {/* Sidebar */}
-                <div className="col-12 col-lg-4">
-                    <div style={{ ...card, padding: '20px', position: 'sticky', top: '80px' }}>
-                        <div style={{ color: '#1f2937', fontSize: '26px', fontWeight: 700, marginBottom: '4px' }}>₹{c.price?.toLocaleString()}</div>
-                        <div style={{ color: '#6b7280', fontSize: '12px', marginBottom: '16px' }}>One-time payment · Lifetime access</div>
+                {/* Sidebar Details Area */}
+                <div className="col-12 col-xl-4">
+                    <div style={{ ...cardStyle, padding: '32px', position: 'sticky', top: '96px' }}>
+                        <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '20px', marginBottom: '24px', border: '1px solid #f1f5f9' }}>
+                            <div style={{ color: '#64748b', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '0.05em' }}>Course Price</div>
+                            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                                <span style={{ fontSize: '32px', fontWeight: 900, color: '#1e293b' }}>₹{course.price?.toLocaleString()}</span>
+                                <span style={{ fontSize: '14px', color: '#94a3b8', textDecoration: 'line-through' }}>₹{(course.price * 1.5).toLocaleString()}</span>
+                            </div>
+                            <div style={{ fontSize: '12px', color: '#ef4444', fontWeight: 700, marginTop: '4px' }}>
+                                <i className="bi bi-lightning-charge-fill me-1"></i> Limited time offer: 30% Off
+                            </div>
+                        </div>
 
-                        <Link href={route('admissions.create')} style={{
-                            display: 'block', textAlign: 'center', padding: '12px',
-                            background: '#2563eb', color: '#fff', borderRadius: '6px',
-                            textDecoration: 'none', fontSize: '14px', fontWeight: 600, marginBottom: '10px',
-                        }}>Enroll Now</Link>
+                        {!isEnrolled ? (
+                            <Link href={route('admissions.create')} style={{ 
+                                display: 'block', textAlign: 'center', padding: '16px', background: '#2563eb', 
+                                color: '#fff', borderRadius: '12px', textDecoration: 'none', fontWeight: 800, 
+                                fontSize: '16px', marginBottom: '16px', boxShadow: '0 10px 15px -3px rgba(37,99,235,0.3)',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-2px)'}
+                            onMouseLeave={e => e.currentTarget.style.transform = ''}
+                            >
+                                Enroll in Course
+                            </Link>
+                        ) : (
+                            <div style={{ 
+                                textAlign: 'center', padding: '16px', background: '#f0fdf4', 
+                                color: '#15803d', borderRadius: '12px', fontWeight: 800, 
+                                fontSize: '14px', marginBottom: '16px', border: '1px solid #bbf7d0'
+                            }}>
+                                <i className="bi bi-patch-check-fill me-2"></i> Successfully Enrolled
+                            </div>
+                        )}
 
-                        <a href="#" style={{ display: 'block', textAlign: 'center', padding: '10px', background: '#f3f4f6', border: '1px solid #e5e7eb', color: '#374151', borderRadius: '6px', textDecoration: 'none', fontSize: '13px' }}>
-                            <i className="bi bi-whatsapp me-1"></i> Contact Us
-                        </a>
+                        <div style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', marginBottom: '24px', fontWeight: 500 }}>
+                            <i className="bi bi-arrow-counterclockwise"></i> 30-Day Money-Back Guarantee
+                        </div>
 
-                        <hr style={{ borderColor: '#e5e7eb', margin: '16px 0' }} />
+                        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '24px' }}>
+                            <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#1e293b', marginBottom: '16px' }}>Course Includes:</h4>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                                {[
+                                    { icon: 'bi-collection-play', text: `${lessons.length} HD video lessons` },
+                                    { icon: 'bi-file-earmark-arrow-down', text: '5 Downloadable resources' },
+                                    { icon: 'bi-patch-check', text: 'Certificate of completion' },
+                                    { icon: 'bi-pc-display', text: 'Access on mobile and TV' },
+                                    { icon: 'bi-infinity', text: 'Full lifetime access' },
+                                ].map((item, i) => (
+                                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#475569', fontSize: '13px', fontWeight: 500 }}>
+                                        <i className={`bi ${item.icon}`} style={{ color: '#2563eb', fontSize: '16px', width: '20px', textAlign: 'center' }}></i>
+                                        {item.text}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            {[
-                                { icon: 'bi-camera-video', text: 'Weekly live classes (Zoom)' },
-                                { icon: 'bi-play-circle', text: 'Recorded video lessons (YouTube)' },
-                                { icon: 'bi-file-earmark-text', text: 'Study materials & PDFs' },
-                                { icon: 'bi-patch-check', text: 'Certificate on completion' },
-                            ].map((f, i) => (
-                                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#374151', fontSize: '13px' }}>
-                                    <i className={`bi ${f.icon}`} style={{ color: '#3b82f6', fontSize: '15px', width: '18px', textAlign: 'center' }}></i>
-                                    {f.text}
+                        <div style={{ marginTop: '32px', background: '#f8fafc', borderRadius: '12px', padding: '16px', border: '1px solid #f1f5f9' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0' }}>
+                                    <i className="bi bi-headphones" style={{ color: '#2563eb' }}></i>
                                 </div>
-                            ))}
+                                <div>
+                                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>Need help?</div>
+                                    <div style={{ fontSize: '11px', color: '#64748b' }}>Contact our support team</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
