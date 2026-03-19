@@ -1,4 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -14,118 +15,143 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <>
-            <Head title="Login - EduLMS" />
+            <Head title="Login – EduLMS" />
             <div style={{
                 minHeight: '100vh',
-                background: 'linear-gradient(135deg, #0f1117 0%, #1a1d2e 100%)',
+                background: '#f3f4f6',
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '20px',
                 fontFamily: "'Inter', sans-serif",
             }}>
-                {/* Background decorations */}
-                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-                    <div style={{ position: 'absolute', top: '-10%', right: '-5%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)', borderRadius: '50%' }}></div>
-                    <div style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(79,70,229,0.12) 0%, transparent 70%)', borderRadius: '50%' }}></div>
+                {/* Left panel - Blue gradient */}
+                <div style={{
+                    flex: '1',
+                    background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '60px 40px',
+                    position: 'relative',
+                    overflow: 'hidden',
+                }}>
+                    <div style={{ position: 'absolute', top: '-60px', left: '-60px', width: '250px', height: '250px', border: '2px solid rgba(255,255,255,0.1)', borderRadius: '50%' }}></div>
+                    <div style={{ position: 'absolute', bottom: '-40px', right: '-40px', width: '200px', height: '200px', border: '2px solid rgba(255,255,255,0.08)', borderRadius: '50%' }}></div>
+                    <div style={{ position: 'relative', textAlign: 'center', color: '#fff' }}>
+                        <div style={{ width: '60px', height: '60px', borderRadius: '14px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                            <i className="bi bi-mortarboard-fill" style={{ fontSize: '28px' }}></i>
+                        </div>
+                        <h1 style={{ fontSize: '32px', fontWeight: 800, marginBottom: '12px', letterSpacing: '-0.5px' }}>EduLMS</h1>
+                        <p style={{ fontSize: '16px', opacity: 0.85, maxWidth: '280px', lineHeight: 1.6 }}>
+                            Your complete learning management system. Learn, grow, and achieve.
+                        </p>
+                        <div style={{ marginTop: '40px', display: 'flex', gap: '24px', justifyContent: 'center' }}>
+                            {[
+                                { n: '500+', l: 'Courses' },
+                                { n: '2K+', l: 'Students' },
+                                { n: '50+', l: 'Instructors' },
+                            ].map(s => (
+                                <div key={s.l} style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '22px', fontWeight: 700 }}>{s.n}</div>
+                                    <div style={{ fontSize: '12px', opacity: 0.75 }}>{s.l}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
-                <div style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 10 }}>
-                    {/* Logo */}
-                    <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-                        <div style={{
-                            width: '60px', height: '60px', borderRadius: '16px',
-                            background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            margin: '0 auto 14px',
-                            boxShadow: '0 12px 40px rgba(124,58,237,0.4)',
-                        }}>
-                            <i className="bi bi-mortarboard-fill" style={{ color: '#fff', fontSize: '28px' }}></i>
-                        </div>
-                        <h1 style={{ color: '#fff', fontSize: '26px', fontWeight: 800, margin: '0 0 4px 0', letterSpacing: '-0.5px' }}>EduLMS</h1>
-                        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', margin: 0 }}>Sign in to your account</p>
-                    </div>
+                {/* Right panel - Login form */}
+                <div style={{
+                    width: '440px',
+                    background: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '40px 48px',
+                }}>
+                    <div style={{ width: '100%' }}>
+                        <h2 style={{ color: '#1f2937', fontSize: '24px', fontWeight: 700, marginBottom: '6px' }}>Sign in</h2>
+                        <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '28px' }}>
+                            Welcome back! Please enter your details.
+                        </p>
 
-                    {/* Card */}
-                    <div style={{
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '20px',
-                        padding: '32px',
-                        backdropFilter: 'blur(12px)',
-                        boxShadow: '0 24px 60px rgba(0,0,0,0.4)',
-                    }}>
                         {status && (
-                            <div style={{ background: '#10b98122', border: '1px solid #10b98144', borderRadius: '8px', padding: '10px 14px', color: '#10b981', fontSize: '13px', marginBottom: '20px' }}>
+                            <div style={{ background: '#d1fae5', border: '1px solid #a7f3d0', borderRadius: '6px', padding: '10px 14px', color: '#065f46', fontSize: '13px', marginBottom: '16px' }}>
                                 {status}
                             </div>
                         )}
 
                         <form onSubmit={submit}>
-                            <div style={{ marginBottom: '18px' }}>
-                                <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 500, display: 'block', marginBottom: '8px' }}>
+                            <div style={{ marginBottom: '16px' }}>
+                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, color: '#374151', marginBottom: '6px' }}>
                                     Email Address
                                 </label>
                                 <input
-                                    id="email"
                                     type="email"
                                     value={data.email}
                                     onChange={e => setData('email', e.target.value)}
-                                    autoComplete="username"
-                                    autoFocus
                                     required
+                                    autoFocus
                                     placeholder="you@email.com"
                                     style={{
-                                        width: '100%', background: 'rgba(255,255,255,0.08)', border: `1px solid ${errors.email ? '#ef4444' : 'rgba(255,255,255,0.12)'}`,
-                                        borderRadius: '10px', color: '#fff', padding: '12px 14px', fontSize: '14px', outline: 'none', boxSizing: 'border-box',
+                                        width: '100%', padding: '10px 12px',
+                                        border: `1px solid ${errors.email ? '#ef4444' : '#d1d5db'}`,
+                                        borderRadius: '6px', fontSize: '14px', color: '#1f2937', outline: 'none',
+                                        boxSizing: 'border-box', background: '#fff',
                                     }}
+                                    onFocus={e => e.target.style.borderColor = '#3b82f6'}
+                                    onBlur={e => e.target.style.borderColor = errors.email ? '#ef4444' : '#d1d5db'}
                                 />
-                                {errors.email && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{errors.email}</div>}
+                                {errors.email && <p style={{ color: '#ef4444', fontSize: '12px', margin: '4px 0 0' }}>{errors.email}</p>}
                             </div>
 
-                            <div style={{ marginBottom: '24px' }}>
-                                <div className="d-flex justify-content-between align-items-center" style={{ marginBottom: '8px' }}>
-                                    <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 500 }}>Password</label>
+                            <div style={{ marginBottom: '20px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                                    <label style={{ fontSize: '13px', fontWeight: 500, color: '#374151' }}>Password</label>
                                     {canResetPassword && (
-                                        <a href={route('password.request')} style={{ color: '#7c3aed', fontSize: '12px', textDecoration: 'none' }}>Forgot password?</a>
+                                        <Link href={route('password.request')} style={{ color: '#2563eb', fontSize: '12px', textDecoration: 'none' }}>Forgot password?</Link>
                                     )}
                                 </div>
                                 <input
-                                    id="password"
                                     type="password"
                                     value={data.password}
                                     onChange={e => setData('password', e.target.value)}
-                                    autoComplete="current-password"
                                     required
                                     placeholder="••••••••"
                                     style={{
-                                        width: '100%', background: 'rgba(255,255,255,0.08)', border: `1px solid ${errors.password ? '#ef4444' : 'rgba(255,255,255,0.12)'}`,
-                                        borderRadius: '10px', color: '#fff', padding: '12px 14px', fontSize: '14px', outline: 'none', boxSizing: 'border-box',
+                                        width: '100%', padding: '10px 12px',
+                                        border: `1px solid ${errors.password ? '#ef4444' : '#d1d5db'}`,
+                                        borderRadius: '6px', fontSize: '14px', color: '#1f2937', outline: 'none',
+                                        boxSizing: 'border-box', background: '#fff',
                                     }}
+                                    onFocus={e => e.target.style.borderColor = '#3b82f6'}
+                                    onBlur={e => e.target.style.borderColor = errors.password ? '#ef4444' : '#d1d5db'}
                                 />
-                                {errors.password && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{errors.password}</div>}
+                                {errors.password && <p style={{ color: '#ef4444', fontSize: '12px', margin: '4px 0 0' }}>{errors.password}</p>}
                             </div>
 
                             <button
                                 type="submit"
                                 disabled={processing}
                                 style={{
-                                    width: '100%', padding: '13px', background: 'linear-gradient(90deg, #7c3aed, #4f46e5)',
-                                    color: '#fff', border: 'none', borderRadius: '12px', fontSize: '15px', fontWeight: 700,
-                                    cursor: processing ? 'not-allowed' : 'pointer', opacity: processing ? 0.7 : 1,
-                                    boxShadow: '0 8px 24px rgba(124,58,237,0.35)',
-                                    transition: 'all 0.2s',
+                                    width: '100%', padding: '11px',
+                                    background: processing ? '#93c5fd' : '#2563eb',
+                                    color: '#fff', border: 'none', borderRadius: '6px',
+                                    fontSize: '14px', fontWeight: 600, cursor: processing ? 'not-allowed' : 'pointer',
+                                    transition: 'background 0.15s',
                                 }}
+                                onMouseEnter={e => { if (!processing) e.target.style.background = '#1d4ed8'; }}
+                                onMouseLeave={e => { if (!processing) e.target.style.background = '#2563eb'; }}
                             >
                                 {processing ? 'Signing in...' : 'Sign In'}
                             </button>
                         </form>
-                    </div>
 
-                    <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '13px', marginTop: '20px' }}>
-                        Don't have an account?{' '}
-                        <a href={route('register')} style={{ color: '#7c3aed', textDecoration: 'none', fontWeight: 600 }}>Apply for Admission</a>
-                    </p>
+                        <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '13px', marginTop: '20px' }}>
+                            Don't have an account?{' '}
+                            <Link href={route('register')} style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Apply for Admission</Link>
+                        </p>
+                    </div>
                 </div>
             </div>
         </>

@@ -21,25 +21,29 @@
             body {
                 font-family: 'Inter', sans-serif;
                 margin: 0;
-                background: #0f1117;
-                color: #fff;
+                background: #f3f4f6;
+                color: #1f2937;
                 -webkit-font-smoothing: antialiased;
             }
-            input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3) !important; }
-            input, textarea, select { color-scheme: dark; }
-            /* Sidebar link active state */
-            .sidebar-link:hover {
-                background: rgba(124, 58, 237, 0.12) !important;
-                color: rgba(255, 255, 255, 0.9) !important;
+            a { color: #2563eb; }
+            input::placeholder, textarea::placeholder { color: #9ca3af !important; }
+            /* Sidebar nav link hover */
+            nav a:hover {
+                background: #f3f4f6 !important;
+                color: #1f2937 !important;
             }
-            @keyframes pulse {
-                0%, 100% { opacity: 1; transform: scale(1); }
-                50% { opacity: 0.6; transform: scale(1.2); }
-            }
+            /* Smooth animations */
+            * { transition-duration: 0.15s; }
             /* Custom scrollbar */
-            ::-webkit-scrollbar { width: 6px; }
-            ::-webkit-scrollbar-track { background: transparent; }
-            ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+            ::-webkit-scrollbar { width: 5px; }
+            ::-webkit-scrollbar-track { background: #f3f4f6; }
+            ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+            ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+            /* Live pulse */
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
         </style>
 
         <!-- Scripts -->
