@@ -314,3 +314,6 @@ php artisan migrate
 # Reset everything (DANGER: deletes all data)
 php artisan migrate:fresh
 ```
+
+
+https://demo.foxthemes.net/courseplus/instructor/dashboard.html
