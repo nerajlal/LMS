@@ -316,4 +316,3 @@ php artisan migrate:fresh
 ```
 
 
-https://demo.foxthemes.net/courseplus/instructor/dashboard.html
