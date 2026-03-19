@@ -8,43 +8,48 @@ const card = {
     padding: '24px',
 };
 
-const StatCard = ({ icon, label, value, color, sub }) => (
-    <div style={{ ...card, borderTop: `4px solid ${color}`, position: 'relative' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <i className={`bi ${icon}`} style={{ color, fontSize: '18px' }}></i>
-            </div>
-            {sub && <span style={{ color: '#9ca3af', fontSize: '11px', fontWeight: 500, background: '#f9fafb', padding: '2px 8px', borderRadius: '10px' }}>{sub}</span>}
+const StatCard = ({ icon, label, value, color }) => (
+    <div style={{ background: '#fff', padding: '24px', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '20px', border: '1px solid #f1f5f9' }}>
+        <div style={{ width: '52px', height: '52px', borderRadius: '50%', background: color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <i className={`bi ${icon}`} style={{ color: '#fff', fontSize: '20px' }}></i>
         </div>
-        <div style={{ color: '#1f2937', fontSize: '28px', fontWeight: 800, marginBottom: '2px' }}>{value}</div>
-        <div style={{ color: '#6b7280', fontSize: '13px', fontWeight: 500 }}>{label}</div>
+        <div>
+            <div style={{ color: '#1e293b', fontSize: '24px', fontWeight: 800 }}>{value}</div>
+            <div style={{ color: '#64748b', fontSize: '13px', fontWeight: 500 }}>{label}</div>
+        </div>
     </div>
 );
 
-const CourseProgressCard = ({ title, progress, instructor, lessons_count }) => (
-    <div style={{ 
-        ...card, padding: '16px', transition: 'all 0.2s', cursor: 'pointer', border: '1px solid transparent'
-    }}
-    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1)'; e.currentTarget.style.borderColor = '#e5e7eb'; }}
-    onMouseLeave={e => { e.currentTarget.style.boxShadow = card.boxShadow; e.currentTarget.style.borderColor = 'transparent'; }}
-    >
-        <div style={{ height: '140px', background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', position: 'relative', overflow: 'hidden' }}>
-            <i className="bi bi-play-circle-fill" style={{ color: '#3b82f6', fontSize: '48px', zIndex: 1 }}></i>
-            <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.9)', padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 700, color: '#111827' }}>
-                {lessons_count || 0} Lessons
+const CourseProgressRow = ({ title, progress, instructor, thumbnail }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '20px', padding: '16px 0', borderBottom: '1px solid #f1f5f9' }}>
+        <div style={{ width: '80px', height: '56px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, background: '#f1f5f9' }}>
+            <img src={thumbnail || 'https://via.placeholder.com/80x56'} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+            <div style={{ color: '#1e293b', fontWeight: 700, fontSize: '15px', marginBottom: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ fontSize: '12px', color: '#64748b', whiteSpace: 'nowrap' }}>{Math.round(progress/10)}/10 Complete</div>
+                <div style={{ flex: 1, height: '4px', background: '#f1f5f9', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ width: `${progress}%`, height: '100%', background: '#2563eb' }}></div>
+                </div>
             </div>
         </div>
-        <div style={{ color: '#111827', fontWeight: 700, fontSize: '15px', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
-        <div style={{ color: '#6b7280', fontSize: '12px', marginBottom: '12px' }}>Instructor: {instructor}</div>
-        <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <span style={{ color: '#6b7280', fontSize: '11px', fontWeight: 600 }}>Training Progress</span>
-                <span style={{ color: '#2563eb', fontSize: '11px', fontWeight: 700 }}>{progress}%</span>
-            </div>
-            <div style={{ height: '6px', background: '#f3f4f6', borderRadius: '100px', overflow: 'hidden' }}>
-                <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(to right, #3b82f6, #2563eb)', borderRadius: '100px' }}></div>
-            </div>
+        <Link href={route('courses.index')} style={{ background: '#f1f5f9', color: '#1e293b', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>
+            Resume
+        </Link>
+    </div>
+);
+
+const InstructorRow = ({ name, courses, avatar }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0' }}>
+        <img src={avatar} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+        <div style={{ flex: 1 }}>
+            <div style={{ color: '#1e293b', fontWeight: 700, fontSize: '14px' }}>{name}</div>
+            <div style={{ color: '#64748b', fontSize: '12px' }}>{courses} Courses</div>
         </div>
+        <button style={{ background: '#fff', border: '1px solid #e2e8f0', padding: '4px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, color: '#1e293b', cursor: 'pointer' }}>
+            Follow
+        </button>
     </div>
 );
 
@@ -53,99 +58,72 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
         <LmsLayout title="Dashboard">
             <Head title="Student Dashboard" />
 
-            {/* Welcome Banner */}
-            <div style={{
-                background: 'linear-gradient(135deg, #2563eb, #1d4ed8)',
-                borderRadius: '16px',
-                padding: '36px 40px',
-                marginBottom: '32px',
-                color: '#fff',
-                position: 'relative',
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(37, 99, 235, 0.25)',
-            }}>
-                <div style={{ position: 'absolute', right: '5%', top: '-25%', width: '220px', height: '220px', border: '30px solid rgba(255,255,255,0.05)', borderRadius: '50%' }}></div>
-                <div style={{ position: 'absolute', right: '15%', bottom: '-35%', width: '180px', height: '180px', border: '25px solid rgba(255,255,255,0.03)', borderRadius: '50%' }}></div>
-                
-                <div style={{ position: 'relative', zIndex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: 500, opacity: 0.9, marginBottom: '8px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Learning Dashboard</div>
-                    <h2 style={{ fontSize: '28px', fontWeight: 800, margin: '0 0 10px 0' }}>Hi, {auth?.user?.name || 'Explorer'}! 👋</h2>
-                    <div style={{ fontSize: '15px', opacity: 0.85, maxWidth: '500px', lineHeight: '1.6' }}>
-                        Welcome back to your learning portal. You have <strong>{stats?.enrolled || 0} active courses</strong> in progress. Ready to continue?
-                    </div>
-                </div>
-            </div>
-
             {/* Stats Row */}
-            <div className="row g-4 mb-5">
-                <div className="col-6 col-md-3"><StatCard icon="bi-collection-play" label="Enrolled Courses" value={stats?.enrolled || 0} color="#3b82f6" /></div>
-                <div className="col-6 col-md-3"><StatCard icon="bi-check-circle" label="Completed" value={stats?.completed || 0} color="#10b981" /></div>
-                <div className="col-6 col-md-3"><StatCard icon="bi-camera-video" label="Live Classes" value={stats?.liveClasses || 0} color="#f59e0b" sub="Upcoming" /></div>
-                <div className="col-6 col-md-3"><StatCard icon="bi-cash-stack" label="Fees Due (₹)" value={stats?.feesDue || 0} color="#ef4444" /></div>
+            <div className="row g-4 mb-4">
+                <div className="col-12 col-md-3"><StatCard icon="bi-briefcase" label="Completed" value={stats?.completed || 0} color="#3b82f6" /></div>
+                <div className="col-12 col-md-3"><StatCard icon="bi-heart" label="Wishlist" value="43" color="#f87171" /></div>
+                <div className="col-12 col-md-3"><StatCard icon="bi-award" label="Certification" value="15" color="#f59e0b" /></div>
+                <div className="col-12 col-md-3"><StatCard icon="bi-cart" label="Purchased" value={stats?.enrolled || 0} color="#10b981" /></div>
             </div>
 
             <div className="row g-4">
-                {/* My Courses */}
-                <div className="col-12 col-xl-8">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                        <h2 style={{ color: '#111827', fontSize: '18px', fontWeight: 800, margin: 0 }}>Continue Learning</h2>
-                        <Link href={route('courses.index')} style={{ color: '#2563eb', fontSize: '13px', textDecoration: 'none', fontWeight: 700 }}>Browse All <i className="bi bi-chevron-right ms-1"></i></Link>
-                    </div>
-                    <div className="row g-4">
-                        {(enrolledCourses || []).length === 0 ? (
-                            <div className="col-12">
-                                <div style={{ ...card, textAlign: 'center', padding: '48px 24px', border: '2px dashed #e5e7eb', boxShadow: 'none' }}>
-                                    <i className="bi bi-journal-bookmark" style={{ fontSize: '48px', color: '#9ca3af', display: 'block', marginBottom: '16px' }}></i>
-                                    <div style={{ fontSize: '16px', fontWeight: 700, color: '#374151', marginBottom: '8px' }}>Not enrolled in any courses yet</div>
-                                    <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '20px' }}>Jump start your career by enrolling in one of our premium courses.</p>
-                                    <Link href={route('courses.index')} style={{ background: '#2563eb', color: '#fff', padding: '10px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}>Explore Courses</Link>
+                {/* Main Content: Courses in progress */}
+                <div className="col-12 col-lg-8">
+                    <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+                        <div style={{ padding: '24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', margin: 0 }}>Courses in progress</h2>
+                            <Link href={route('courses.index')} style={{ color: '#2563eb', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>
+                        </div>
+                        <div style={{ padding: '0 24px' }}>
+                            {(enrolledCourses || []).length === 0 ? (
+                                <div style={{ padding: '48px 0', textAlign: 'center' }}>
+                                    <div style={{ color: '#64748b', fontSize: '14px' }}>No courses in progress</div>
                                 </div>
-                            </div>
-                        ) : (
-                            enrolledCourses.map(c => (
-                                <div key={c.id} className="col-12 col-md-4">
-                                    <CourseProgressCard {...c} />
-                                </div>
-                            ))
-                        )}
+                            ) : (
+                                enrolledCourses.map(c => (
+                                    <CourseProgressRow key={c.id} {...c} />
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                {/* Upcoming Classes */}
-                <div className="col-12 col-xl-4">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                        <h2 style={{ color: '#111827', fontSize: '18px', fontWeight: 800, margin: 0 }}>Live Classes</h2>
-                        <Link href={route('live-classes.index')} style={{ color: '#2563eb', fontSize: '13px', textDecoration: 'none', fontWeight: 700 }}>Full Schedule <i className="bi bi-calendar3 ms-2"></i></Link>
+                {/* Sidebar: Top Instructors */}
+                <div className="col-12 col-lg-4">
+                    <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+                        <div style={{ padding: '24px', borderBottom: '1px solid #f1f5f9' }}>
+                            <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', margin: 0 }}>Top Instructors</h2>
+                        </div>
+                        <div style={{ padding: '0 24px' }}>
+                            <InstructorRow name="Stella Johnson" courses="28" avatar="https://ui-avatars.com/api/?name=Stella+Johnson&background=random" />
+                            <InstructorRow name="Alex Dolgove" courses="23" avatar="https://ui-avatars.com/api/?name=Alex+Dolgove&background=random" />
+                            <InstructorRow name="John Michael" courses="19" avatar="https://ui-avatars.com/api/?name=John+Michael&background=random" />
+                            <InstructorRow name="Dennis Han" courses="17" avatar="https://ui-avatars.com/api/?name=Dennis+Han&background=random" />
+                            <InstructorRow name="Erica Jones" courses="12" avatar="https://ui-avatars.com/api/?name=Erica+Jones&background=random" />
+                        </div>
+                        <div style={{ padding: '16px 24px', textAlign: 'center', borderTop: '1px solid #f1f5f9' }}>
+                            <Link href="#" style={{ color: '#2563eb', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>
+                        </div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        {upcomingClasses.map(cls => (
-                            <div key={cls.id} style={{ ...card, padding: '20px', border: '1px solid #f3f4f6' }}>
-                                <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-                                    <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <i className="bi bi-camera-video" style={{ color: '#f59e0b', fontSize: '20px' }}></i>
+
+                    {/* Upcoming Live Classes (Added below) */}
+                    <div style={{ marginTop: '24px', background: '#fff', borderRadius: '12px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+                        <div style={{ padding: '20px' }}>
+                             <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#1e293b', marginBottom: '16px' }}>Upcoming Live Classes</h3>
+                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {upcomingClasses.slice(0, 2).map(cls => (
+                                    <div key={cls.id} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                                        <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <i className="bi bi-camera-video" style={{ color: '#2563eb' }}></i>
+                                        </div>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cls.title}</div>
+                                            <div style={{ fontSize: '11px', color: '#64748b' }}>{cls.time}</div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div style={{ color: '#111827', fontSize: '14px', fontWeight: 700, marginBottom: '2px' }}>{cls.title}</div>
-                                        <div style={{ color: '#6b7280', fontSize: '12px', fontWeight: 500 }}>by {cls.host}</div>
-                                    </div>
-                                </div>
-                                <div style={{ padding: '8px 12px', background: '#f9fafb', borderRadius: '8px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <i className="bi bi-clock-history" style={{ color: '#3b82f6', fontSize: '14px' }}></i>
-                                    <span style={{ color: '#4b5563', fontSize: '12px', fontWeight: 600 }}>{cls.time}</span>
-                                </div>
-                                <Link href={route('live-classes.index')} style={{
-                                    display: 'block', textAlign: 'center', padding: '10px',
-                                    background: '#2563eb', color: '#fff', borderRadius: '8px',
-                                    textDecoration: 'none', fontSize: '13px', fontWeight: 700,
-                                    transition: 'all 0.2s'
-                                }}
-                                onMouseEnter={e => e.currentTarget.style.background = '#1d4ed8'}
-                                onMouseLeave={e => e.currentTarget.style.background = '#2563eb'}
-                                >
-                                    Join Session Now
-                                </Link>
-                            </div>
-                        ))}
+                                ))}
+                             </div>
+                        </div>
                     </div>
                 </div>
             </div>

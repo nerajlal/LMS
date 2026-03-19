@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 
 const NAV_ITEMS = [
-    { label: 'Learning Dashboard', icon: 'bi-grid-1x2',          href: 'dashboard' },
-    { label: 'Browse Courses',     icon: 'bi-collection-play',    href: 'courses.index' },
-    { label: 'My Enrollment',      icon: 'bi-journal-check',      href: 'enrollments.index' },
-    { label: 'Live Classes',       icon: 'bi-camera-video',       href: 'live-classes.index' },
-    { label: 'Study Materials',    icon: 'bi-file-earmark-text',  href: 'materials.index' },
-    { label: 'Payments & Fees',    icon: 'bi-credit-card',        href: 'fees.index' },
-    { label: 'Register Course',    icon: 'bi-person-plus',        href: 'admissions.create' },
+    { label: 'Dashboard',   icon: 'bi-house-door',     href: 'dashboard' },
+    { label: 'Courses',      icon: 'bi-play-circle',    href: 'enrollments.index' },
+    { label: 'Browse',       icon: 'bi-grid',           href: 'courses.index' },
+    { label: 'Live Classes', icon: 'bi-camera-video',   href: 'live-classes.index' },
+    { label: 'Resources',    icon: 'bi-file-earmark',   href: 'materials.index' },
+    { label: 'Billing',      icon: 'bi-credit-card',    href: 'fees.index' },
+    { label: 'Profile',      icon: 'bi-person',         href: 'profile.edit' },
+    { label: 'Register',     icon: 'bi-plus-circle',    href: 'admissions.create' },
 ];
 
 export default function LmsLayout({ children, title }) {
@@ -28,7 +29,7 @@ export default function LmsLayout({ children, title }) {
     const currentPath = typeof window !== 'undefined' ? window.location.pathname.split('/').filter(Boolean) : [];
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#f9fafb', fontFamily: "'Inter', sans-serif" }}>
 
             {/* Flash Messages */}
             {showFlash && (flash?.success || flash?.error) && (
@@ -51,6 +52,7 @@ export default function LmsLayout({ children, title }) {
 
             <style>{`
                 @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+                .nav-link:hover { background: #f1f5f9 !important; color: #1e293b !important; }
             `}</style>
 
             {/* ── SIDEBAR ── */}
@@ -58,7 +60,7 @@ export default function LmsLayout({ children, title }) {
                 width: sidebarOpen ? '260px' : '72px',
                 minHeight: '100vh',
                 background: '#ffffff',
-                borderRight: '1px solid #e2e8f0',
+                borderRight: '1px solid #f1f5f9',
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'fixed',
@@ -66,55 +68,58 @@ export default function LmsLayout({ children, title }) {
                 zIndex: 1040,
                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 overflowX: 'hidden',
-                boxShadow: '4px 0 24px rgba(0,0,0,0.02)',
             }}>
-                <div style={{ height: '72px', display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: '1px solid #f1f5f9', gap: '12px', flexShrink: 0 }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>
+                <div style={{ height: '72px', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '12px', flexShrink: 0 }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <i className="bi bi-mortarboard-fill" style={{ color: '#fff', fontSize: '18px' }}></i>
                     </div>
-                    {sidebarOpen && (
-                        <div>
-                            <div style={{ fontWeight: 800, fontSize: '18px', color: '#1e293b', whiteSpace: 'nowrap', letterSpacing: '-0.5px' }}>EduLMS</div>
-                            <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>Portal</div>
-                        </div>
-                    )}
+                    {sidebarOpen && <div style={{ fontWeight: 800, fontSize: '20px', color: '#1e293b', letterSpacing: '-0.5px' }}>Courseplus</div>}
                 </div>
 
-                <nav style={{ flex: 1, padding: '20px 12px', overflowY: 'auto' }}>
+                {/* Profile Section (Top) */}
+                {sidebarOpen && user && (
+                    <div style={{ padding: '24px 20px', borderBottom: '1px solid #f1f5f9' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                            <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                                <img src={`https://ui-avatars.com/api/?name=${user.name}&background=random`} alt={user.name} style={{ width: '100%', height: '100%' }} />
+                            </div>
+                            <div style={{ flex: 1, overflow: 'hidden' }}>
+                                <div style={{ fontSize: '14px', fontWeight: 700, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
+                                <div style={{ fontSize: '12px', color: '#64748b', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.email}</div>
+                            </div>
+                            <i className="bi bi-chevron-down" style={{ fontSize: '12px', color: '#94a3b8' }}></i>
+                        </div>
+                    </div>
+                )}
+
+                <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
                     {NAV_ITEMS.map(item => {
                         const href = `/${item.href.replace('.', '/')}`;
                         const active = window.location.pathname === href || (item.href === 'dashboard' && window.location.pathname === '/dashboard');
                         return (
-                            <Link key={item.label} href={route(item.href)} style={{
-                                display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '10px', marginBottom: '4px',
-                                color: active ? '#2563eb' : '#475569', background: active ? '#eff6ff' : 'transparent',
-                                textDecoration: 'none', fontWeight: active ? 700 : 500, fontSize: '14px', whiteSpace: 'nowrap', transition: 'all 0.2s',
+                            <Link key={item.label} href={route(item.href)} className="nav-link" style={{
+                                display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', borderRadius: '8px', marginBottom: '4px',
+                                color: active ? '#1e293b' : '#64748b', background: active ? '#f1f5f9' : 'transparent',
+                                textDecoration: 'none', fontWeight: active ? 700 : 500, fontSize: '14px', transition: 'all 0.2s',
                             }}>
-                                <i className={`bi ${item.icon}`} style={{ fontSize: '18px', width: '24px', textAlign: 'center', flexShrink: 0 }}></i>
+                                <i className={`bi ${item.icon}`} style={{ fontSize: '18px', opacity: active ? 1 : 0.7 }}></i>
                                 {sidebarOpen && <span>{item.label}</span>}
                             </Link>
                         );
                     })}
                 </nav>
 
-                {user?.is_admin && sidebarOpen && (
-                    <div style={{ padding: '20px 12px', borderTop: '1px solid #f1f5f9' }}>
-                        <Link href={route('admin.dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '10px', color: '#7c3aed', background: '#f5f3ff', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>
-                            <i className="bi bi-shield-check" style={{ fontSize: '18px' }}></i>
-                            <span>Admin Panel</span>
+                {/* Sidebar Footer */}
+                {sidebarOpen && (
+                    <div style={{ padding: '16px 12px', borderTop: '1px solid #f1f5f9' }}>
+                        <Link href={route('profile.edit')} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', color: '#64748b', textDecoration: 'none', fontSize: '14px' }}>
+                            <i className="bi bi-person-circle"></i>
+                            <span>Manage profile</span>
                         </Link>
-                    </div>
-                )}
-
-                {sidebarOpen && user && (
-                    <div style={{ padding: '20px 16px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: '12px', background: '#f8fafc' }}>
-                        <div style={{ width: '40px', height: '40px', borderRadius: '12px', flexShrink: 0, background: 'linear-gradient(135deg, #3b82f6, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800 }}>
-                            {user.name?.charAt(0).toUpperCase()}
-                        </div>
-                        <div style={{ overflow: 'hidden' }}>
-                            <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
-                            <div style={{ fontSize: '11px', color: '#64748b' }}>{user.is_admin ? 'Admin' : 'Student'}</div>
-                        </div>
+                        <Link href={route('logout')} method="post" as="button" style={{ width: '100%', border: 'none', background: 'none', display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', color: '#64748b', fontSize: '14px', cursor: 'pointer' }}>
+                            <i className="bi bi-box-arrow-right"></i>
+                            <span>Logout</span>
+                        </Link>
                     </div>
                 )}
             </aside>
@@ -122,33 +127,36 @@ export default function LmsLayout({ children, title }) {
             {/* ── MAIN CONTENT ── */}
             <div style={{ marginLeft: sidebarOpen ? '260px' : '72px', flex: 1, display: 'flex', flexDirection: 'column', transition: 'margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)', minHeight: '100vh' }}>
                 <header style={{
-                    background: 'linear-gradient(to right, #2563eb, #1d4ed8)', height: '72px', display: 'flex', alignItems: 'center',
-                    justifyContent: 'space-between', padding: '0 32px', position: 'sticky', top: 0, zIndex: 1030, boxShadow: '0 4px 20px rgba(37,99,235,0.15)',
+                    background: '#ffffff', height: '72px', display: 'flex', alignItems: 'center',
+                    justifyContent: 'space-between', padding: '0 32px', position: 'sticky', top: 0, zIndex: 1030, borderBottom: '1px solid #f1f5f9',
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                        <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'rgba(255,255,255,0.12)', border: 'none', borderRadius: '10px', color: '#fff', fontSize: '20px', cursor: 'pointer', padding: '8px 10px', display: 'flex' }}><i className="bi bi-list"></i></button>
-                        <div>
-                            {title && <h1 style={{ color: '#fff', fontSize: '18px', fontWeight: 700, margin: 0 }}>{title}</h1>}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-                                <Link href={route('dashboard')} style={{ fontSize: '11px', color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>EduLMS</Link>
-                                {currentPath.map((segment, i) => (
-                                    <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        <i className="bi bi-chevron-right" style={{ fontSize: '8px', color: 'rgba(255,255,255,0.4)' }}></i>
-                                        <span style={{ fontSize: '11px', color: i === currentPath.length - 1 ? '#fff' : 'rgba(255,255,255,0.7)', textTransform: 'capitalize' }}>{segment.replace(/-/g, ' ')}</span>
-                                    </span>
-                                ))}
-                            </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flex: 1 }}>
+                        <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '24px', cursor: 'pointer', display: 'flex' }}><i className="bi bi-list"></i></button>
+                        
+                        {/* Search Bar (Sample style) */}
+                        <div style={{ position: 'relative', width: '300px' }}>
+                            <i className="bi bi-search" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: '14px' }}></i>
+                            <input 
+                                type="text" 
+                                placeholder="Quick search for anything.." 
+                                style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '8px', border: 'none', background: 'none', fontSize: '14px', outline: 'none' }}
+                            />
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                        <Link href={route('logout')} method="post" as="button" style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '10px', color: '#fff', padding: '8px 16px', cursor: 'pointer', fontSize: '13px', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <i className="bi bi-box-arrow-right"></i> Logout
-                        </Link>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                        <i className="bi bi-envelope" style={{ fontSize: '20px', color: '#64748b', cursor: 'pointer' }}></i>
+                        <div style={{ position: 'relative' }}>
+                            <i className="bi bi-bell" style={{ fontSize: '20px', color: '#64748b', cursor: 'pointer' }}></i>
+                            <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#ef4444', color: '#fff', fontSize: '10px', fontWeight: 700, borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
+                        </div>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: 'pointer' }}>
+                            <img src={`https://ui-avatars.com/api/?name=${user?.name}&background=random`} alt="User" style={{ width: '100%', height: '100%' }} />
+                        </div>
                     </div>
                 </header>
 
-                <main style={{ flex: 1, padding: '32px', background: '#f8fafc' }}>
+                <main style={{ flex: 1, padding: '32px' }}>
                     {children}
                 </main>
             </div>
