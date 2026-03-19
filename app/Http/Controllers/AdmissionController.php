@@ -2,63 +2,64 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admission;
+use App\Models\Course;
+use App\Models\Batch;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class AdmissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $admissions = Admission::where('user_id', auth()->id())
+            ->with(['course', 'batch'])
+            ->latest()
+            ->get()
+            ->map(fn($a) => [
+                'id'           => $a->id,
+                'course'       => $a->course?->title,
+                'batch'        => $a->batch?->name,
+                'status'       => $a->status,
+                'submitted_at' => $a->created_at->format('Y-m-d'),
+            ]);
+
+        return Inertia::render('Admissions/Index', compact('admissions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return Inertia::render('Admissions/Create', [
+            'courses' => Course::all(),
+            'batches' => Batch::all(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $data = $request->validate([
+            'full_name'          => 'required|string|max:255',
+            'email'              => 'required|email|max:255',
+            'phone'              => 'required|string|max:20',
+            'course_id'         => 'required|exists:courses,id',
+            'batch_id'          => 'nullable|exists:batches,id',
+            'address'           => 'nullable|string',
+            'previous_education' => 'nullable|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        Admission::create([
+            'user_id'   => auth()->id(),
+            'course_id' => $data['course_id'],
+            'batch_id'  => $data['batch_id'] ?? null,
+            'status'    => 'pending',
+            'details'   => json_encode([
+                'full_name'          => $data['full_name'],
+                'phone'              => $data['phone'],
+                'address'            => $data['address'] ?? '',
+                'previous_education' => $data['previous_education'] ?? '',
+            ]),
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admissions.index')->with('success', 'Application submitted!');
     }
 }

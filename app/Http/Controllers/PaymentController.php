@@ -2,63 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $fees = \App\Models\Fee::where('user_id', auth()->id())->get();
+        return Inertia::render('Payments/Create', compact('fees'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+        // TODO: Initiate PhonePe payment here
+        // $response = PhonePeService::initiate($data['amount'], auth()->user(), route('payments.callback'));
+
+        $payment = Payment::create([
+            'user_id'    => auth()->id(),
+            'amount'     => $data['amount'],
+            'payment_id' => null,
+            'status'     => 'pending',
+            'type'       => 'course_fee',
+        ]);
+
+        // Redirect to PhonePe payment URL
+        // return redirect($response->payment_url);
+
+        return redirect()->route('fees.index')->with('info', 'Payment initiated. Complete it on the gateway.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function callback(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        // TODO: Verify PhonePe callback signature
+        // Update payment status
+        return redirect()->route('fees.index')->with('success', 'Payment received!');
     }
 }
