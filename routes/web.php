@@ -101,9 +101,19 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 
 // ── Trainer Routes ──────────────────────────────────────────────────────────────
 use App\Http\Controllers\Trainer\TrainerController;
+use App\Http\Controllers\Trainer\TrainerCourseController;
+use App\Http\Controllers\Trainer\TrainerLiveClassController;
 
 Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')->group(function () {
     Route::get('/', [TrainerController::class, 'index'])->name('dashboard');
+    
+    // Trainer exclusive module routes
+    Route::get('/courses', [TrainerCourseController::class, 'index'])->name('courses.index');
+    Route::get('/courses/{course}', [TrainerCourseController::class, 'show'])->name('courses.show');
+    Route::post('/courses/{course}/lessons', [TrainerCourseController::class, 'storeLesson'])->name('courses.lessons.store');
+    Route::post('/courses/{course}/materials', [TrainerCourseController::class, 'storeMaterial'])->name('courses.materials.store');
+    
+    Route::resource('live-classes', TrainerLiveClassController::class)->except(['destroy']);
 });
 
 require __DIR__.'/auth.php';

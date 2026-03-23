@@ -22,17 +22,21 @@ class CourseController extends Controller
         $isEnrolled = false;
         
         if (auth()->check()) {
-            $isEnrolled = Enrollment::where('user_id', auth()->id())
-                ->where('course_id', $id)
-                ->where('status', 'active')
-                ->exists();
-                
-            // Also check approved admissions as a fallback for demo
-            if (!$isEnrolled) {
-                $isEnrolled = Admission::where('user_id', auth()->id())
+            if (auth()->user()->isAdmin() || auth()->user()->isTrainer()) {
+                $isEnrolled = true;
+            } else {
+                $isEnrolled = Enrollment::where('user_id', auth()->id())
                     ->where('course_id', $id)
-                    ->where('status', 'approved')
+                    ->where('status', 'active')
                     ->exists();
+                    
+                // Also check approved admissions as a fallback for demo
+                if (!$isEnrolled) {
+                    $isEnrolled = Admission::where('user_id', auth()->id())
+                        ->where('course_id', $id)
+                        ->where('status', 'approved')
+                        ->exists();
+                }
             }
         }
 

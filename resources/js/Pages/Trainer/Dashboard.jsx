@@ -43,8 +43,8 @@ export default function TrainerDashboard({ auth, stats }) {
                             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', margin: 0 }}>Quick Actions</h2>
                         </div>
                         <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <button className="btn w-100" style={{ background: '#e3000f', color: '#fff', fontWeight: 600 }}>Create Live Class</button>
-                            <button className="btn w-100" style={{ border: '1px solid #1e3a8a', color: '#1e3a8a', fontWeight: 600 }}>Upload Material</button>
+                            <Link href={route('trainer.live-classes.index')} className="btn w-100" style={{ background: '#e3000f', color: '#fff', fontWeight: 600 }}>Schedule Live Class</Link>
+                            <Link href={route('trainer.courses.index')} className="btn w-100" style={{ border: '1px solid #1e293b', color: '#1e293b', fontWeight: 600 }}>Manage Course Content</Link>
                         </div>
                     </div>
                 </div>

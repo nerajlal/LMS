@@ -13,9 +13,10 @@ const NAV_ITEMS = [
 ];
 
 const TRAINER_NAV = [
-    { label: 'Dashboard',    icon: 'bi-speedometer2',   href: 'trainer.dashboard' },
-    { label: 'My Courses',   icon: 'bi-camera-video',   href: 'trainer.dashboard' }, // Placeholder for trainer routes
-    { label: 'Profile',      icon: 'bi-person',         href: 'profile.edit' },
+    { label: 'Dashboard',      icon: 'bi-speedometer2',   href: 'trainer.dashboard' },
+    { label: 'My Courses',     icon: 'bi-journal-bookmark',href: 'trainer.courses.index' },
+    { label: 'Live Classes',   icon: 'bi-camera-video',   href: 'trainer.live-classes.index' },
+    { label: 'Profile',        icon: 'bi-person',         href: 'profile.edit' },
 ];
 
 export default function LmsLayout({ children, title }) {
