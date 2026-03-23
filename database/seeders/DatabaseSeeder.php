@@ -25,6 +25,17 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // ── Trainer user ────────────────────────────
+        $trainer = User::firstOrCreate(
+            ['email' => 'trainer@edulms.com'],
+            [
+                'name' => 'Expert Trainer',
+                'password' => Hash::make('password'),
+                'is_admin' => false,
+                'is_trainer' => true,
+            ]
+        );
+
         // ── Student user ────────────────────────────
         $student = User::firstOrCreate(
             ['email' => 'student@edulms.com'],
@@ -131,6 +142,7 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('✅ EduLMS demo data seeded successfully!');
         $this->command->info('   Admin:   admin@edulms.com / password');
+        $this->command->info('   Trainer: trainer@edulms.com / password');
         $this->command->info('   Student: student@edulms.com / password');
     }
 }

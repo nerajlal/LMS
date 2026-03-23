@@ -11,6 +11,11 @@ const ADMIN_NAV = [
     { label: 'Fees',        icon: 'bi-cash-stack',         href: 'admin.fees.index' },
 ];
 
+const TRAINER_NAV = [
+    { label: 'Dashboard',   icon: 'bi-speedometer2',      href: 'trainer.dashboard' },
+    { label: 'My Courses',  icon: 'bi-collection-play',   href: 'trainer.dashboard' }, // Placeholder for now
+];
+
 export default function AdminLayout({ children, title }) {
     const { auth } = usePage().props;
     const user = auth?.user;
@@ -26,7 +31,7 @@ export default function AdminLayout({ children, title }) {
             <aside style={{
                 width: sidebarOpen ? '240px' : '64px',
                 minHeight: '100vh',
-                background: '#1e1b4b',
+                background: '#111827',
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'fixed',
@@ -44,14 +49,14 @@ export default function AdminLayout({ children, title }) {
                 }}>
                     <div style={{
                         width: '36px', height: '36px', borderRadius: '8px',
-                        background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
+                        background: 'linear-gradient(135deg, #e3000f, #cc0000)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                     }}>
-                        <i className="bi bi-shield-check" style={{ color: '#fff', fontSize: '16px' }}></i>
+                        <i className="bi bi-building-fill" style={{ color: '#fff', fontSize: '16px' }}></i>
                     </div>
                     {sidebarOpen && (
                         <div>
-                            <div style={{ fontWeight: 700, fontSize: '15px', color: '#fff', whiteSpace: 'nowrap' }}>EduLMS Admin</div>
+                            <div style={{ fontWeight: 700, fontSize: '15px', color: '#fff', whiteSpace: 'nowrap' }}>The Ace India</div>
                             <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.4)', whiteSpace: 'nowrap' }}>Management Panel</div>
                         </div>
                     )}
@@ -59,9 +64,11 @@ export default function AdminLayout({ children, title }) {
 
                 {/* Navigation */}
                 <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
-                    {ADMIN_NAV.map(item => {
+                    {(user?.is_trainer && !user?.is_admin ? TRAINER_NAV : ADMIN_NAV).map(item => {
                         const active = currentPath.startsWith('/admin/' + item.href.replace('admin.', '').replace('.index', '').replace('.', '/'))
-                            || (item.href === 'admin.dashboard' && currentPath === '/admin');
+                            || currentPath.startsWith('/trainer/' + item.href.replace('trainer.', '').replace('.index', '').replace('.', '/'))
+                            || (item.href === 'admin.dashboard' && currentPath === '/admin')
+                            || (item.href === 'trainer.dashboard' && currentPath === '/trainer');
                         return (
                             <Link
                                 key={item.label}
@@ -70,10 +77,10 @@ export default function AdminLayout({ children, title }) {
                                     display: 'flex', alignItems: 'center', gap: '10px',
                                     padding: '9px 12px', borderRadius: '6px', marginBottom: '2px',
                                     color: active ? '#fff' : 'rgba(255,255,255,0.55)',
-                                    background: active ? 'rgba(124,58,237,0.4)' : 'transparent',
+                                    background: active ? 'rgba(227,0,15,0.4)' : 'transparent',
                                     textDecoration: 'none', fontWeight: active ? 600 : 400,
                                     fontSize: '14px', whiteSpace: 'nowrap', transition: 'all 0.15s',
-                                    borderLeft: active ? '3px solid #7c3aed' : '3px solid transparent',
+                                    borderLeft: active ? '3px solid #e3000f' : '3px solid transparent',
                                 }}
                                 onMouseEnter={e => { if (!active) { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}}
                                 onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; }}}
@@ -104,7 +111,7 @@ export default function AdminLayout({ children, title }) {
                     <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <div style={{
                             width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0,
-                            background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
+                            background: 'linear-gradient(135deg, #e3000f, #cc0000)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             color: '#fff', fontWeight: 700, fontSize: '13px',
                         }}>
@@ -112,7 +119,7 @@ export default function AdminLayout({ children, title }) {
                         </div>
                         <div style={{ overflow: 'hidden' }}>
                             <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
-                            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>Administrator</div>
+                            <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>{user.is_admin ? 'Administrator' : 'Trainer'}</div>
                         </div>
                     </div>
                 )}
@@ -123,11 +130,11 @@ export default function AdminLayout({ children, title }) {
 
                 {/* Header */}
                 <header style={{
-                    background: 'linear-gradient(to right, #7c3aed, #4f46e5)',
+                    background: 'linear-gradient(to right, #e3000f, #cc0000)',
                     height: '64px', display: 'flex', alignItems: 'center',
                     justifyContent: 'space-between', padding: '0 24px',
                     position: 'sticky', top: 0, zIndex: 1030,
-                    boxShadow: '0 2px 8px rgba(124,58,237,0.3)',
+                    boxShadow: '0 2px 8px rgba(227,0,15,0.3)',
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                         <button

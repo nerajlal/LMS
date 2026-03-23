@@ -27,7 +27,7 @@ export default function LiveClassesIndex({ auth, classes }) {
                     <div key={cls.id} className="col-12 col-xl-6">
                         <div style={cardStyle} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                                <div style={{ padding: '6px 14px', background: '#eff6ff', color: '#2563eb', borderRadius: '30px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                <div style={{ padding: '6px 14px', background: '#eff6ff', color: '#e3000f', borderRadius: '30px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                     {cls.course?.title || 'Unknown Course'}
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#10b981', fontSize: '13px', fontWeight: 700 }}>
@@ -40,15 +40,15 @@ export default function LiveClassesIndex({ auth, classes }) {
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#64748b', fontSize: '14px' }}>
-                                    <i className="bi bi-person-circle" style={{ color: '#2563eb' }}></i>
+                                    <i className="bi bi-person-circle" style={{ color: '#e3000f' }}></i>
                                     <span>Instructor: <strong style={{ color: '#1e293b' }}>{cls.instructor_name}</strong></span>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#64748b', fontSize: '14px' }}>
-                                    <i className="bi bi-calendar3" style={{ color: '#2563eb' }}></i>
+                                    <i className="bi bi-calendar3" style={{ color: '#e3000f' }}></i>
                                     <span>{new Date(cls.start_time).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#64748b', fontSize: '14px' }}>
-                                    <i className="bi bi-clock" style={{ color: '#2563eb' }}></i>
+                                    <i className="bi bi-clock" style={{ color: '#e3000f' }}></i>
                                     <span>{new Date(cls.start_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} ({cls.duration})</span>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@ export default function LiveClassesIndex({ auth, classes }) {
                                         borderRadius: '10px', textDecoration: 'none', fontSize: '13px', fontWeight: 700,
                                         transition: 'all 0.2s'
                                     }}
-                                    onMouseEnter={e => e.currentTarget.style.background = '#2563eb'}
+                                    onMouseEnter={e => e.currentTarget.style.background = '#e3000f'}
                                     onMouseLeave={e => e.currentTarget.style.background = '#1e293b'}
                                 >
                                     Join Session

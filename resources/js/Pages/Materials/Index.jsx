@@ -16,7 +16,7 @@ export default function MaterialsIndex({ auth, materials }) {
         switch(type) {
             case 'PDF': return { icon: 'bi-file-earmark-pdf', color: '#ef4444', bg: '#fef2f2' };
             case 'ZIP': return { icon: 'bi-file-earmark-zip', color: '#8b5cf6', bg: '#f5f3ff' };
-            default:    return { icon: 'bi-file-earmark-text', color: '#2563eb', bg: '#eff6ff' };
+            default:    return { icon: 'bi-file-earmark-text', color: '#e3000f', bg: '#eff6ff' };
         }
     };
 

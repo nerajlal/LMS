@@ -99,4 +99,11 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::resource('study-materials', AdminStudyMaterialController::class);
 });
 
+// ── Trainer Routes ──────────────────────────────────────────────────────────────
+use App\Http\Controllers\Trainer\TrainerController;
+
+Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')->group(function () {
+    Route::get('/', [TrainerController::class, 'index'])->name('dashboard');
+});
+
 require __DIR__.'/auth.php';

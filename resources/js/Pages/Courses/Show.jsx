@@ -12,10 +12,10 @@ const cardStyle = {
 const TabButton = ({ active, children, onClick }) => (
     <button onClick={onClick} style={{
         padding: '12px 24px', background: 'transparent', border: 'none', cursor: 'pointer',
-        color: active ? '#2563eb' : '#64748b',
+        color: active ? '#e3000f' : '#64748b',
         fontWeight: active ? 700 : 500,
         fontSize: '14px',
-        borderBottom: active ? '3px solid #2563eb' : '3px solid transparent',
+        borderBottom: active ? '3px solid #e3000f' : '3px solid transparent',
         transition: 'all 0.2s',
         marginBottom: '-1px',
     }}>
@@ -56,7 +56,7 @@ export default function CourseShow({ auth, course, isEnrolled }) {
                                 <p style={{ fontSize: '15px', color: '#94a3b8', maxWidth: '400px', marginBottom: '24px' }}>
                                     You need to be enrolled in this course to access the video lessons and study materials.
                                 </p>
-                                <Link href={route('admissions.create')} style={{ background: '#2563eb', color: '#fff', padding: '12px 32px', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, boxShadow: '0 10px 15px -3px rgba(37,99,235,0.4)' }}>
+                                <Link href={route('admissions.create')} style={{ background: '#e3000f', color: '#fff', padding: '12px 32px', borderRadius: '10px', textDecoration: 'none', fontWeight: 700, boxShadow: '0 10px 15px -3px rgba(37,99,235,0.4)' }}>
                                     Enroll to Unlock
                                 </Link>
                             </div>
@@ -123,13 +123,13 @@ export default function CourseShow({ auth, course, isEnrolled }) {
                                             >
                                                 <div style={{ 
                                                     width: '32px', height: '32px', borderRadius: '50%', 
-                                                    background: activeLesson?.id === lesson.id ? '#2563eb' : '#fff',
+                                                    background: activeLesson?.id === lesson.id ? '#e3000f' : '#fff',
                                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                     flexShrink: 0, boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
                                                     border: activeLesson?.id === lesson.id ? 'none' : '1px solid #e2e8f0'
                                                 }}>
                                                     {isEnrolled ? (
-                                                        <i className={`bi ${activeLesson?.id === lesson.id ? 'bi-play-fill' : 'bi-play'}`} style={{ color: activeLesson?.id === lesson.id ? '#fff' : '#2563eb', fontSize: '14px' }}></i>
+                                                        <i className={`bi ${activeLesson?.id === lesson.id ? 'bi-play-fill' : 'bi-play'}`} style={{ color: activeLesson?.id === lesson.id ? '#fff' : '#e3000f', fontSize: '14px' }}></i>
                                                     ) : (
                                                         <i className="bi bi-lock-fill" style={{ color: '#94a3b8', fontSize: '12px' }}></i>
                                                     )}
@@ -139,7 +139,7 @@ export default function CourseShow({ auth, course, isEnrolled }) {
                                                     <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 500 }}>Video Lesson • 12:45</div>
                                                 </div>
                                                 {isEnrolled && activeLesson?.id === lesson.id && (
-                                                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#2563eb', background: '#fff', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Playing</span>
+                                                    <span style={{ fontSize: '11px', fontWeight: 800, color: '#e3000f', background: '#fff', padding: '2px 8px', borderRadius: '20px', textTransform: 'uppercase' }}>Playing</span>
                                                 )}
                                             </div>
                                         ))
@@ -150,11 +150,11 @@ export default function CourseShow({ auth, course, isEnrolled }) {
                             {activeTab === 'instructor' && (
                                 <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
                                     <div style={{ width: '120px', height: '120px', borderRadius: '20px', background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <i className="bi bi-person-fill" style={{ fontSize: '64px', color: '#3b82f6' }}></i>
+                                        <i className="bi bi-person-fill" style={{ fontSize: '64px', color: '#cc0000' }}></i>
                                     </div>
                                     <div>
                                         <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#1e293b', marginBottom: '4px' }}>{course.instructor_name || "Expert Instructor"}</h3>
-                                        <div style={{ color: '#2563eb', fontSize: '13px', fontWeight: 700, marginBottom: '12px' }}>Senior Developer & Educator</div>
+                                        <div style={{ color: '#e3000f', fontSize: '13px', fontWeight: 700, marginBottom: '12px' }}>Senior Developer & Educator</div>
                                         <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.6', maxWidth: '400px' }}>
                                             Join the most popular instructor on EduLMS. With over 10 years of experience in technical education, {course.instructor_name} makes complex topics easy to understand.
                                         </p>
@@ -181,7 +181,7 @@ export default function CourseShow({ auth, course, isEnrolled }) {
 
                         {!isEnrolled ? (
                             <Link href={route('admissions.create')} style={{ 
-                                display: 'block', textAlign: 'center', padding: '16px', background: '#2563eb', 
+                                display: 'block', textAlign: 'center', padding: '16px', background: '#e3000f', 
                                 color: '#fff', borderRadius: '12px', textDecoration: 'none', fontWeight: 800, 
                                 fontSize: '16px', marginBottom: '16px', boxShadow: '0 10px 15px -3px rgba(37,99,235,0.3)',
                                 transition: 'all 0.2s'
@@ -216,7 +216,7 @@ export default function CourseShow({ auth, course, isEnrolled }) {
                                     { icon: 'bi-infinity', text: 'Full lifetime access' },
                                 ].map((item, i) => (
                                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#475569', fontSize: '13px', fontWeight: 500 }}>
-                                        <i className={`bi ${item.icon}`} style={{ color: '#2563eb', fontSize: '16px', width: '20px', textAlign: 'center' }}></i>
+                                        <i className={`bi ${item.icon}`} style={{ color: '#e3000f', fontSize: '16px', width: '20px', textAlign: 'center' }}></i>
                                         {item.text}
                                     </div>
                                 ))}
@@ -226,7 +226,7 @@ export default function CourseShow({ auth, course, isEnrolled }) {
                         <div style={{ marginTop: '32px', background: '#f8fafc', borderRadius: '12px', padding: '16px', border: '1px solid #f1f5f9' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0' }}>
-                                    <i className="bi bi-headphones" style={{ color: '#2563eb' }}></i>
+                                    <i className="bi bi-headphones" style={{ color: '#e3000f' }}></i>
                                 </div>
                                 <div>
                                     <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>Need help?</div>

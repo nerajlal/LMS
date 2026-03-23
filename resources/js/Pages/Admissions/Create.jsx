@@ -76,7 +76,7 @@ export default function AdmissionCreate({ auth, courses, batches }) {
                             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
                                 <div style={{ 
                                     display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', 
-                                    borderRadius: '12px', background: i === 0 ? '#2563eb' : '#f8fafc',
+                                    borderRadius: '12px', background: i === 0 ? '#e3000f' : '#f8fafc',
                                     color: i === 0 ? '#fff' : '#64748b', border: i === 0 ? 'none' : '1px solid #f1f5f9'
                                 }}>
                                     <i className={`bi ${step.icon}`} style={{ fontSize: '16px' }}></i>
@@ -91,7 +91,7 @@ export default function AdmissionCreate({ auth, courses, batches }) {
                         {/* Section 1: Personal */}
                         <div style={cardStyle}>
                             <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#eff6ff', color: '#e3000f', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <i className="bi bi-person-fill"></i>
                                 </div>
                                 Personal Information
@@ -203,7 +203,7 @@ export default function AdmissionCreate({ auth, courses, batches }) {
                                 type="submit" 
                                 disabled={processing} 
                                 style={{ 
-                                    padding: '14px 36px', background: '#2563eb', color: '#fff', 
+                                    padding: '14px 36px', background: '#e3000f', color: '#fff', 
                                     border: 'none', borderRadius: '12px', fontWeight: 800, fontSize: '15px',
                                     boxShadow: '0 10px 15px -3px rgba(37,99,235,0.3)', transition: 'all 0.2s',
                                     cursor: processing ? 'not-allowed' : 'pointer', opacity: processing ? 0.7 : 1
@@ -228,7 +228,7 @@ export default function AdmissionCreate({ auth, courses, batches }) {
                             ].map((item, i) => (
                                 <div key={i} style={{ display: 'flex', gap: '16px' }}>
                                     <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f8fafc', border: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <i className={`bi ${item.icon}`} style={{ color: '#2563eb', fontSize: '14px' }}></i>
+                                        <i className={`bi ${item.icon}`} style={{ color: '#e3000f', fontSize: '14px' }}></i>
                                     </div>
                                     <div>
                                         <div style={{ fontSize: '14px', fontWeight: 700, color: '#1e293b', marginBottom: '2px' }}>{item.title}</div>
@@ -241,7 +241,7 @@ export default function AdmissionCreate({ auth, courses, batches }) {
                         <div style={{ mt: '32px', pt: '24px', borderTop: '1px solid #f1f5f9', textAlign: 'center' }}>
                             <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px' }}>Have any questions?</div>
                             <a href="#" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px', background: '#f8fafc', border: '1px solid #f1f5f9', borderRadius: '10px', color: '#1e293b', textDecoration: 'none', fontSize: '13px', fontWeight: 700 }}>
-                                <i className="bi bi-chat-dots-fill" style={{ color: '#2563eb' }}></i>
+                                <i className="bi bi-chat-dots-fill" style={{ color: '#e3000f' }}></i>
                                 Chat with an Advisor
                             </a>
                         </div>
@@ -250,7 +250,7 @@ export default function AdmissionCreate({ auth, courses, batches }) {
                     <div style={{ ...cardStyle, background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', color: '#fff', border: 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
                             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <i className="bi bi-info-circle" style={{ color: '#3b82f6' }}></i>
+                                <i className="bi bi-info-circle" style={{ color: '#cc0000' }}></i>
                             </div>
                             <div style={{ fontSize: '14px', fontWeight: 800 }}>Next Steps</div>
                         </div>

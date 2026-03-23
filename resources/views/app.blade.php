@@ -25,12 +25,12 @@
                 color: #1f2937;
                 -webkit-font-smoothing: antialiased;
             }
-            a { color: #2563eb; }
+            a { color: #e3000f; }
             input::placeholder, textarea::placeholder { color: #9ca3af !important; }
             /* Sidebar nav link hover */
             nav a:hover {
-                background: #f3f4f6 !important;
-                color: #1f2937 !important;
+                background: #fff1f2 !important;
+                color: #e3000f !important;
             }
             /* Smooth animations */
             * { transition-duration: 0.15s; }

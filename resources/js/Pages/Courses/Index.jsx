@@ -28,7 +28,7 @@ const CourseCard = ({ course }) => (
     >
         <Link href={route('courses.show', course.id)} style={{ textDecoration: 'none' }}>
             <div style={{ height: '180px', background: 'linear-gradient(135deg, #f8fafc, #eff6ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-                <i className="bi bi-play-circle-fill" style={{ color: '#2563eb', fontSize: '56px', opacity: 0.9 }}></i>
+                <i className="bi bi-play-circle-fill" style={{ color: '#e3000f', fontSize: '56px', opacity: 0.9 }}></i>
                 {course.price > 0 ? (
                     <span style={{ position: 'absolute', bottom: '12px', right: '12px', background: '#fff', color: '#1e293b', borderRadius: '8px', padding: '4px 10px', fontSize: '14px', fontWeight: 800, boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
                         ₹{course.price?.toLocaleString()}
@@ -66,11 +66,11 @@ const CourseCard = ({ course }) => (
             
             <div style={{ mt: 'auto', pt: '16px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b', fontSize: '12px', fontWeight: 600 }}>
-                    <i className="bi bi-people-fill" style={{ color: '#3b82f6' }}></i>
+                    <i className="bi bi-people-fill" style={{ color: '#cc0000' }}></i>
                     <span>{course.enrollments_count || 0} students</span>
                 </div>
                 <div style={{ color: '#64748b', fontSize: '12px', fontWeight: 600 }}>
-                    <i className="bi bi-clock-fill me-1" style={{ color: '#3b82f6' }}></i> 12h 30m
+                    <i className="bi bi-clock-fill me-1" style={{ color: '#cc0000' }}></i> 12h 30m
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@ export default function CoursesIndex({ auth, courses }) {
                     </p>
                     <div style={{ display: 'flex', gap: '16px' }}>
                         <Link href={route('admissions.create')} style={{ 
-                            background: '#2563eb', color: '#fff', padding: '14px 28px', 
+                            background: '#e3000f', color: '#fff', padding: '14px 28px', 
                             borderRadius: '12px', textDecoration: 'none', fontWeight: 700, fontSize: '16px',
                             boxShadow: '0 10px 15px -3px rgba(37,99,235,0.4)', transition: 'all 0.2s'
                         }}
@@ -122,7 +122,7 @@ export default function CoursesIndex({ auth, courses }) {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <div style={{ display: 'flex', marginLeft: '8px' }}>
                                 {[1,2,3,4].map(i => (
-                                    <div key={i} style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #1e293b', background: '#3b82f6', marginLeft: '-12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700 }}>
+                                    <div key={i} style={{ width: '32px', height: '32px', borderRadius: '50%', border: '2px solid #1e293b', background: '#cc0000', marginLeft: '-12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700 }}>
                                         {String.fromCharCode(64 + i)}
                                     </div>
                                 ))}
@@ -147,7 +147,7 @@ export default function CoursesIndex({ auth, courses }) {
                             onClick={() => setActiveCategory(cat)} 
                             style={{
                                 padding: '8px 18px', borderRadius: '10px', fontSize: '14px', fontWeight: 700, cursor: 'pointer',
-                                background: activeCategory === cat ? '#2563eb' : 'transparent',
+                                background: activeCategory === cat ? '#e3000f' : 'transparent',
                                 border: 'none',
                                 color: activeCategory === cat ? '#fff' : '#64748b',
                                 transition: 'all 0.2s',

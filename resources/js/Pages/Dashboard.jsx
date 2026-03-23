@@ -30,7 +30,7 @@ const CourseProgressRow = ({ title, progress, instructor, thumbnail }) => (
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '12px', color: '#64748b', whiteSpace: 'nowrap' }}>{Math.round(progress/10)}/10 Complete</div>
                 <div style={{ flex: 1, height: '4px', background: '#f1f5f9', borderRadius: '10px', overflow: 'hidden' }}>
-                    <div style={{ width: `${progress}%`, height: '100%', background: '#2563eb' }}></div>
+                    <div style={{ width: `${progress}%`, height: '100%', background: '#e3000f' }}></div>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
 
             {/* Stats Row */}
             <div className="row g-4 mb-4">
-                <div className="col-12 col-md-3"><StatCard icon="bi-briefcase" label="Completed" value={stats?.completed || 0} color="#3b82f6" /></div>
+                <div className="col-12 col-md-3"><StatCard icon="bi-briefcase" label="Completed" value={stats?.completed || 0} color="#cc0000" /></div>
                 <div className="col-12 col-md-3"><StatCard icon="bi-heart" label="Wishlist" value="43" color="#f87171" /></div>
                 <div className="col-12 col-md-3"><StatCard icon="bi-award" label="Certification" value="15" color="#f59e0b" /></div>
                 <div className="col-12 col-md-3"><StatCard icon="bi-cart" label="Purchased" value={stats?.enrolled || 0} color="#10b981" /></div>
@@ -72,7 +72,7 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
                     <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #f1f5f9', overflow: 'hidden' }}>
                         <div style={{ padding: '24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', margin: 0 }}>Courses in progress</h2>
-                            <Link href={route('courses.index')} style={{ color: '#2563eb', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>
+                            <Link href={route('courses.index')} style={{ color: '#e3000f', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>
                         </div>
                         <div style={{ padding: '0 24px' }}>
                             {(enrolledCourses || []).length === 0 ? (
@@ -102,7 +102,7 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
                             <InstructorRow name="Erica Jones" courses="12" avatar="https://ui-avatars.com/api/?name=Erica+Jones&background=random" />
                         </div>
                         <div style={{ padding: '16px 24px', textAlign: 'center', borderTop: '1px solid #f1f5f9' }}>
-                            <Link href="#" style={{ color: '#2563eb', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>
+                            <Link href="#" style={{ color: '#e3000f', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>
                         </div>
                     </div>
 
@@ -114,7 +114,7 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
                                 {upcomingClasses.slice(0, 2).map(cls => (
                                     <div key={cls.id} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                                         <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                            <i className="bi bi-camera-video" style={{ color: '#2563eb' }}></i>
+                                            <i className="bi bi-camera-video" style={{ color: '#e3000f' }}></i>
                                         </div>
                                         <div style={{ flex: 1, minWidth: 0 }}>
                                             <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{cls.title}</div>

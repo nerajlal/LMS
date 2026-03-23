@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import LmsLayout from '@/Layouts/LmsLayout';
 import { Head, Link } from '@inertiajs/react';
 
@@ -24,7 +25,7 @@ const CourseHorizontalCard = ({ course, status, progress = 45 }) => (
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{Math.round(progress/10)}/10 Complete</div>
                 <div style={{ flex: 1, height: '4px', background: '#f1f5f9', borderRadius: '10px', overflow: 'hidden' }}>
-                    <div style={{ width: `${progress}%`, height: '100%', background: '#2563eb' }}></div>
+                    <div style={{ width: `${progress}%`, height: '100%', background: '#e3000f' }}></div>
                 </div>
             </div>
         </div>
@@ -74,8 +75,8 @@ export default function AdmissionsIndex({ auth, admissions }) {
                         onClick={() => setActiveTab(tab)}
                         style={{ 
                             padding: '12px 0', border: 'none', background: 'none', fontSize: '15px', fontWeight: 700,
-                            color: activeTab === tab ? '#2563eb' : '#64748b',
-                            borderBottom: activeTab === tab ? '2px solid #2563eb' : '2px solid transparent',
+                            color: activeTab === tab ? '#e3000f' : '#64748b',
+                            borderBottom: activeTab === tab ? '2px solid #e3000f' : '2px solid transparent',
                             cursor: 'pointer', transition: 'all 0.2s'
                         }}
                     >
@@ -95,7 +96,7 @@ export default function AdmissionsIndex({ auth, admissions }) {
                         <i className="bi bi-journal-x" style={{ fontSize: '48px', color: '#cbd5e1', display: 'block', marginBottom: '16px' }}></i>
                         <div style={{ color: '#1e293b', fontWeight: 700, fontSize: '18px' }}>No courses here</div>
                         <p style={{ color: '#64748b', fontSize: '14px' }}>You haven't enrolled in any courses yet.</p>
-                        <Link href={route('courses.index')} style={{ color: '#2563eb', fontWeight: 700, textDecoration: 'none' }}>Browse Courses</Link>
+                        <Link href={route('courses.index')} style={{ color: '#e3000f', fontWeight: 700, textDecoration: 'none' }}>Browse Courses</Link>
                     </div>
                 )}
             </div>

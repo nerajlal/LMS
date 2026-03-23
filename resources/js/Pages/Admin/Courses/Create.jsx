@@ -34,7 +34,7 @@ export default function AdminCourseCreate({ course }) {
 
             <div style={{ maxWidth: '680px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                    <Link href={route('admin.courses.index')} style={{ color: '#7c3aed', textDecoration: 'none', fontSize: '14px' }}>
+                    <Link href={route('admin.courses.index')} style={{ color: '#e3000f', textDecoration: 'none', fontSize: '14px' }}>
                         <i className="bi bi-arrow-left me-1"></i> Back to Courses
                     </Link>
                 </div>
@@ -96,7 +96,7 @@ export default function AdminCourseCreate({ course }) {
 
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button type="submit" disabled={processing} style={{
-                                background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', color: '#fff',
+                                background: 'linear-gradient(135deg, #e3000f, #cc0000)', color: '#fff',
                                 border: 'none', padding: '10px 24px', borderRadius: '8px',
                                 fontWeight: 600, fontSize: '14px', cursor: processing ? 'not-allowed' : 'pointer',
                                 opacity: processing ? 0.7 : 1,

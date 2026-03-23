@@ -36,7 +36,7 @@ export default function AdminStudentsIndex({ students }) {
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <div style={{
                                                 width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0,
-                                                background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                                                background: 'linear-gradient(135deg, #cc0000, #e3000f)',
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 color: '#fff', fontWeight: 700, fontSize: '13px',
                                             }}>
@@ -47,7 +47,7 @@ export default function AdminStudentsIndex({ students }) {
                                     </td>
                                     <td style={{ padding: '12px 16px', color: '#6b7280' }}>{student.email}</td>
                                     <td style={{ padding: '12px 16px', color: '#6b7280' }}>
-                                        <span style={{ background: '#eff6ff', color: '#3b82f6', borderRadius: '20px', padding: '2px 10px', fontSize: '12px', fontWeight: 600 }}>
+                                        <span style={{ background: '#eff6ff', color: '#cc0000', borderRadius: '20px', padding: '2px 10px', fontSize: '12px', fontWeight: 600 }}>
                                             {student.admissions_count ?? 0}
                                         </span>
                                     </td>

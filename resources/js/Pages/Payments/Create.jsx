@@ -95,7 +95,7 @@ export default function PaymentCreate({ auth, fees }) {
                                     </div>
                                     {selectedFee && (
                                         <div style={{ marginTop: '8px', fontSize: '12px', color: '#64748b', display: 'flex', gap: '8px' }}>
-                                            <button type="button" onClick={() => setData('amount', maxAmount)} style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: 700, padding: 0, cursor: 'pointer' }}>Pay Full Amount (₹{maxAmount.toLocaleString()})</button>
+                                            <button type="button" onClick={() => setData('amount', maxAmount)} style={{ background: 'none', border: 'none', color: '#e3000f', fontWeight: 700, padding: 0, cursor: 'pointer' }}>Pay Full Amount (₹{maxAmount.toLocaleString()})</button>
                                         </div>
                                     )}
                                     {errors.amount && <div style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>{errors.amount}</div>}

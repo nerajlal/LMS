@@ -25,7 +25,7 @@ export default function Login({ status, canResetPassword }) {
                 {/* Left panel - Blue gradient */}
                 <div style={{
                     flex: '1',
-                    background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                    background: 'linear-gradient(135deg, #cc0000, #1d4ed8)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -99,7 +99,7 @@ export default function Login({ status, canResetPassword }) {
                                         borderRadius: '6px', fontSize: '14px', color: '#1f2937', outline: 'none',
                                         boxSizing: 'border-box', background: '#fff',
                                     }}
-                                    onFocus={e => e.target.style.borderColor = '#3b82f6'}
+                                    onFocus={e => e.target.style.borderColor = '#cc0000'}
                                     onBlur={e => e.target.style.borderColor = errors.email ? '#ef4444' : '#d1d5db'}
                                 />
                                 {errors.email && <p style={{ color: '#ef4444', fontSize: '12px', margin: '4px 0 0' }}>{errors.email}</p>}
@@ -109,7 +109,7 @@ export default function Login({ status, canResetPassword }) {
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                                     <label style={{ fontSize: '13px', fontWeight: 500, color: '#374151' }}>Password</label>
                                     {canResetPassword && (
-                                        <Link href={route('password.request')} style={{ color: '#2563eb', fontSize: '12px', textDecoration: 'none' }}>Forgot password?</Link>
+                                        <Link href={route('password.request')} style={{ color: '#e3000f', fontSize: '12px', textDecoration: 'none' }}>Forgot password?</Link>
                                     )}
                                 </div>
                                 <input
@@ -124,7 +124,7 @@ export default function Login({ status, canResetPassword }) {
                                         borderRadius: '6px', fontSize: '14px', color: '#1f2937', outline: 'none',
                                         boxSizing: 'border-box', background: '#fff',
                                     }}
-                                    onFocus={e => e.target.style.borderColor = '#3b82f6'}
+                                    onFocus={e => e.target.style.borderColor = '#cc0000'}
                                     onBlur={e => e.target.style.borderColor = errors.password ? '#ef4444' : '#d1d5db'}
                                 />
                                 {errors.password && <p style={{ color: '#ef4444', fontSize: '12px', margin: '4px 0 0' }}>{errors.password}</p>}
@@ -135,13 +135,13 @@ export default function Login({ status, canResetPassword }) {
                                 disabled={processing}
                                 style={{
                                     width: '100%', padding: '11px',
-                                    background: processing ? '#93c5fd' : '#2563eb',
+                                    background: processing ? '#93c5fd' : '#e3000f',
                                     color: '#fff', border: 'none', borderRadius: '6px',
                                     fontSize: '14px', fontWeight: 600, cursor: processing ? 'not-allowed' : 'pointer',
                                     transition: 'background 0.15s',
                                 }}
                                 onMouseEnter={e => { if (!processing) e.target.style.background = '#1d4ed8'; }}
-                                onMouseLeave={e => { if (!processing) e.target.style.background = '#2563eb'; }}
+                                onMouseLeave={e => { if (!processing) e.target.style.background = '#e3000f'; }}
                             >
                                 {processing ? 'Signing in...' : 'Sign In'}
                             </button>
@@ -149,7 +149,7 @@ export default function Login({ status, canResetPassword }) {
 
                         <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '13px', marginTop: '20px' }}>
                             Don't have an account?{' '}
-                            <Link href={route('register')} style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 600 }}>Apply for Admission</Link>
+                            <Link href={route('register')} style={{ color: '#e3000f', textDecoration: 'none', fontWeight: 600 }}>Apply for Admission</Link>
                         </p>
                     </div>
                 </div>

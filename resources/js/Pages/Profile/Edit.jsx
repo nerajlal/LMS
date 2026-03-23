@@ -20,7 +20,7 @@ export default function Edit({ mustVerifyEmail, status }) {
                             <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', margin: '0 auto' }}>
                                 <img src={`https://ui-avatars.com/api/?name=${user.name}&size=120&background=random`} alt={user.name} />
                             </div>
-                            <button style={{ position: 'absolute', bottom: '0', right: '0', background: '#2563eb', color: '#fff', border: 'none', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                            <button style={{ position: 'absolute', bottom: '0', right: '0', background: '#e3000f', color: '#fff', border: 'none', width: '32px', height: '32px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                                 <i className="bi bi-camera"></i>
                             </button>
                         </div>

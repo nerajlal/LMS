@@ -34,7 +34,7 @@ export default function FeesIndex({ auth, fees }) {
             {/* Summary Row */}
             <div className="row g-4 mb-5">
                 <div className="col-md-4">
-                    <div style={{ ...cardStyle, background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#fff', border: 'none' }}>
+                    <div style={{ ...cardStyle, background: 'linear-gradient(135deg, #cc0000 0%, #e3000f 100%)', color: '#fff', border: 'none' }}>
                         <div style={{ fontSize: '13px', fontWeight: 700, opacity: 0.8, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Total Course Fee</div>
                         <div style={{ fontSize: '32px', fontWeight: 900 }}>₹{totalFees.toLocaleString()}</div>
                         <div style={{ marginTop: '16px', fontSize: '12px', background: 'rgba(255,255,255,0.1)', padding: '6px 12px', borderRadius: '8px', display: 'inline-block' }}>
@@ -59,7 +59,7 @@ export default function FeesIndex({ auth, fees }) {
                         <div style={{ fontSize: '13px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Outstanding Due</div>
                         <div style={{ fontSize: '32px', fontWeight: 900, color: '#ef4444' }}>₹{totalDue.toLocaleString()}</div>
                         {totalDue > 0 && (
-                            <Link href={route('payments.create')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '16px', color: '#2563eb', fontWeight: 700, fontSize: '12px', textDecoration: 'none' }}>
+                            <Link href={route('payments.create')} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginTop: '16px', color: '#e3000f', fontWeight: 700, fontSize: '12px', textDecoration: 'none' }}>
                                 Pay Now <i className="bi bi-arrow-right"></i>
                             </Link>
                         )}
@@ -72,7 +72,7 @@ export default function FeesIndex({ auth, fees }) {
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
                     <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', margin: 0 }}>Fee Breakdown</h3>
                     {totalDue > 0 && (
-                        <Link href={route('payments.create')} style={{ padding: '10px 20px', background: '#2563eb', color: '#fff', borderRadius: '10px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>
+                        <Link href={route('payments.create')} style={{ padding: '10px 20px', background: '#e3000f', color: '#fff', borderRadius: '10px', textDecoration: 'none', fontSize: '13px', fontWeight: 700, boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>
                             <i className="bi bi-credit-card-2-front me-2"></i> Make a Payment
                         </Link>
                     )}
@@ -118,7 +118,7 @@ export default function FeesIndex({ auth, fees }) {
                                         </td>
                                         <td style={{ padding: '20px 16px' }}>
                                             {balance > 0 ? (
-                                                <Link href={route('payments.create')} style={{ padding: '8px 16px', background: '#eff6ff', border: '1px solid #dbeafe', color: '#2563eb', borderRadius: '8px', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
+                                                <Link href={route('payments.create')} style={{ padding: '8px 16px', background: '#eff6ff', border: '1px solid #dbeafe', color: '#e3000f', borderRadius: '8px', textDecoration: 'none', fontSize: '12px', fontWeight: 700 }}>
                                                     Pay
                                                 </Link>
                                             ) : (
@@ -138,7 +138,7 @@ export default function FeesIndex({ auth, fees }) {
             {/* Info Section */}
             <div className="mt-5" style={{ ...cardStyle, background: '#f8fafc', borderStyle: 'dashed' }}>
                 <div style={{ display: 'flex', gap: '16px' }}>
-                    <div style={{ fontSize: '24px', color: '#2563eb' }}><i className="bi bi-info-circle-fill"></i></div>
+                    <div style={{ fontSize: '24px', color: '#e3000f' }}><i className="bi bi-info-circle-fill"></i></div>
                     <div>
                         <h4 style={{ fontSize: '15px', fontWeight: 800, color: '#1e293b', marginBottom: '4px' }}>Secure Payments with PhonePe</h4>
                         <p style={{ fontSize: '13px', color: '#64748b', margin: 0, lineHeight: '1.6' }}>

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'is_trainer',
     ];
 
     /**
@@ -46,7 +47,23 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_trainer' => 'boolean',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
+    public function isTrainer(): bool
+    {
+        return $this->is_trainer;
+    }
+
+    public function isStudent(): bool
+    {
+        return !$this->is_admin && !$this->is_trainer;
     }
 
     public function admissions()

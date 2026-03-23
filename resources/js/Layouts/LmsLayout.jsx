@@ -12,6 +12,12 @@ const NAV_ITEMS = [
     { label: 'Register',     icon: 'bi-plus-circle',    href: 'admissions.create' },
 ];
 
+const TRAINER_NAV = [
+    { label: 'Dashboard',    icon: 'bi-speedometer2',   href: 'trainer.dashboard' },
+    { label: 'My Courses',   icon: 'bi-camera-video',   href: 'trainer.dashboard' }, // Placeholder for trainer routes
+    { label: 'Profile',      icon: 'bi-person',         href: 'profile.edit' },
+];
+
 export default function LmsLayout({ children, title }) {
     const { auth, flash } = usePage().props;
     const user = auth?.user;
@@ -70,10 +76,10 @@ export default function LmsLayout({ children, title }) {
                 overflowX: 'hidden',
             }}>
                 <div style={{ height: '72px', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '12px', flexShrink: 0 }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <i className="bi bi-mortarboard-fill" style={{ color: '#fff', fontSize: '18px' }}></i>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#e3000f', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <i className="bi bi-building-fill" style={{ color: '#fff', fontSize: '18px' }}></i>
                     </div>
-                    {sidebarOpen && <div style={{ fontWeight: 800, fontSize: '20px', color: '#1e293b', letterSpacing: '-0.5px' }}>Courseplus</div>}
+                    {sidebarOpen && <div style={{ fontWeight: 800, fontSize: '20px', color: '#1e293b', letterSpacing: '-0.5px' }}>The Ace India</div>}
                 </div>
 
                 {/* Profile Section (Top) */}
@@ -93,16 +99,16 @@ export default function LmsLayout({ children, title }) {
                 )}
 
                 <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
-                    {NAV_ITEMS.map(item => {
-                        const href = `/${item.href.replace('.', '/')}`;
-                        const active = window.location.pathname === href || (item.href === 'dashboard' && window.location.pathname === '/dashboard');
+                    {(user?.is_trainer ? TRAINER_NAV : NAV_ITEMS).map(item => {
+                        const href = `/${item.href.replace(/\./g, '/')}`;
+                        const active = window.location.pathname === href || (item.href === 'dashboard' && window.location.pathname === '/dashboard') || (item.href === 'trainer.dashboard' && window.location.pathname === '/trainer');
                         return (
                             <Link key={item.label} href={route(item.href)} className="nav-link" style={{
                                 display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 14px', borderRadius: '8px', marginBottom: '4px',
-                                color: active ? '#1e293b' : '#64748b', background: active ? '#f1f5f9' : 'transparent',
+                                color: active ? '#e3000f' : '#64748b', background: active ? '#fff1f2' : 'transparent',
                                 textDecoration: 'none', fontWeight: active ? 700 : 500, fontSize: '14px', transition: 'all 0.2s',
                             }}>
-                                <i className={`bi ${item.icon}`} style={{ fontSize: '18px', opacity: active ? 1 : 0.7 }}></i>
+                                <i className={`bi ${item.icon}`} style={{ fontSize: '18px', color: active ? '#e3000f' : 'inherit', opacity: active ? 1 : 0.7 }}></i>
                                 {sidebarOpen && <span>{item.label}</span>}
                             </Link>
                         );
@@ -148,7 +154,7 @@ export default function LmsLayout({ children, title }) {
                         <i className="bi bi-envelope" style={{ fontSize: '20px', color: '#64748b', cursor: 'pointer' }}></i>
                         <div style={{ position: 'relative' }}>
                             <i className="bi bi-bell" style={{ fontSize: '20px', color: '#64748b', cursor: 'pointer' }}></i>
-                            <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#ef4444', color: '#fff', fontSize: '10px', fontWeight: 700, borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
+                            <span style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#e3000f', color: '#fff', fontSize: '10px', fontWeight: 700, borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>2</span>
                         </div>
                         <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', cursor: 'pointer' }}>
                             <img src={`https://ui-avatars.com/api/?name=${user?.name}&background=random`} alt="User" style={{ width: '100%', height: '100%' }} />
