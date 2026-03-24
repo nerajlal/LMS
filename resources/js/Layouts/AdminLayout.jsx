@@ -26,13 +26,13 @@ export default function AdminLayout({ children, title }) {
     const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f3f4f6', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F4F4', fontFamily: "'Inter', sans-serif" }}>
 
             {/* ── SIDEBAR ── */}
             <aside style={{
                 width: sidebarOpen ? '240px' : '64px',
                 height: '100vh',
-                background: '#111827',
+                background: '#1B365D',
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'fixed',
@@ -50,7 +50,7 @@ export default function AdminLayout({ children, title }) {
                 }}>
                     <div style={{
                         width: '36px', height: '36px', borderRadius: '8px',
-                        background: 'linear-gradient(135deg, #e3000f, #cc0000)',
+                        background: 'linear-gradient(135deg, #F37021, #F37021)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                     }}>
                         <i className="bi bi-building-fill" style={{ color: '#fff', fontSize: '16px' }}></i>
@@ -78,10 +78,10 @@ export default function AdminLayout({ children, title }) {
                                     display: 'flex', alignItems: 'center', gap: '10px',
                                     padding: '9px 12px', borderRadius: '6px', marginBottom: '2px',
                                     color: active ? '#fff' : 'rgba(255,255,255,0.55)',
-                                    background: active ? 'rgba(227,0,15,0.4)' : 'transparent',
+                                    background: active ? 'rgba(243,112,33,0.4)' : 'transparent',
                                     textDecoration: 'none', fontWeight: active ? 600 : 400,
                                     fontSize: '14px', whiteSpace: 'nowrap', transition: 'all 0.15s',
-                                    borderLeft: active ? '3px solid #e3000f' : '3px solid transparent',
+                                    borderLeft: active ? '3px solid #F37021' : '3px solid transparent',
                                 }}
                                 onMouseEnter={e => { if (!active) { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = '#fff'; }}}
                                 onMouseLeave={e => { if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; }}}
@@ -112,7 +112,7 @@ export default function AdminLayout({ children, title }) {
                     <div style={{ padding: '12px 16px', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <div style={{
                             width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0,
-                            background: 'linear-gradient(135deg, #e3000f, #cc0000)',
+                            background: 'linear-gradient(135deg, #F37021, #F37021)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             color: '#fff', fontWeight: 700, fontSize: '13px',
                         }}>
@@ -131,29 +131,29 @@ export default function AdminLayout({ children, title }) {
 
                 {/* Header */}
                 <header style={{
-                    background: 'linear-gradient(to right, #e3000f, #cc0000)',
+                    background: '#FFFFFF',
                     height: '64px', display: 'flex', alignItems: 'center',
                     justifyContent: 'space-between', padding: '0 24px',
                     position: 'sticky', top: 0, zIndex: 1030,
-                    boxShadow: '0 2px 8px rgba(227,0,15,0.3)',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
-                            style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '6px', color: '#fff', fontSize: '18px', cursor: 'pointer', padding: '5px 8px' }}
+                            style={{ background: '#F4F4F4', border: 'none', borderRadius: '6px', color: '#1B365D', fontSize: '18px', cursor: 'pointer', padding: '5px 8px' }}
                         >
                             <i className="bi bi-list"></i>
                         </button>
-                        {title && <h1 style={{ color: '#fff', fontSize: '17px', fontWeight: 600, margin: 0 }}>{title}</h1>}
+                        {title && <h1 style={{ color: '#1B365D', fontSize: '17px', fontWeight: 600, margin: 0 }}>{title}</h1>}
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px' }}>
+                        <span style={{ color: '#333333', fontSize: '13px' }}>
                             <i className="bi bi-shield-check me-1"></i> Admin Panel
                         </span>
                         <Link
                             href={route('logout')} method="post" as="button"
-                            style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '6px', color: '#fff', padding: '7px 12px', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}
+                            style={{ background: '#F4F4F4', border: '1px solid #EEEEEE', borderRadius: '6px', color: '#1B365D', padding: '7px 12px', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}
                         >
                             <i className="bi bi-box-arrow-right me-1"></i> Logout
                         </Link>
@@ -161,7 +161,7 @@ export default function AdminLayout({ children, title }) {
                 </header>
 
                 {/* Page Content */}
-                <main style={{ flex: 1, padding: '28px 24px', background: '#f3f4f6' }}>
+                <main style={{ flex: 1, padding: '28px 24px', background: '#F4F4F4' }}>
                     {children}
                 </main>
             </div>

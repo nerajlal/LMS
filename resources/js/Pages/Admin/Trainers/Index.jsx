@@ -14,10 +14,10 @@ export default function AdminTrainersIndex({ trainers, flash }) {
                 <Link
                     href={route('admin.trainers.create')}
                     style={{
-                        background: 'linear-gradient(to right, #e3000f, #cc0000)',
+                        background: 'linear-gradient(to right, #F37021, #1B365D)',
                         color: '#fff', padding: '10px 20px', borderRadius: '8px',
                         textDecoration: 'none', fontSize: '14px', fontWeight: 600,
-                        boxShadow: '0 4px 6px -1px rgba(227,0,15,0.2)'
+                        boxShadow: '0 4px 6px -1px rgba(243,112,33,0.2)'
                     }}
                 >
                     <i className="bi bi-plus-circle me-2"></i> Add Trainer
@@ -34,7 +34,7 @@ export default function AdminTrainersIndex({ trainers, flash }) {
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
                         <thead>
-                            <tr style={{ background: '#f9fafb' }}>
+                            <tr style={{ background: '#F4F4F4' }}>
                                 {['#', 'Name', 'Email', 'Assigned Courses', 'Joined'].map(h => (
                                     <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontWeight: 600, color: '#6b7280', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
                                 ))}
@@ -46,7 +46,7 @@ export default function AdminTrainersIndex({ trainers, flash }) {
                                     No trainers registered yet. Create one above.
                                 </td></tr>
                             ) : trainers.data.map((trainer, i) => (
-                                <tr key={trainer.id} style={{ borderTop: '1px solid #f3f4f6' }}
+                                <tr key={trainer.id} style={{ borderTop: '1px solid #F4F4F4' }}
                                     onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
                                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                                 >
@@ -55,7 +55,7 @@ export default function AdminTrainersIndex({ trainers, flash }) {
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <div style={{
                                                 width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0,
-                                                background: 'linear-gradient(135deg, #cc0000, #e3000f)',
+                                                background: 'linear-gradient(135deg, #1B365D, #F37021)',
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 color: '#fff', fontWeight: 700, fontSize: '13px',
                                             }}>

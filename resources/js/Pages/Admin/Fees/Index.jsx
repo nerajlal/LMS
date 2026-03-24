@@ -4,7 +4,7 @@ import { Head, router } from '@inertiajs/react';
 export default function AdminFeesIndex({ fees, stats }) {
     const statusBadge = (status) => {
         const map = { paid: { bg: '#d1fae5', color: '#059669' }, pending: { bg: '#fef3c7', color: '#d97706' }, overdue: { bg: '#fee2e2', color: '#dc2626' } };
-        const s = map[status] || { bg: '#f3f4f6', color: '#6b7280' };
+        const s = map[status] || { bg: '#F4F4F4', color: '#6b7280' };
         return <span style={{ background: s.bg, color: s.color, borderRadius: '20px', padding: '3px 10px', fontSize: '12px', fontWeight: 600 }}>{status}</span>;
     };
 
@@ -42,7 +42,7 @@ export default function AdminFeesIndex({ fees, stats }) {
                             {(fees?.data || []).length === 0 ? (
                                 <tr><td colSpan="7" style={{ padding: '32px', textAlign: 'center', color: '#9ca3af' }}>No fee records yet.</td></tr>
                             ) : fees.data.map((fee, i) => (
-                                <tr key={fee.id} style={{ borderTop: '1px solid #f3f4f6' }}
+                                <tr key={fee.id} style={{ borderTop: '1px solid #F4F4F4' }}
                                     onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
                                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                                 >

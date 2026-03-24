@@ -41,7 +41,7 @@ export default function AdminTrainersCreate() {
                             placeholder="John Doe"
                             required
                         />
-                        {errors.name && <div style={{ color: '#e3000f', fontSize: '12px', marginTop: '6px' }}>{errors.name}</div>}
+                        {errors.name && <div style={{ color: '#F37021', fontSize: '12px', marginTop: '6px' }}>{errors.name}</div>}
                     </div>
 
                     {/* Email */}
@@ -56,7 +56,7 @@ export default function AdminTrainersCreate() {
                             placeholder="trainer@example.com"
                             required
                         />
-                        {errors.email && <div style={{ color: '#e3000f', fontSize: '12px', marginTop: '6px' }}>{errors.email}</div>}
+                        {errors.email && <div style={{ color: '#F37021', fontSize: '12px', marginTop: '6px' }}>{errors.email}</div>}
                     </div>
 
                     {/* Password */}
@@ -70,7 +70,7 @@ export default function AdminTrainersCreate() {
                             style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #d1d5db', fontSize: '14px' }}
                             required
                         />
-                        {errors.password && <div style={{ color: '#e3000f', fontSize: '12px', marginTop: '6px' }}>{errors.password}</div>}
+                        {errors.password && <div style={{ color: '#F37021', fontSize: '12px', marginTop: '6px' }}>{errors.password}</div>}
                     </div>
 
                     {/* Password Confirmation */}
@@ -99,7 +99,7 @@ export default function AdminTrainersCreate() {
                             type="submit" 
                             disabled={processing}
                             style={{
-                                background: 'linear-gradient(to right, #e3000f, #cc0000)',
+                                background: 'linear-gradient(to right, #F37021, #1B365D)',
                                 color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px',
                                 fontSize: '14px', fontWeight: 600, cursor: processing ? 'not-allowed' : 'pointer',
                                 opacity: processing ? 0.7 : 1

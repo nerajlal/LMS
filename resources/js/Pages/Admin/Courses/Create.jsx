@@ -34,13 +34,13 @@ export default function AdminCourseCreate({ course }) {
 
             <div style={{ maxWidth: '680px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                    <Link href={route('admin.courses.index')} style={{ color: '#e3000f', textDecoration: 'none', fontSize: '14px' }}>
+                    <Link href={route('admin.courses.index')} style={{ color: '#F37021', textDecoration: 'none', fontSize: '14px' }}>
                         <i className="bi bi-arrow-left me-1"></i> Back to Courses
                     </Link>
                 </div>
 
                 <div style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
-                    <div style={{ padding: '20px 24px', borderBottom: '1px solid #f3f4f6' }}>
+                    <div style={{ padding: '20px 24px', borderBottom: '1px solid #F4F4F4' }}>
                         <h1 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#1f2937' }}>
                             {isEdit ? 'Edit Course' : 'Add New Course'}
                         </h1>
@@ -96,7 +96,7 @@ export default function AdminCourseCreate({ course }) {
 
                         <div style={{ display: 'flex', gap: '10px' }}>
                             <button type="submit" disabled={processing} style={{
-                                background: 'linear-gradient(135deg, #e3000f, #cc0000)', color: '#fff',
+                                background: 'linear-gradient(135deg, #F37021, #F37021)', color: '#fff',
                                 border: 'none', padding: '10px 24px', borderRadius: '8px',
                                 fontWeight: 600, fontSize: '14px', cursor: processing ? 'not-allowed' : 'pointer',
                                 opacity: processing ? 0.7 : 1,
@@ -104,7 +104,7 @@ export default function AdminCourseCreate({ course }) {
                                 {processing ? 'Saving...' : (isEdit ? 'Update Course' : 'Create Course')}
                             </button>
                             <Link href={route('admin.courses.index')} style={{
-                                background: '#f3f4f6', color: '#6b7280', padding: '10px 20px',
+                                background: '#F4F4F4', color: '#6b7280', padding: '10px 20px',
                                 borderRadius: '8px', textDecoration: 'none', fontWeight: 500, fontSize: '14px',
                             }}>
                                 Cancel

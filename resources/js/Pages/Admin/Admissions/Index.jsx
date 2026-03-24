@@ -8,7 +8,7 @@ export default function AdminAdmissionsIndex({ admissions }) {
             approved: { bg: '#d1fae5', color: '#059669' },
             rejected: { bg: '#fee2e2', color: '#dc2626' },
         };
-        const s = map[status] || { bg: '#f3f4f6', color: '#6b7280' };
+        const s = map[status] || { bg: '#F4F4F4', color: '#6b7280' };
         return (
             <span style={{ background: s.bg, color: s.color, borderRadius: '20px', padding: '3px 10px', fontSize: '12px', fontWeight: 600 }}>
                 {status?.charAt(0).toUpperCase() + status?.slice(1)}
@@ -44,7 +44,7 @@ export default function AdminAdmissionsIndex({ admissions }) {
                                     No admissions yet.
                                 </td></tr>
                             ) : admissions.data.map((a, i) => (
-                                <tr key={a.id} style={{ borderTop: '1px solid #f3f4f6' }}
+                                <tr key={a.id} style={{ borderTop: '1px solid #F4F4F4' }}
                                     onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
                                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                                 >

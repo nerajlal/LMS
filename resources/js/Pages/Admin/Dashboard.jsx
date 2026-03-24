@@ -27,7 +27,7 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
             approved: { bg: '#d1fae5', color: '#059669' },
             rejected: { bg: '#fee2e2', color: '#dc2626' },
         };
-        const s = map[status] || { bg: '#f3f4f6', color: '#6b7280' };
+        const s = map[status] || { bg: '#F4F4F4', color: '#6b7280' };
         return (
             <span style={{ background: s.bg, color: s.color, borderRadius: '20px', padding: '3px 10px', fontSize: '12px', fontWeight: 600 }}>
                 {status}
@@ -41,7 +41,7 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
 
             {/* Welcome strip */}
             <div style={{
-                background: 'linear-gradient(135deg, #e3000f, #cc0000)', borderRadius: '14px',
+                background: '#1B365D', borderRadius: '14px',
                 padding: '24px 28px', marginBottom: '24px', color: '#fff',
             }}>
                 <h1 style={{ margin: 0, fontSize: '22px', fontWeight: 700 }}>Admin Dashboard</h1>
@@ -51,10 +51,10 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
             {/* Stats Grid */}
             <div className="row g-3 mb-4">
                 <div className="col-6 col-lg-3">
-                    <StatCard icon="bi-people" label="Total Students" value={stats?.total_students ?? 0} color="#cc0000" />
+                    <StatCard icon="bi-people" label="Total Students" value={stats?.total_students ?? 0} color="#F37021" />
                 </div>
                 <div className="col-6 col-lg-3">
-                    <StatCard icon="bi-collection-play" label="Total Courses" value={stats?.total_courses ?? 0} color="#e3000f" />
+                    <StatCard icon="bi-collection-play" label="Total Courses" value={stats?.total_courses ?? 0} color="#F37021" />
                 </div>
                 <div className="col-6 col-lg-3">
                     <StatCard icon="bi-person-check" label="Admissions" value={stats?.total_admissions ?? 0} color="#10b981" sub={`${stats?.pending_admissions ?? 0} pending`} />
@@ -73,8 +73,8 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
             {/* Quick Actions */}
             <div className="row g-3 mb-4">
                 {[
-                    { label: 'Add New Course', icon: 'bi-plus-circle', href: route('admin.courses.create'), color: '#e3000f' },
-                    { label: 'View Students',  icon: 'bi-people',       href: route('admin.students.index'), color: '#cc0000' },
+                    { label: 'Add New Course', icon: 'bi-plus-circle', href: route('admin.courses.create'), color: '#F37021' },
+                    { label: 'View Students',  icon: 'bi-people',       href: route('admin.students.index'), color: '#F37021' },
                     { label: 'Manage Admissions', icon: 'bi-person-check', href: route('admin.admissions.index'), color: '#10b981' },
                     { label: 'Fee Records',   icon: 'bi-cash-stack',   href: route('admin.fees.index'), color: '#f59e0b' },
                 ].map(a => (
@@ -100,9 +100,9 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
 
             {/* Recent Admissions */}
             <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
-                <div style={{ padding: '16px 20px', borderBottom: '1px solid #f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ padding: '16px 20px', borderBottom: '1px solid #F4F4F4', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#1f2937' }}>Recent Admissions</h2>
-                    <Link href={route('admin.admissions.index')} style={{ fontSize: '13px', color: '#e3000f', textDecoration: 'none' }}>View All →</Link>
+                    <Link href={route('admin.admissions.index')} style={{ fontSize: '13px', color: '#F37021', textDecoration: 'none' }}>View All →</Link>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
@@ -118,7 +118,7 @@ export default function AdminDashboard({ stats, recentAdmissions }) {
                                 <tr><td colSpan="4" style={{ padding: '24px', textAlign: 'center', color: '#9ca3af' }}>No admissions yet. Seed demo data to populate.</td></tr>
                             ) : (
                                 recentAdmissions.map(a => (
-                                    <tr key={a.id} style={{ borderTop: '1px solid #f3f4f6' }}>
+                                    <tr key={a.id} style={{ borderTop: '1px solid #F4F4F4' }}>
                                         <td style={{ padding: '12px 16px', color: '#1f2937', fontWeight: 500 }}>{a.user?.name}</td>
                                         <td style={{ padding: '12px 16px', color: '#6b7280' }}>{a.course?.title}</td>
                                         <td style={{ padding: '12px 16px', color: '#6b7280' }}>{new Date(a.created_at).toLocaleDateString()}</td>

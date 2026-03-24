@@ -25,15 +25,15 @@
                 color: #1f2937;
                 -webkit-font-smoothing: antialiased;
             }
-            a { color: #e3000f; }
-            input::placeholder, textarea::placeholder { color: #9ca3af !important; }
+            a { color: #F37021; }
+            input::placeholder, textarea::placeholder { color: #333333 !important; }
             /* Sidebar nav link hover */
             nav a:hover {
-                background: #fff1f2 !important;
-                color: #e3000f !important;
+                background: #F4F4F4 !important;
+                color: #F37021 !important;
             }
-            /* Smooth animations */
-            * { transition-duration: 0.15s; }
+            /* Smooth animations - restricted to specific elements */
+            a, button, .nav-link, input { transition-duration: 0.15s; }
             /* Custom scrollbar */
             ::-webkit-scrollbar { width: 5px; }
             ::-webkit-scrollbar-track { background: #f3f4f6; }

@@ -18,7 +18,7 @@ export default function AdminCoursesIndex({ courses }) {
                     <p style={{ margin: '2px 0 0', color: '#6b7280', fontSize: '14px' }}>{courses?.total ?? 0} total courses</p>
                 </div>
                 <Link href={route('admin.courses.create')} style={{
-                    background: 'linear-gradient(135deg, #e3000f, #cc0000)', color: '#fff',
+                    background: 'linear-gradient(135deg, #F37021, #F37021)', color: '#fff',
                     padding: '9px 18px', borderRadius: '8px', textDecoration: 'none',
                     fontWeight: 600, fontSize: '14px', display: 'inline-flex', alignItems: 'center', gap: '6px',
                 }}>
@@ -39,11 +39,11 @@ export default function AdminCoursesIndex({ courses }) {
                         <tbody>
                             {(courses?.data || []).length === 0 ? (
                                 <tr><td colSpan="7" style={{ padding: '32px', textAlign: 'center', color: '#9ca3af' }}>
-                                    No courses yet. <Link href={route('admin.courses.create')} style={{ color: '#e3000f' }}>Add your first course</Link>.
+                                    No courses yet. <Link href={route('admin.courses.create')} style={{ color: '#F37021' }}>Add your first course</Link>.
                                 </td></tr>
                             ) : (
                                 courses.data.map((course, i) => (
-                                    <tr key={course.id} style={{ borderTop: '1px solid #f3f4f6' }}
+                                    <tr key={course.id} style={{ borderTop: '1px solid #F4F4F4' }}
                                         onMouseEnter={e => e.currentTarget.style.background = '#fafafa'}
                                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                                     >
@@ -59,7 +59,7 @@ export default function AdminCoursesIndex({ courses }) {
                                         <td style={{ padding: '12px 16px' }}>
                                             <div style={{ display: 'flex', gap: '6px' }}>
                                                 <Link href={route('admin.courses.edit', course.id)} style={{
-                                                    background: '#eff6ff', color: '#cc0000', border: 'none',
+                                                    background: '#eff6ff', color: '#F37021', border: 'none',
                                                     padding: '5px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 600, textDecoration: 'none',
                                                 }}>
                                                     <i className="bi bi-pencil me-1"></i>Edit
@@ -81,11 +81,11 @@ export default function AdminCoursesIndex({ courses }) {
 
                 {/* Pagination */}
                 {courses?.last_page > 1 && (
-                    <div style={{ padding: '16px 20px', borderTop: '1px solid #f3f4f6', display: 'flex', gap: '8px' }}>
+                    <div style={{ padding: '16px 20px', borderTop: '1px solid #F4F4F4', display: 'flex', gap: '8px' }}>
                         {courses.links?.map((link, i) => (
                             <Link key={i} href={link.url || '#'} style={{
                                 padding: '5px 12px', borderRadius: '6px', fontSize: '13px', textDecoration: 'none',
-                                background: link.active ? '#e3000f' : '#f3f4f6',
+                                background: link.active ? '#F37021' : '#F4F4F4',
                                 color: link.active ? '#fff' : '#6b7280',
                             }} dangerouslySetInnerHTML={{ __html: link.label }} />
                         ))}
