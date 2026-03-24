@@ -102,9 +102,16 @@ EduLMS is a modern, premium **Learning Management System (LMS)** built with **La
 
 ## 🎨 Design System
 
-The UI is meticulously crafted to match the **Courseplus** theme:
-- **Primary Color**: `#2563eb` (Blue)
-- **Background**: `#f3f4f6` (Light Gray)
+The UI architecture has been custom tailored to strictly adhere to **The Ace India** brand color palette:
+
+| Element | Color Name | Hex Code |
+|---------|------------|----------|
+| **Primary/Accents** | Safety Orange | `#F37021` |
+| **Headings/Sidebars** | Deep Navy Blue | `#1B365D` |
+| **Text/Body/Icons** | Charcoal Grey | `#333333` |
+| **Borders/Cards** | Pure White | `#FFFFFF` |
+| **Base Background** | Light Silver | `#F4F4F4` |
+
 - **Typography**: Inter (Google Fonts)
 
 ---
