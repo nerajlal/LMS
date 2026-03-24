@@ -53,7 +53,7 @@ const InstructorRow = ({ name, courses, avatar }) => (
     </div>
 );
 
-export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasses }) {
+export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasses, topInstructors }) {
     return (
         <LmsLayout title="Dashboard">
             <Head title="Student Dashboard" />
@@ -61,8 +61,8 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
             {/* Stats Row */}
             <div className="row g-4 mb-4">
                 <div className="col-12 col-md-3"><StatCard icon="bi-briefcase" label="Completed" value={stats?.completed || 0} color="#cc0000" /></div>
-                <div className="col-12 col-md-3"><StatCard icon="bi-heart" label="Wishlist" value="43" color="#f87171" /></div>
-                <div className="col-12 col-md-3"><StatCard icon="bi-award" label="Certification" value="15" color="#f59e0b" /></div>
+                <div className="col-12 col-md-3"><StatCard icon="bi-heart" label="Wishlist" value={stats?.wishlist || 0} color="#f87171" /></div>
+                <div className="col-12 col-md-3"><StatCard icon="bi-award" label="Certification" value={stats?.certifications || 0} color="#f59e0b" /></div>
                 <div className="col-12 col-md-3"><StatCard icon="bi-cart" label="Purchased" value={stats?.enrolled || 0} color="#10b981" /></div>
             </div>
 
@@ -95,11 +95,13 @@ export default function Dashboard({ auth, stats, enrolledCourses, upcomingClasse
                             <h2 style={{ fontSize: '18px', fontWeight: 800, color: '#1e293b', margin: 0 }}>Top Instructors</h2>
                         </div>
                         <div style={{ padding: '0 24px' }}>
-                            <InstructorRow name="Stella Johnson" courses="28" avatar="https://ui-avatars.com/api/?name=Stella+Johnson&background=random" />
-                            <InstructorRow name="Alex Dolgove" courses="23" avatar="https://ui-avatars.com/api/?name=Alex+Dolgove&background=random" />
-                            <InstructorRow name="John Michael" courses="19" avatar="https://ui-avatars.com/api/?name=John+Michael&background=random" />
-                            <InstructorRow name="Dennis Han" courses="17" avatar="https://ui-avatars.com/api/?name=Dennis+Han&background=random" />
-                            <InstructorRow name="Erica Jones" courses="12" avatar="https://ui-avatars.com/api/?name=Erica+Jones&background=random" />
+                            {(topInstructors || []).length === 0 ? (
+                                <div style={{ padding: '24px 0', textAlign: 'center', color: '#9ca3af', fontSize: '13px' }}>
+                                    No instructors available.
+                                </div>
+                            ) : topInstructors.map(instructor => (
+                                <InstructorRow key={instructor.id} name={instructor.name} courses={instructor.courses} avatar={instructor.avatar} />
+                            ))}
                         </div>
                         <div style={{ padding: '16px 24px', textAlign: 'center', borderTop: '1px solid #f1f5f9' }}>
                             <Link href="#" style={{ color: '#e3000f', fontSize: '14px', fontWeight: 700, textDecoration: 'none' }}>See all</Link>

@@ -6,6 +6,7 @@ const ADMIN_NAV = [
     { label: 'Courses',     icon: 'bi-collection-play',   href: 'admin.courses.index' },
     { label: 'Live Classes', icon: 'bi-camera-video',     href: 'admin.live-classes.index' },
     { label: 'Resources',   icon: 'bi-file-earmark-text', href: 'admin.study-materials.index' },
+    { label: 'Trainers',    icon: 'bi-person-badge',       href: 'admin.trainers.index' },
     { label: 'Students',    icon: 'bi-people',             href: 'admin.students.index' },
     { label: 'Admissions',  icon: 'bi-person-check',       href: 'admin.admissions.index' },
     { label: 'Fees',        icon: 'bi-cash-stack',         href: 'admin.fees.index' },
@@ -30,7 +31,7 @@ export default function AdminLayout({ children, title }) {
             {/* ── SIDEBAR ── */}
             <aside style={{
                 width: sidebarOpen ? '240px' : '64px',
-                minHeight: '100vh',
+                height: '100vh',
                 background: '#111827',
                 display: 'flex',
                 flexDirection: 'column',
@@ -63,7 +64,7 @@ export default function AdminLayout({ children, title }) {
                 </div>
 
                 {/* Navigation */}
-                <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
+                <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto', minHeight: 0 }}>
                     {(user?.is_trainer && !user?.is_admin ? TRAINER_NAV : ADMIN_NAV).map(item => {
                         const active = currentPath.startsWith('/admin/' + item.href.replace('admin.', '').replace('.index', '').replace('.', '/'))
                             || currentPath.startsWith('/trainer/' + item.href.replace('trainer.', '').replace('.index', '').replace('.', '/'))

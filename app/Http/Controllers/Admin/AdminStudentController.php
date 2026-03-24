@@ -11,6 +11,7 @@ class AdminStudentController extends Controller
     public function index()
     {
         $students = User::where('is_admin', false)
+            ->where('is_trainer', false)
             ->withCount(['admissions', 'enrollments'])
             ->latest()
             ->paginate(20);

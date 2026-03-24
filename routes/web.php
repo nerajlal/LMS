@@ -83,6 +83,9 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     // Students
     Route::get('students', [AdminStudentController::class, 'index'])->name('students.index');
 
+    // Trainers
+    Route::resource('trainers', \App\Http\Controllers\Admin\AdminTrainerController::class)->only(['index', 'create', 'store']);
+
     // Admissions
     Route::get('admissions', [AdminAdmissionController::class, 'index'])->name('admissions.index');
     Route::post('admissions/{admission}/approve', [AdminAdmissionController::class, 'approve'])->name('admissions.approve');

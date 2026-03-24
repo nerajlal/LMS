@@ -44,32 +44,44 @@ class DashboardController extends Controller
             });
 
         $stats = [
-            'enrolled'    => $activeCourseIds->count(),
-            'completed'   => 0,
-            'liveClasses' => 2, // Mocking
-            'feesDue'     => number_format(Fee::where('user_id', $user->id)->where('status', 'pending')->sum('total_amount')),
+            'enrolled'       => $activeCourseIds->count(),
+            'completed'      => 0,
+            'wishlist'       => 0,
+            'certifications' => 0,
+            'liveClasses'    => 2, // Mocking
+            'feesDue'        => number_format(Fee::where('user_id', $user->id)->where('status', 'pending')->sum('total_amount')),
         ];
 
-        // Mocking upcoming classes
-        $upcomingClasses = [
-            [
-                'id' => 1,
-                'title' => 'Deep Dive into React Hooks',
-                'time' => 'Today, 4:00 PM',
-                'host' => 'Prof. Rao',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Exploratory Data Analysis',
-                'time' => 'Tomorrow, 10:30 AM',
-                'host' => 'Prof. Sharma',
-            ]
-        ];
+        $upcomingClasses = \App\Models\LiveClass::where('status', 'upcoming')
+            ->orderBy('start_time', 'asc')
+            ->take(3)
+            ->get()
+            ->map(function($class) {
+                return [
+                    'id' => $class->id,
+                    'title' => $class->title,
+                    'time' => \Carbon\Carbon::parse($class->start_time)->format('M d, Y - g:i A'),
+                    'host' => $class->instructor_name, // Optional based on UI
+                ];
+            });
+
+        $topInstructors = \App\Models\User::where('is_trainer', true)
+            ->take(5)
+            ->get()
+            ->map(function($trainer) {
+                return [
+                    'id' => $trainer->id,
+                    'name' => $trainer->name,
+                    'courses' => \App\Models\Course::where('instructor_name', $trainer->name)->count(),
+                    'avatar' => 'https://ui-avatars.com/api/?name=' . urlencode($trainer->name) . '&background=random',
+                ];
+            });
 
         return Inertia::render('Dashboard', [
             'stats' => $stats,
             'enrolledCourses' => $enrolledCourses,
             'upcomingClasses' => $upcomingClasses,
+            'topInstructors' => $topInstructors,
         ]);
     }
 }
