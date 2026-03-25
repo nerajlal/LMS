@@ -13,7 +13,7 @@
     <!-- Courses Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
         @foreach($courses as $course)
-        <div class="group bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all overflow-hidden flex flex-col">
+        <div class="group bg-white rounded-[12px] border border-slate-100 shadow-sm hover:shadow-2xl transition-all overflow-hidden flex flex-col">
             <div class="relative h-56 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800" 
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="">

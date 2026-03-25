@@ -3,21 +3,19 @@
 @section('title', isset($course) ? 'Modify Course' : 'Create Course')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-10">
-    <div class="bg-white rounded-[3rem] border border-slate-100 shadow-2xl relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-40 h-40 bg-[#F37021]/10 rounded-full blur-3xl opacity-50"></div>
-        
-        <div class="p-10 lg:p-14">
-            <div class="mb-12 relative flex items-center justify-between">
+<div class="max-w-4xl mx-auto py-8">
+    <div class="bg-white rounded-[12px] border border-border shadow-md relative overflow-hidden">
+        <div class="p-8 lg:p-12">
+            <div class="mb-10 relative flex items-center justify-between">
                 <div>
-                    <div class="text-[10px] font-black text-[#F37021] uppercase tracking-[0.2em] mb-2 pl-1">Knowledge Management</div>
-                    <h1 class="text-3xl font-black text-slate-900 tracking-tight">
+                    <div class="text-[11px] font-[700] text-primary uppercase tracking-widest mb-2 pl-1">Knowledge Management</div>
+                    <h1 class="text-[32px] font-[800] text-navy tracking-tight">
                         {{ isset($course) ? 'Modify Curriculum' : 'Launch New Program' }}
                     </h1>
-                    <p class="text-sm text-slate-500 font-medium italic mt-2">Fill the metadata details below to push updates to the store.</p>
+                    <p class="text-[14px] text-muted font-[500] mt-2 italic">Fill the metadata details below to push updates to the store.</p>
                 </div>
                 <div class="hidden sm:block">
-                    <div class="w-16 h-16 bg-[#F37021]/5 rounded-2xl flex items-center justify-center text-[#F37021] text-3xl">
+                    <div class="w-16 h-16 bg-accent rounded-[12px] flex items-center justify-center text-primary text-3xl">
                         <i class="bi {{ isset($course) ? 'bi-pencil-square' : 'bi-plus-circle' }}"></i>
                     </div>
                 </div>
@@ -25,61 +23,61 @@
 
             <form action="{{ isset($course) ? route('admin.courses.update', $course->id) : route('admin.courses.store') }}" 
                   method="POST" 
-                  class="space-y-10">
+                  class="space-y-8">
                 @csrf
                 @if(isset($course)) @method('PUT') @endif
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-1">Course Title</label>
+                        <label class="block text-[12px] font-[700] text-navy uppercase tracking-wider mb-3 pl-1">Course Title</label>
                         <input type="text" name="title" required 
                                value="{{ old('title', $course->title ?? '') }}" 
                                placeholder="e.g. Fullstack Web Development 2024" 
-                               class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold shadow-inner">
-                        @error('title') <p class="mt-2 text-xs font-bold text-orange-600">{{ $message }}</p> @enderror
+                               class="w-full px-5 py-3 bg-white border border-border rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[14px] font-[600] text-navy">
+                        @error('title') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-1">Course Description</label>
+                        <label class="block text-[12px] font-[700] text-navy uppercase tracking-wider mb-3 pl-1">Course Description</label>
                         <textarea name="description" rows="4" 
-                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-3xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold shadow-inner">{{ old('description', $course->description ?? '') }}</textarea>
+                                class="w-full px-5 py-3 bg-white border border-border rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[14px] font-[600] text-navy">{{ old('description', $course->description ?? '') }}</textarea>
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-1">Instructor Name</label>
+                        <label class="block text-[12px] font-[700] text-navy uppercase tracking-wider mb-3 pl-1">Instructor Name</label>
                         <input type="text" name="instructor_name" required 
                                value="{{ old('instructor_name', $course->instructor_name ?? '') }}" 
                                placeholder="e.g. Neraj Lal" 
-                               class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold shadow-inner">
-                        @error('instructor_name') <p class="mt-2 text-xs font-bold text-orange-600">{{ $message }}</p> @enderror
+                               class="w-full px-5 py-3 bg-white border border-border rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[14px] font-[600] text-navy">
+                        @error('instructor_name') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-1">Course Price (INR)</label>
+                        <label class="block text-[12px] font-[700] text-navy uppercase tracking-wider mb-3 pl-1">Course Price (INR)</label>
                         <div class="relative">
-                            <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-sm">₹</span>
+                            <span class="absolute left-5 top-1/2 -translate-y-1/2 text-muted font-[700] text-[14px]">₹</span>
                             <input type="number" name="price" required 
                                    value="{{ old('price', $course->price ?? '') }}" 
                                    placeholder="4999" 
-                                   class="w-full pl-12 pr-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold shadow-inner">
+                                   class="w-full pl-10 pr-5 py-3 bg-white border border-border rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[14px] font-[600] text-navy">
                         </div>
-                        @error('price') <p class="mt-2 text-xs font-bold text-orange-600">{{ $message }}</p> @enderror
+                        @error('price') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="md:col-span-2">
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 pl-1">Thumbnail Overlay / CSS Color Code</label>
+                        <label class="block text-[12px] font-[700] text-navy uppercase tracking-wider mb-3 pl-1">Thumbnail / Background Color</label>
                         <input type="text" name="thumbnail" 
                                value="{{ old('thumbnail', $course->thumbnail ?? '') }}" 
                                placeholder="e.g. bg-blue-500 or image-url" 
-                               class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-[10px] font-black uppercase tracking-widest shadow-inner">
+                               class="w-full px-5 py-3 bg-white border border-border rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[12px] font-[700] text-navy uppercase tracking-widest">
                     </div>
                 </div>
 
-                <div class="pt-10 flex flex-col sm:flex-row gap-4">
-                    <button type="submit" class="flex-1 py-5 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#F37021] transition-all transform hover:-translate-y-1 shadow-2xl shadow-slate-900/10">
+                <div class="pt-8 border-t border-border flex flex-col sm:flex-row gap-4">
+                    <button type="submit" class="flex-1 py-4 bg-navy text-white rounded-[8px] font-[700] text-[14px] uppercase tracking-widest hover:bg-primary transition-all shadow-sm">
                         {{ isset($course) ? 'Apply Global Changes' : 'Initialize Curriculum' }}
                     </button>
-                    <a href="{{ route('admin.courses.index') }}" class="py-5 px-10 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 text-center transition-all">
+                    <a href="{{ route('admin.courses.index') }}" class="py-4 px-[32px] bg-border/50 text-muted rounded-[8px] font-[700] text-[14px] uppercase tracking-widest hover:bg-border text-center transition-all">
                         Discard
                     </a>
                 </div>

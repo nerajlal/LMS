@@ -13,9 +13,9 @@
 
     <!-- Financial Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl flex items-center gap-6 relative overflow-hidden group hover:shadow-2xl transition-all">
+        <div class="bg-white p-8 rounded-[12px] border border-slate-100 shadow-xl flex items-center gap-6 relative overflow-hidden group hover:shadow-2xl transition-all">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-50 rounded-full blur-3xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
-            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-3xl shrink-0">
+            <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-[12px] flex items-center justify-center text-3xl shrink-0">
                 <i class="bi bi-hourglass-split"></i>
             </div>
             <div>
@@ -24,9 +24,9 @@
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl flex items-center gap-6 relative overflow-hidden group hover:shadow-2xl transition-all">
+        <div class="bg-white p-8 rounded-[12px] border border-slate-100 shadow-xl flex items-center gap-6 relative overflow-hidden group hover:shadow-2xl transition-all">
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-emerald-50 rounded-full blur-3xl opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
-            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl shrink-0">
+            <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-[12px] flex items-center justify-center text-3xl shrink-0">
                 <i class="bi bi-wallet2"></i>
             </div>
             <div>
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
+    <div class="bg-white rounded-[12px] border border-slate-100 shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead>

@@ -12,7 +12,9 @@ class AdmissionController extends Controller
     public function index()
     {
         $admissions = Admission::where('user_id', auth()->id())
-            ->with(['course', 'batch'])
+            ->with(['course' => function($query) {
+                $query->withCount('lessons');
+            }, 'batch'])
             ->latest()
             ->get();
 

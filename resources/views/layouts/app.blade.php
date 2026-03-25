@@ -22,6 +22,9 @@
                     colors: {
                         primary: '#F37021',
                         navy: '#1B365D',
+                        accent: '#FEF1EA',
+                        border: '#F4F4F4',
+                        muted: '#333333',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -42,6 +45,15 @@
             .video-container iframe {
                 @apply absolute top-0 left-0 w-full h-full border-0;
             }
+            .nav-link {
+                @apply flex items-center gap-[14px] px-[14px] py-[10px] rounded-[8px] mb-[4px] text-[14px] transition-all duration-200;
+            }
+            .nav-link-active {
+                @apply bg-accent text-primary font-[700];
+            }
+            .nav-link-inactive {
+                @apply text-muted font-[500] hover:bg-border hover:text-navy;
+            }
         }
     </style>
 
@@ -50,126 +62,159 @@
 
     <style>
         [x-cloak] { display: none !important; }
-        body { font-family: 'Inter', sans-serif; background-color: #F4F4F4; }
+        body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
+        .sidebar-shadow { box-shadow: 2px 0 12px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="text-slate-900 antialiased">
-    <!-- Navbar -->
-    <nav class="bg-white border-b border-slate-100 sticky top-0 z-50 shadow-sm" x-data="{ mobileMenuOpen: false }">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-[72px]">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ url('/') }}" class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-orange-500/20">
-                            A
+<body class="antialiased text-slate-900">
+    <!-- If guest, show a simple top-nav (Welcome Page) -->
+    @guest
+        @if(View::hasSection('full_page'))
+            @yield('content')
+        @else
+            <nav class="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
+                <div class="max-w-7xl mx-auto px-6 flex justify-between h-[72px] items-center">
+                    <a href="{{ url('/') }}" class="flex items-center gap-[12px]">
+                        <div class="w-[36px] h-[36px] bg-primary rounded-[8px] flex items-center justify-center text-white font-black text-lg shadow-lg shadow-orange-500/20 shrink-0">
+                            <i class="bi bi-building-fill text-[18px]"></i>
                         </div>
-                        <span class="text-xl font-black tracking-tight text-navy hidden sm:block uppercase">The Ace <span class="text-primary">India</span></span>
+                        <span class="text-[20px] font-[800] tracking-tight text-navy uppercase letter-spacing-[-0.5px]">The Ace India</span>
                     </a>
+                    <div class="flex items-center gap-6">
+                        <a href="{{ route('login') }}" class="text-[14px] font-[700] text-muted hover:text-primary transition-colors">Log In</a>
+                        <a href="{{ route('register') }}" class="bg-primary text-white px-6 py-2.5 rounded-[8px] text-[14px] font-[800] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 uppercase tracking-widest">Enroll Now</a>
+                    </div>
+                </div>
+            </nav>
+            <main class="py-[32px]">
+                <div class="max-w-7xl mx-auto px-6">
+                    @yield('content')
+                </div>
+            </main>
+        @endif
+    @else
+        <!-- AUTH SIDEBAR VIEW (EXACT MATCH) -->
+        <div class="min-h-screen flex" x-data="{ sidebarOpen: true }">
+            
+            <!-- Sidebar -->
+            <aside 
+                :style="sidebarOpen ? 'width: 260px' : 'width: 72px'"
+                class="bg-white border-r border-border flex flex-col fixed inset-y-0 left-0 z-[1040] transition-all duration-300 sidebar-shadow"
+            >
+                <!-- Sidebar Header -->
+                <div class="h-[72px] flex items-center px-[24px] gap-[12px] shrink-0 overflow-hidden">
+                    <div class="w-[36px] h-[36px] bg-primary rounded-[8px] flex items-center justify-center text-white shrink-0">
+                        <i class="bi bi-building-fill text-[18px]"></i>
+                    </div>
+                    <div x-show="sidebarOpen" x-transition class="font-[800] text-[20px] text-navy tracking-tight whitespace-nowrap overflow-hidden">
+                        The Ace India
+                    </div>
                 </div>
 
-                <!-- Desktop Nav -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ url('/') }}" class="text-sm font-bold text-slate-600 hover:text-primary transition-colors">Home</a>
-                    <a href="{{ route('courses.index') }}" class="text-sm font-bold text-slate-600 hover:text-primary transition-colors">Courses</a>
-                    
-                    @auth
-                        <a href="{{ route('dashboard') }}" class="text-sm font-bold text-slate-600 hover:text-primary transition-colors">My Dashboard</a>
-                        <div class="h-6 w-px bg-slate-100"></div>
-                        <div class="flex items-center gap-3">
-                            <div class="text-right">
-                                <div class="text-sm font-bold text-navy leading-none">{{ auth()->user()->name }}</div>
-                                <div class="text-[10px] text-primary font-black uppercase tracking-widest mt-1">
-                                    {{ auth()->user()->is_admin ? 'Admin' : (auth()->user()->is_trainer ? 'Trainer' : 'Student') }}
-                                </div>
-                            </div>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="p-2 text-slate-300 hover:text-primary transition-colors">
-                                    <i class="bi bi-box-arrow-right text-xl"></i>
-                                </button>
-                            </form>
+                <!-- Profile Section -->
+                <div x-show="sidebarOpen" x-transition class="p-[24px_20px] border-b border-border">
+                    <div class="flex items-center gap-[14px] cursor-pointer">
+                        <div class="w-[44px] h-[44px] rounded-full bg-border border-border shadow-sm overflow-hidden shrink-0 flex items-center justify-center">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=random" class="w-full h-full object-cover">
                         </div>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm font-bold text-slate-600 hover:text-primary transition-colors">Log In</a>
-                        <a href="{{ route('register') }}" class="bg-primary text-white px-6 py-2.5 rounded-xl text-sm font-black hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 uppercase tracking-widest">Enroll Now</a>
-                    @endauth
+                        <div class="flex-1 min-w-0">
+                            <div class="text-[14px] font-[700] text-navy truncate">{{ auth()->user()->name }}</div>
+                            <div class="text-[12px] text-muted truncate">{{ auth()->user()->email }}</div>
+                        </div>
+                        <i class="bi bi-chevron-down text-[12px] text-muted"></i>
+                    </div>
                 </div>
 
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-slate-500 p-2">
-                        <i class="bi bi-list text-3xl" x-show="!mobileMenuOpen"></i>
-                        <i class="bi bi-x-lg text-2xl" x-show="mobileMenuOpen" x-cloak></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+                <!-- Navigation -->
+                <nav class="flex-1 overflow-y-auto p-[16px_12px] space-y-1">
+                    @php
+                        $studentNav = [
+                            ['label' => 'Dashboard',   'icon' => 'bi-house-door',     'route' => 'dashboard'],
+                            ['label' => 'Courses',      'icon' => 'bi-play-circle',    'route' => 'enrollments.index'],
+                            ['label' => 'Browse',       'icon' => 'bi-grid',           'route' => 'courses.index'],
+                            ['label' => 'Live Classes', 'icon' => 'bi-camera-video',   'route' => 'live-classes.index'],
+                            ['label' => 'Resources',    'icon' => 'bi-file-earmark',   'route' => 'materials.index'],
+                            ['label' => 'Billing',      'icon' => 'bi-credit-card',    'route' => 'fees.index'],
+                            ['label' => 'Profile',      'icon' => 'bi-person',         'route' => 'profile.edit'],
+                            ['label' => 'Register',     'icon' => 'bi-plus-circle',    'route' => 'admissions.create'],
+                        ];
+                    @endphp
 
-        <!-- Mobile menu -->
-        <div class="md:hidden bg-white border-b border-slate-100" x-show="mobileMenuOpen" x-cloak x-transition>
-            <div class="px-4 pt-2 pb-6 space-y-2">
-                <a href="{{ url('/') }}" class="block px-4 py-3 rounded-xl text-base font-bold text-slate-600 hover:text-primary hover:bg-slate-50">Home</a>
-                <a href="{{ route('courses.index') }}" class="block px-4 py-3 rounded-xl text-base font-bold text-slate-600 hover:text-primary hover:bg-slate-50">Courses</a>
-                @auth
-                    <a href="{{ route('dashboard') }}" class="block px-4 py-3 rounded-xl text-base font-bold text-slate-600 hover:text-primary hover:bg-slate-50">Dashboard</a>
+                    @foreach($studentNav as $item)
+                    @php $isActive = request()->routeIs($item['route']); @endphp
+                    <a href="{{ route($item['route']) }}" 
+                       class="nav-link {{ $isActive ? 'nav-link-active' : 'nav-link-inactive' }}">
+                        <div class="w-[18px] flex justify-center shrink-0">
+                            <i class="bi {{ $item['icon'] }} text-[18px]"></i>
+                        </div>
+                        <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">{{ $item['label'] }}</span>
+                    </a>
+                    @endforeach
+                </nav>
+
+                <!-- Sidebar Footer -->
+                <div x-show="sidebarOpen" x-transition class="p-[16px_12px] border-t border-border">
+                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-border transition-all text-[14px] rounded-[8px]">
+                        <i class="bi bi-person-circle text-[18px]"></i>
+                        <span>Manage profile</span>
+                    </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="w-full text-left px-4 py-3 rounded-xl text-base font-bold text-slate-600 hover:text-primary hover:bg-slate-50">Log Out</button>
+                        <button type="submit" class="w-full flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-red-50 hover:text-red-500 transition-all text-[14px] rounded-[8px]">
+                            <i class="bi bi-box-arrow-right text-[18px]"></i>
+                            <span>Logout</span>
+                        </button>
                     </form>
-                @else
-                    <a href="{{ route('login') }}" class="block px-4 py-3 rounded-xl text-base font-bold text-slate-600">Log In</a>
-                    <a href="{{ route('register') }}" class="block px-4 py-3 rounded-xl text-base font-black text-primary">Register</a>
-                @endauth
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            @if(session('success'))
-                <div class="mb-8 p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-2xl flex items-center gap-3 shadow-sm">
-                    <i class="bi bi-check-circle-fill"></i>
-                    <span class="font-bold text-sm">{{ session('success') }}</span>
                 </div>
-            @endif
+            </aside>
 
-            @yield('content')
-        </div>
-    </main>
+            <!-- Main Content Area -->
+            <div 
+                :style="sidebarOpen ? 'margin-left: 260px' : 'margin-left: 72px'"
+                class="flex-1 flex flex-col transition-all duration-300 min-h-screen"
+            >
+                <!-- Header -->
+                <header class="h-[72px] bg-white border-b border-border flex items-center justify-between px-[32px] sticky top-0 z-[1030]">
+                    <div class="flex items-center gap-[20px] flex-1">
+                        <button @click="sidebarOpen = !sidebarOpen" class="text-muted text-[24px] cursor-pointer flex p-1 hover:bg-border rounded-[8px] transition-all">
+                            <i class="bi bi-list"></i>
+                        </button>
 
-    <!-- Footer -->
-    <footer class="bg-navy text-slate-400 py-16 mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center gap-3 mb-8">
-                        <div class="w-9 h-9 bg-primary rounded flex items-center justify-center text-white font-black text-lg">A</div>
-                        <span class="text-white font-black text-2xl tracking-tight uppercase">The Ace <span class="text-primary">India</span></span>
+                        <!-- Search Bar -->
+                        <div class="hidden md:flex items-center relative w-[300px]">
+                            <i class="bi bi-search absolute left-[12px] text-muted text-[14px]"></i>
+                            <input type="text" placeholder="Quick search for anything.." 
+                                   class="w-full pl-[36px] pr-[12px] py-[8px] bg-transparent border-none text-[14px] focus:outline-none font-[500]">
+                        </div>
                     </div>
-                    <p class="max-w-sm mb-8 leading-relaxed">Empowering students through quality education and expert-led recorded courses. Learn at your own pace with The Ace India.</p>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-8 uppercase text-[10px] tracking-[0.2em]">Quick Links</h4>
-                    <ul class="space-y-4 text-sm font-medium">
-                        <li><a href="#" class="hover:text-primary transition-colors">About Us</a></li>
-                        <li><a href="{{ route('courses.index') }}" class="hover:text-primary transition-colors">Browse Courses</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Help Center</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-bold mb-8 uppercase text-[10px] tracking-[0.2em]">Legal</h4>
-                    <ul class="space-y-4 text-sm font-medium">
-                        <li><a href="#" class="hover:text-primary transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-primary transition-colors">Terms of Service</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-slate-800 mt-16 pt-8 text-center text-xs font-bold tracking-widest uppercase opacity-40">
-                &copy; {{ date('Y') }} The Ace India. Premium LMS Experience.
+
+                    <div class="flex items-center gap-[20px]">
+                        <i class="bi bi-envelope text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
+                        <div class="relative">
+                            <i class="bi bi-bell text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
+                            <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">2</span>
+                        </div>
+                        <div class="w-[32px] h-[32px] rounded-full bg-border overflow-hidden cursor-pointer">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=random" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Page Content -->
+                <main class="p-[32px] flex-1 bg-[#F4F4F4]">
+                    @if(session('success'))
+                        <div class="mb-[32px] p-[16px] bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-[12px] flex items-center gap-[12px] text-[14px] font-[600]">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    @yield('content')
+                </main>
             </div>
         </div>
-    </footer>
+    @endguest
+</body>
+</html>
 </body>
 </html>

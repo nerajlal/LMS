@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class PaymentController extends Controller
 {
@@ -15,7 +14,7 @@ class PaymentController extends Controller
             ->where('status', '!=', 'paid')
             ->get();
             
-        return Inertia::render('Payments/Create', compact('fees'));
+        return view('payments.create', compact('fees'));
     }
 
     public function store(Request $request)

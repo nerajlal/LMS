@@ -6,33 +6,33 @@
 <div class="space-y-8">
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight">Assigned Courses</h1>
-            <p class="text-sm text-slate-500 font-medium">Manage your curriculum and student materials</p>
+            <h1 class="text-[24px] font-[800] text-navy tracking-tight">Assigned Courses</h1>
+            <p class="text-muted mt-1 font-[500] text-[14px]">Manage your curriculum and student materials</p>
         </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @foreach($courses as $course)
-        <div class="group bg-white rounded-[2.5rem] border border-slate-200 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col">
-            <div class="relative h-48 overflow-hidden">
+        <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+            <div class="relative h-[200px] overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=600" 
-                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div class="absolute top-4 right-4 px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-bold text-white uppercase tracking-widest">
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                <div class="absolute top-[12px] right-[12px] px-[10px] py-[4px] bg-white/20 backdrop-blur-md rounded-[6px] text-[10px] font-[700] text-white uppercase tracking-widest">
                     {{ $course->lessons_count }} Lessons
                 </div>
             </div>
-            <div class="p-8 flex-1 flex flex-col">
-                <h4 class="text-xl font-bold text-slate-900 mb-4 group-hover:text-[#F37021] transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
+            <div class="p-[24px] flex-1 flex flex-col">
+                <h4 class="text-[18px] font-[800] text-navy mb-[12px] group-hover:text-primary transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
                 
-                <div class="flex items-center gap-6 mb-8 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                    <div class="flex items-center gap-2">
-                        <i class="bi bi-people text-base"></i> {{ $course->enrollments_count }} Students
+                <div class="flex items-center gap-[16px] mb-[24px] text-[12px] font-[600] text-muted uppercase tracking-wider">
+                    <div class="flex items-center gap-[8px]">
+                        <i class="bi bi-people text-[16px] text-primary"></i> {{ $course->enrollments_count }} Students
                     </div>
                 </div>
 
                 <div class="mt-auto">
-                    <a href="{{ route('trainer.courses.show', $course->id) }}" class="flex items-center justify-center gap-2 w-full py-3.5 bg-slate-900 text-white font-black rounded-2xl hover:bg-[#F37021] transition-all shadow-lg hover:shadow-orange-500/20 text-xs uppercase tracking-widest">
+                    <a href="{{ route('trainer.courses.show', $course->id) }}" class="flex items-center justify-center gap-[10px] w-full py-[12px] bg-navy text-white font-[700] rounded-[8px] hover:bg-primary transition-all shadow-sm text-[13px] uppercase tracking-wider">
                         Manage Content <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>

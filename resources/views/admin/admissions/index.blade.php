@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
+    <div class="bg-white rounded-[12px] border border-slate-100 shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead>
@@ -51,13 +51,13 @@
                                 @if($admission->status === 'pending')
                                     <form action="{{ route('admin.admissions.approve', $admission->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+                                        <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest rounded-[12px] hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
                                             Approve
                                         </button>
                                     </form>
                                     <form action="{{ route('admin.admissions.reject', $admission->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="px-4 py-2 bg-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100">
+                                        <button type="submit" class="px-4 py-2 bg-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-[12px] hover:bg-red-50 hover:text-red-600 transition-all border border-transparent hover:border-red-100">
                                             Reject
                                         </button>
                                     </form>

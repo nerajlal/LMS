@@ -15,7 +15,7 @@ class FeeController extends Controller
             ->where('user_id', auth()->id())
             ->get();
             
-        return \Inertia\Inertia::render('Fees/Index', compact('fees'));
+        return view('fees.index', compact('fees'));
     }
 
     /**

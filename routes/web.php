@@ -101,6 +101,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 use App\Http\Controllers\Trainer\TrainerController;
 use App\Http\Controllers\Trainer\TrainerCourseController;
 use App\Http\Controllers\Trainer\TrainerLiveClassController;
+use App\Http\Controllers\Trainer\TrainerStudyMaterialController;
 
 Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')->group(function () {
     Route::get('/', [TrainerController::class, 'index'])->name('dashboard');
@@ -112,6 +113,14 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     Route::post('/courses/{course}/materials', [TrainerCourseController::class, 'storeMaterial'])->name('courses.materials.store');
     
     Route::resource('live-classes', TrainerLiveClassController::class)->except(['destroy']);
+
+    // Study Materials Management (Trainer)
+    Route::resource('study-materials', TrainerStudyMaterialController::class)->names([
+        'index' => 'study-materials.index',
+        'create' => 'study-materials.create',
+        'store' => 'study-materials.store',
+        'destroy' => 'study-materials.destroy',
+    ]);
 });
 
 require __DIR__.'/auth.php';

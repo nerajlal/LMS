@@ -3,111 +3,108 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-<div class="space-y-10">
-    <!-- Header -->
-    <div>
-        <h1 class="text-3xl font-black text-slate-900 tracking-tight">Master Control Dashboard</h1>
-        <p class="text-slate-500 mt-1 font-medium">Global overview of The Ace India LMS platform</p>
-    </div>
-
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="space-y-8">
+    <!-- Stats Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         @php
             $adminStats = [
-                ['label' => 'Total Students', 'value' => $stats['total_students'], 'icon' => 'bi-people', 'color' => 'bg-blue-50 text-blue-600'],
-                ['label' => 'Total Revenue', 'value' => '₹' . number_format($stats['total_revenue']), 'icon' => 'bi-cash-coin', 'color' => 'bg-emerald-50 text-emerald-600'],
-                ['label' => 'Pending Admissions', 'value' => $stats['pending_admissions'], 'icon' => 'bi-hourglass-split', 'color' => 'bg-amber-50 text-amber-600'],
-                ['label' => 'Active Courses', 'value' => $stats['total_courses'], 'icon' => 'bi-journal-check', 'color' => 'bg-[#F37021]/10 text-[#F37021]'],
+                ['label' => 'Total Students', 'value' => $stats['total_students'], 'icon' => 'bi-people', 'color' => '#1B365D'],
+                ['label' => 'Total Revenue', 'value' => '₹' . number_format($stats['total_revenue']), 'icon' => 'bi-cash-coin', 'color' => '#F37021'],
+                ['label' => 'Pending Admissions', 'value' => $stats['pending_admissions'], 'icon' => 'bi-hourglass-split', 'color' => '#F37021'],
+                ['label' => 'Active Courses', 'value' => $stats['total_courses'], 'icon' => 'bi-journal-check', 'color' => '#1B365D'],
             ];
         @endphp
 
         @foreach($adminStats as $card)
-        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-5 transition-transform hover:-translate-y-1">
-            <div class="w-14 h-14 {{ $card['color'] }} rounded-2xl flex items-center justify-center text-2xl shrink-0">
-                <i class="{{ $card['icon'] }}"></i>
+        <div class="bg-white p-6 rounded-[12px] border border-border flex items-center gap-[20px] transition-all hover:shadow-sm">
+            <div class="w-[48px] h-[48px] rounded-[12px] flex items-center justify-center text-white shrink-0" style="background: {{ $card['color'] }}">
+                <i class="bi {{ $card['icon'] }} text-[20px]"></i>
             </div>
             <div>
-                <div class="text-xl font-black text-slate-900 leading-none mb-1">{{ $card['value'] }}</div>
-                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest whitespace-nowrap">{{ $card['label'] }}</div>
+                <div class="text-[24px] font-[800] text-navy leading-none mb-1">{{ $card['value'] }}</div>
+                <div class="text-[13px] font-[500] text-muted">{{ $card['label'] }}</div>
             </div>
         </div>
         @endforeach
     </div>
 
-    <!-- Tables and Secondary Stats -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <!-- Recent Admissions -->
-        <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col">
-            <div class="p-8 border-b border-slate-50 flex items-center justify-between">
-                <h3 class="text-lg font-black text-slate-900 tracking-tight">Recent Admission Requests</h3>
-                <a href="{{ route('admin.admissions.index') }}" class="text-[10px] font-black text-[#F37021] uppercase tracking-widest hover:underline">View All Requests</a>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead>
-                        <tr class="bg-slate-50/50">
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Student</th>
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Course</th>
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                            <th class="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-50">
-                        @foreach($recentAdmissions as $admission)
-                        <tr class="hover:bg-slate-50/30 transition-colors">
-                            <td class="px-8 py-5">
-                                <div class="text-sm font-bold text-slate-900">{{ $admission->user->name }}</div>
-                            </td>
-                            <td class="px-8 py-5">
-                                <div class="text-xs font-medium text-slate-600 italic">{{ $admission->course->title }}</div>
-                            </td>
-                            <td class="px-8 py-5">
-                                <span class="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-[10px] font-black uppercase tracking-widest">
-                                    {{ $admission->status }}
-                                </span>
-                            </td>
-                            <td class="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                {{ $admission->created_at->format('M d, Y') }}
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        <div class="lg:col-span-8 flex flex-col">
+            <div class="bg-white rounded-[12px] border border-border overflow-hidden h-full">
+                <div class="p-[24px] border-b border-border flex justify-between items-center">
+                    <h2 class="text-[18px] font-[800] text-navy">Recent Admission Requests</h2>
+                    <a href="{{ route('admin.admissions.index') }}" class="text-primary text-[13px] font-[700] hover:underline">See all</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-border/30">
+                                <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider">Student</th>
+                                <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider">Course</th>
+                                <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider">Status</th>
+                                <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider text-right">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-border">
+                            @foreach($recentAdmissions as $admission)
+                            <tr class="hover:bg-border/10 transition-colors">
+                                <td class="px-[24px] py-[16px]">
+                                    <div class="text-[14px] font-[700] text-navy">{{ $admission->user->name }}</div>
+                                </td>
+                                <td class="px-[24px] py-[16px]">
+                                    <div class="text-[13px] text-muted truncate max-w-[200px]">{{ $admission->course->title }}</div>
+                                </td>
+                                <td class="px-[24px] py-[16px]">
+                                    <span class="px-[12px] py-[4px] bg-accent text-primary rounded-[6px] text-[11px] font-[700] uppercase">
+                                        {{ $admission->status }}
+                                    </span>
+                                </td>
+                                <td class="px-[24px] py-[16px] text-[12px] text-muted text-right font-[500]">
+                                    {{ $admission->created_at->format('M d, Y') }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- Sidebar Actions -->
-        <div class="space-y-8">
-            <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#F37021]/20 rounded-full blur-3xl"></div>
-                <h3 class="text-lg font-black mb-8 flex items-center gap-2">
-                    <i class="bi bi-gear-fill text-[#F37021]"></i> Quick Setup
-                </h3>
-                <div class="space-y-4">
-                    <a href="{{ route('admin.courses.create') }}" class="flex items-center gap-4 bg-white/5 hover:bg-white/10 p-4 rounded-2xl transition-all border border-white/10 group">
-                        <div class="w-10 h-10 bg-[#F37021] rounded-xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
-                            <i class="bi bi-journal-plus"></i>
+        <!-- Sidebar Widgets -->
+        <div class="lg:col-span-4 space-y-8">
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-[12px] border border-border overflow-hidden">
+                <div class="p-[24px] border-b border-border">
+                    <h2 class="text-[18px] font-[800] text-navy">Quick Setup</h2>
+                </div>
+                <div class="p-[24px] space-y-3">
+                    <a href="{{ route('admin.courses.create') }}" class="flex items-center gap-[12px] p-[12px] rounded-[8px] bg-border/50 hover:bg-border transition-all group">
+                        <div class="w-[40px] h-[40px] bg-primary rounded-[8px] flex items-center justify-center text-white shrink-0">
+                            <i class="bi bi-journal-plus text-[18px]"></i>
                         </div>
-                        <span class="text-xs font-bold uppercase tracking-widest">New Course</span>
+                        <span class="text-[13px] font-[700] text-navy group-hover:text-primary transition-colors">New Course Creation</span>
                     </a>
-                    <a href="{{ route('admin.trainers.create') }}" class="flex items-center gap-4 bg-white/5 hover:bg-white/10 p-4 rounded-2xl transition-all border border-white/10 group">
-                        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
-                            <i class="bi bi-person-plus"></i>
+                    <a href="{{ route('admin.trainers.create') }}" class="flex items-center gap-[12px] p-[12px] rounded-[8px] bg-border/50 hover:bg-border transition-all group">
+                        <div class="w-[40px] h-[40px] bg-navy rounded-[8px] flex items-center justify-center text-white shrink-0">
+                            <i class="bi bi-person-plus text-[18px]"></i>
                         </div>
-                        <span class="text-xs font-bold uppercase tracking-widest">New Instructor</span>
+                        <span class="text-[13px] font-[700] text-navy group-hover:text-primary transition-colors">Add New Instructor</span>
                     </a>
                 </div>
             </div>
 
-            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Platform Health</h3>
-                <div class="space-y-6">
+            <!-- Health Widget -->
+            <div class="bg-white p-[24px] rounded-[12px] border border-border">
+                <h3 class="text-[13px] font-[700] text-muted uppercase tracking-widest mb-[20px]">System Health</h3>
+                <div class="space-y-[16px]">
                     <div>
-                        <div class="flex justify-between text-[10px] font-black uppercase tracking-widest mb-2">
-                            <span class="text-slate-400">Database Storage</span>
-                            <span class="text-slate-900">12% Used</span>
+                        <div class="flex justify-between text-[11px] font-[700] mb-[8px]">
+                            <span class="text-muted uppercase">Cloud Storage</span>
+                            <span class="text-navy">12%</span>
                         </div>
-                        <div class="h-1.5 w-full bg-slate-50 rounded-full overflow-hidden">
+                        <div class="h-[6px] w-full bg-border rounded-full overflow-hidden">
                             <div class="h-full bg-emerald-500 rounded-full" style="width: 12%"></div>
                         </div>
                     </div>

@@ -52,8 +52,6 @@ class DashboardController extends Controller
             'completed'      => 0,
             'wishlist'       => 0,
             'certifications' => 0,
-            'liveClasses'    => 2, // Mocking
-            'feesDue'        => number_format(Fee::where('user_id', $user->id)->where('status', 'pending')->sum('total_amount')),
         ];
 
         $upcomingClasses = \App\Models\LiveClass::where('status', 'upcoming')

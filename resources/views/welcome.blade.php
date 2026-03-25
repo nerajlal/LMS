@@ -45,11 +45,11 @@
         <div class="relative">
             <div class="absolute -top-20 -right-20 w-80 h-80 bg-red-100 rounded-full blur-3xl opacity-30"></div>
             <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-30"></div>
-            <div class="relative bg-white p-4 rounded-[2rem] shadow-2xl border border-slate-100 overflow-hidden group">
+            <div class="relative bg-white p-4 rounded-[12px] shadow-2xl border border-slate-100 overflow-hidden group">
                 <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200" 
                      alt="Learning" 
-                     class="rounded-3xl object-cover w-full h-[500px] transition-transform duration-700 group-hover:scale-105">
-                <div class="absolute bottom-10 left-10 right-10 p-6 bg-white/90 backdrop-blur-md rounded-2xl border border-white/50 shadow-xl">
+                     class="rounded-[12px] object-cover w-full h-[500px] transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute bottom-10 left-10 right-10 p-6 bg-white/90 backdrop-blur-md rounded-[12px] border border-white/50 shadow-xl">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-[#F37021] rounded-xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
                             <i class="bi bi-play-fill text-2xl"></i>
@@ -72,8 +72,8 @@
             ['label' => 'Expert Mentors', 'value' => '15+', 'icon' => 'bi-person-badge', 'color' => 'bg-amber-50 text-amber-600'],
             ['label' => 'Success Rate', 'value' => '98%', 'icon' => 'bi-star-fill', 'color' => 'bg-emerald-50 text-emerald-600'],
         ] as $stat)
-        <div class="text-center p-8 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-            <div class="w-12 h-12 {{ $stat['color'] }} rounded-2xl flex items-center justify-center mx-auto mb-4 text-xl">
+        <div class="text-center p-8 bg-white rounded-[12px] border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 {{ $stat['color'] }} rounded-[12px] flex items-center justify-center mx-auto mb-4 text-xl">
                 <i class="{{ $stat['icon'] }}"></i>
             </div>
             <div class="text-3xl font-black text-slate-900 mb-1">{{ $stat['value'] }}</div>
@@ -97,7 +97,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {{-- Placeholder course cards --}}
             @for($i = 1; $i <= 3; $i++)
-            <div class="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col">
+            <div class="group bg-white rounded-[12px] border border-slate-100 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col">
                 <div class="relative h-56 overflow-hidden">
                     <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=800" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="">

@@ -10,7 +10,6 @@ use App\Models\Payment;
 use App\Models\Fee;
 use App\Models\LiveClass;
 use App\Models\StudyMaterial;
-use Inertia\Inertia;
 
 class AdminController extends Controller
 {

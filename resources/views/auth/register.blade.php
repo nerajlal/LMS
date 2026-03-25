@@ -1,74 +1,119 @@
 @extends('layouts.app')
 
-@section('title', 'Register - The Ace India')
+@section('title', 'Register - EduLMS')
+
+@section('full_page', true)
 
 @section('content')
-<div class="min-h-[60vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-xl relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-32 h-32 bg-red-50 rounded-full blur-2xl opacity-50"></div>
+<div class="min-h-screen flex flex-col md:flex-row">
+    <!-- Left Side: Gradient & Info (Matches Login) -->
+    <div class="md:w-7/12 bg-gradient-to-br from-[#232526] via-[#414345] to-[#f37021] relative flex items-center justify-center p-8 overflow-hidden">
+        <div class="absolute -top-20 -left-20 opacity-20">
+            <svg width="400" height="400" viewBox="0 0 400 400">
+                <circle cx="200" cy="200" r="180" fill="none" stroke="white" stroke-width="1" />
+                <circle cx="200" cy="200" r="140" fill="none" stroke="white" stroke-width="1" />
+                <circle cx="200" cy="200" r="100" fill="none" stroke="white" stroke-width="1" />
+            </svg>
+        </div>
         
-        <div class="text-center relative">
-            <div class="w-16 h-16 bg-[#F37021] rounded-2xl flex items-center justify-center text-white text-3xl font-black mx-auto mb-6 shadow-lg shadow-orange-500/20">A</div>
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight">Create Account</h2>
-            <p class="mt-2 text-sm text-slate-500 font-medium italic">Join thousands of students on The Ace India</p>
+        <div class="absolute -bottom-20 -right-20 opacity-20">
+            <svg width="400" height="400" viewBox="0 0 400 400">
+                <circle cx="200" cy="200" r="180" fill="none" stroke="white" stroke-width="1" />
+                <circle cx="200" cy="200" r="140" fill="none" stroke="white" stroke-width="1" />
+                <circle cx="200" cy="200" r="100" fill="none" stroke="white" stroke-width="1" />
+            </svg>
         </div>
 
-        <form class="mt-8 space-y-5" method="POST" action="{{ route('register') }}">
-            @csrf
-
+        <div class="relative z-10 text-center text-white max-w-lg space-y-8">
+            <div class="w-[80px] h-[80px] bg-white/20 backdrop-blur-md rounded-[20px] flex items-center justify-center mx-auto shadow-2xl">
+                <i class="bi bi-mortarboard-fill text-[40px]"></i>
+            </div>
+            
             <div class="space-y-4">
-                <div>
-                    <label for="name" class="block text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 mb-1.5">Full Name</label>
-                    <input id="name" name="name" type="text" autocomplete="name" required 
-                           class="appearance-none relative block w-full px-4 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F37021]/20 focus:border-[#F37021] sm:text-sm font-semibold transition-all"
-                           value="{{ old('name') }}" placeholder="John Doe">
-                    @error('name')
-                        <p class="mt-2 text-xs font-bold text-[#F37021]">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="email" class="block text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 mb-1.5">Email Address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required 
-                           class="appearance-none relative block w-full px-4 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F37021]/20 focus:border-[#F37021] sm:text-sm font-semibold transition-all"
-                           value="{{ old('email') }}" placeholder="name@example.com">
-                    @error('email')
-                        <p class="mt-2 text-xs font-bold text-[#F37021]">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="password" class="block text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 mb-1.5">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="new-password" required 
-                           class="appearance-none relative block w-full px-4 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F37021]/20 focus:border-[#F37021] sm:text-sm font-semibold transition-all"
-                           placeholder="••••••••">
-                    @error('password')
-                        <p class="mt-2 text-xs font-bold text-[#F37021]">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="password_confirmation" class="block text-xs font-bold text-slate-400 uppercase tracking-widest pl-1 mb-1.5">Confirm Password</label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required 
-                           class="appearance-none relative block w-full px-4 py-3 border border-slate-200 placeholder-slate-400 text-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#F37021]/20 focus:border-[#F37021] sm:text-sm font-semibold transition-all"
-                           placeholder="••••••••">
-                    @error('password_confirmation')
-                        <p class="mt-2 text-xs font-bold text-[#F37021]">{{ $message }}</p>
-                    @enderror
-                </div>
+                <h1 class="text-[48px] font-[900] tracking-tight leading-tight">Join EduLMS</h1>
+                <p class="text-[18px] font-[500] opacity-90 leading-relaxed">
+                    Start your learning journey today and gain access to premium courses and expert instructors.
+                </p>
             </div>
 
-            <div class="pt-2">
-                <button type="submit" class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-xl text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-slate-900/20 uppercase tracking-widest">
-                    Create My Account
-                </button>
+            <div class="flex items-center justify-center gap-12 pt-8">
+                <div class="text-center">
+                    <div class="text-[28px] font-[900]">500+</div>
+                    <div class="text-[12px] font-[600] uppercase tracking-widest opacity-70">Courses</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-[28px] font-[900]">2K+</div>
+                    <div class="text-[12px] font-[600] uppercase tracking-widest opacity-70">Students</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-[28px] font-[900]">50+</div>
+                    <div class="text-[12px] font-[600] uppercase tracking-widest opacity-70">Instructors</div>
+                </div>
             </div>
-        </form>
+        </div>
+    </div>
 
-        <div class="text-center pt-4">
-            <p class="text-sm text-slate-500 font-medium">Already have an account? 
-                <a href="{{ route('login') }}" class="font-bold text-[#F37021] hover:underline">Log In Here</a>
-            </p>
+    <!-- Right Side: Register Form -->
+    <div class="md:w-5/12 bg-white flex items-center justify-center p-8 lg:p-24 overflow-y-auto">
+        <div class="w-full max-w-[400px] space-y-8">
+            <div>
+                <h2 class="text-[32px] font-[800] text-navy">Create Account</h2>
+                <p class="text-muted text-[15px] font-[500] mt-1">Join thousands of students on EduLMS</p>
+            </div>
+
+            <form action="{{ route('register') }}" method="POST" class="space-y-5">
+                @csrf
+
+                <div class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-[13px] font-[700] text-navy mb-2 pl-1">Full Name</label>
+                        <input id="name" name="name" type="text" autocomplete="name" required 
+                               class="w-full px-[16px] py-[12px] bg-white border border-slate-300 rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[15px] font-[600] text-navy placeholder:text-slate-400"
+                               value="{{ old('name') }}" placeholder="John Doe">
+                        @error('name')
+                            <p class="mt-2 text-[12px] font-[700] text-primary">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-[13px] font-[700] text-navy mb-2 pl-1">Email Address</label>
+                        <input id="email" name="email" type="email" autocomplete="email" required 
+                               class="w-full px-[16px] py-[12px] bg-white border border-slate-300 rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[15px] font-[600] text-navy placeholder:text-slate-400"
+                               value="{{ old('email') }}" placeholder="name@example.com">
+                        @error('email')
+                            <p class="mt-2 text-[12px] font-[700] text-primary">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-[13px] font-[700] text-navy mb-2 pl-1">Password</label>
+                        <input id="password" name="password" type="password" autocomplete="new-password" required 
+                               class="w-full px-[16px] py-[12px] bg-white border border-slate-300 rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[15px] font-[600] text-navy placeholder:text-slate-400"
+                               placeholder="••••••••">
+                        @error('password')
+                            <p class="mt-2 text-[12px] font-[700] text-primary">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="password_confirmation" class="block text-[13px] font-[700] text-navy mb-2 pl-1">Confirm Password</label>
+                        <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required 
+                               class="w-full px-[16px] py-[12px] bg-white border border-slate-300 rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[15px] font-[600] text-navy placeholder:text-slate-400"
+                               placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-[14px] bg-navy text-white font-[800] rounded-[8px] hover:bg-primary transition-all shadow-lg shadow-navy/10 text-[15px]">
+                        Create My Account
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center pt-6 text-[14px] font-[600] text-slate-500">
+                Already have an account? 
+                <a href="{{ route('login') }}" class="text-primary hover:underline font-[700]">Log In Here</a>
+            </div>
         </div>
     </div>
 </div>

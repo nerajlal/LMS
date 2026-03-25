@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\StudyMaterial;
 use App\Models\Course;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class AdminStudyMaterialController extends Controller
@@ -13,17 +12,13 @@ class AdminStudyMaterialController extends Controller
     public function index()
     {
         $materials = StudyMaterial::with('course')->latest()->paginate(10);
-        return Inertia::render('Admin/Materials/Index', [
-            'materials' => $materials
-        ]);
+        return view('admin.materials.index', compact('materials'));
     }
 
     public function create()
     {
         $courses = Course::all();
-        return Inertia::render('Admin/Materials/Create', [
-            'courses' => $courses
-        ]);
+        return view('admin.materials.create', compact('courses'));
     }
 
     public function store(Request $request)

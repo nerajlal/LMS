@@ -9,12 +9,12 @@
             <h1 class="text-3xl font-black text-slate-900 tracking-tight">Instructor Directory</h1>
             <p class="text-slate-500 mt-1 font-medium italic">Manage the educators and trainers contributing to the platform</p>
         </div>
-        <a href="{{ route('admin.trainers.create') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-black rounded-2xl hover:bg-black transition-all shadow-xl shadow-slate-900/20 text-xs uppercase tracking-widest">
+        <a href="{{ route('admin.trainers.create') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white font-black rounded-[12px] hover:bg-black transition-all shadow-xl shadow-slate-900/20 text-xs uppercase tracking-widest">
             <i class="bi bi-person-plus-fill text-base"></i> Onboard New Trainer
         </a>
     </div>
 
-    <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
+    <div class="bg-white rounded-[12px] border border-slate-100 shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead>
@@ -31,7 +31,7 @@
                     <tr class="hover:bg-slate-50/30 transition-colors group">
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs border border-white shadow-sm">
+                                <div class="w-10 h-10 rounded-[12px] bg-blue-50 text-blue-600 flex items-center justify-center font-black text-xs border border-white shadow-sm">
                                     {{ substr($trainer->name, 0, 1) }}
                                 </div>
                                 <div>
