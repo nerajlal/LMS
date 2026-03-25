@@ -15,7 +15,7 @@
         @foreach($courses as $course)
         <div class="group bg-white rounded-[12px] border border-slate-100 shadow-sm hover:shadow-2xl transition-all overflow-hidden flex flex-col">
             <div class="relative h-56 overflow-hidden">
-                <img src="{{ $course->thumbnail ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800' }}" 
+                <img src="{{ $course->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800' }}" 
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="{{ $course->title }}">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div class="absolute top-4 right-4 flex items-center gap-2">

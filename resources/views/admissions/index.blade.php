@@ -37,7 +37,7 @@
             <div class="flex flex-col md:flex-row items-stretch">
                 <!-- Course Thumbnail -->
                 <div class="md:w-[200px] h-[160px] md:h-auto relative shrink-0 overflow-hidden">
-                    <img src="{{ $admission->course->thumbnail ?? 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" 
+                    <img src="{{ $admission->course->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute inset-0 bg-navy/20 group-hover:bg-navy/0 transition-colors"></div>
                     
