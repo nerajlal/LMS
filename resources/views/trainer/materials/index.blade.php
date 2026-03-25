@@ -30,7 +30,7 @@
                 @forelse($materials as $material)
                 <tr class="hover:bg-border/5 transition-colors">
                     <td class="p-[20px] text-[14px] font-[600] text-navy">{{ $material->title }}</td>
-                    <td class="p-[20px] text-[14px] font-[500] text-navy">{{ $material->course->title }}</td>
+                    <td class="p-[20px] text-[14px] font-[500] text-navy">{{ $material->course->title ?? 'Deleted Course' }}</td>
                     <td class="p-[20px]">
                         <span class="px-2 py-1 bg-border/50 text-muted rounded text-[10px] font-[800] uppercase tracking-wider">
                             {{ $material->file_type ?? 'PDF' }}

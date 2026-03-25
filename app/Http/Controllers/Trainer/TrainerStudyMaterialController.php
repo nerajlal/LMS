@@ -11,15 +11,16 @@ class TrainerStudyMaterialController extends Controller
 {
     public function index()
     {
-        // For now, trainers see all materials or those assigned. 
-        // In a real multi-tenant scenario, we'd filter by course->instructor_id
-        $materials = StudyMaterial::with('course')->latest()->paginate(10);
+        $materials = StudyMaterial::whereHas('course', function($q) {
+            $q->where('instructor_name', auth()->user()->name);
+        })->with('course')->latest()->paginate(10);
+        
         return view('trainer.materials.index', compact('materials'));
     }
 
     public function create()
     {
-        $courses = Course::all();
+        $courses = Course::where('instructor_name', auth()->user()->name)->get();
         return view('trainer.materials.create', compact('courses'));
     }
 
@@ -30,6 +31,11 @@ class TrainerStudyMaterialController extends Controller
             'title' => 'required|string|max:255',
             'file' => 'required|file|mimes:pdf,doc,docx,zip|max:20480',
         ]);
+
+        // Security check: Ensure course belongs to this trainer
+        $course = Course::where('id', $request->course_id)
+                        ->where('instructor_name', auth()->user()->name)
+                        ->firstOrFail();
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');

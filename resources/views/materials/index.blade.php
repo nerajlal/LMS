@@ -29,7 +29,7 @@
                     </span>
                 </div>
                 <h3 class="text-[16px] font-[800] text-navy mb-2 line-clamp-2">{{ $material->title }}</h3>
-                <p class="text-[13px] text-muted font-[600] mb-6">{{ $material->course->title }}</p>
+                <p class="text-[13px] text-muted font-[600] mb-6">{{ $material->course->title ?? 'General Resource' }}</p>
                 
                 <div class="flex items-center justify-between pt-4 border-t border-border">
                     <span class="text-[12px] font-[700] text-muted">{{ $material->file_size ?? '2.4 MB' }}</span>
