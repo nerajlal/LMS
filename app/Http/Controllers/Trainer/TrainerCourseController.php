@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Trainer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\StudyMaterial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class TrainerCourseController extends Controller
 {
@@ -33,49 +36,70 @@ class TrainerCourseController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'thumbnail' => 'nullable|file|image|max:2048',
-            'youtube_link' => 'nullable|string',
-            'price' => 'nullable|numeric|min:0',
-            'learning_outcomes' => 'nullable|string',
-            'documents.*' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240', // 10MB per file
-        ]);
+        Log::info('Course creation attempt started.', ['request' => $request->except('thumbnail', 'documents')]);
 
-        $thumbnailPath = null;
-        if ($request->hasFile('thumbnail')) {
-            $thumbnailPath = '/storage/' . $request->file('thumbnail')->store('thumbnails', 'public');
-        }
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string',
+                'thumbnail' => 'nullable|file|image|max:2048',
+                'youtube_link' => 'nullable|string',
+                'price' => 'nullable|numeric|min:0',
+                'learning_outcomes' => 'nullable|string',
+                'documents.*' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240',
+            ]);
 
-        $course = Course::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'thumbnail' => $thumbnailPath ?? 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=600',
-            'instructor_name' => auth()->user()->name,
-            'price' => $request->price ?? 0,
-            'youtube_link' => $request->youtube_link,
-            'learning_outcomes' => $request->learning_outcomes,
-        ]);
-
-        // Handle initial documents if provided
-        if ($request->hasFile('documents')) {
-            foreach ($request->file('documents') as $file) {
-                $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9.\-]/', '_', $file->getClientOriginalName());
-                $filePath = $file->storeAs('study_materials', $fileName, 'public');
-
-                \App\Models\StudyMaterial::create([
-                    'course_id' => $course->id,
-                    'title' => $file->getClientOriginalName(),
-                    'file_path' => '/storage/' . $filePath,
-                    'file_type' => $file->getClientOriginalExtension(),
-                    'file_size' => $file->getSize(),
-                ]);
+            $thumbnailPath = null;
+            if ($request->hasFile('thumbnail')) {
+                $thumbnailPath = '/storage/' . $request->file('thumbnail')->store('thumbnails', 'public');
+                Log::info('Thumbnail uploaded.', ['path' => $thumbnailPath]);
             }
-        }
 
-        return redirect()->route('trainer.courses.index')
-            ->with('success', 'Course created with premium features!');
+            $course = Course::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'thumbnail' => $thumbnailPath ?? 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=600',
+                'instructor_name' => auth()->user()->name,
+                'price' => $request->price ?? 0,
+                'youtube_link' => $request->youtube_link,
+                'learning_outcomes' => $request->learning_outcomes,
+            ]);
+
+            Log::info('Course created successfully.', ['id' => $course->id]);
+
+            // Handle initial documents if provided
+            if ($request->hasFile('documents')) {
+                Log::info('Handling initial documents.', ['count' => count($request->file('documents'))]);
+                foreach ($request->file('documents') as $file) {
+                    $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9.\-]/', '_', $file->getClientOriginalName());
+                    $filePath = $file->storeAs('study_materials', $fileName, 'public');
+
+                    StudyMaterial::create([
+                        'course_id' => $course->id,
+                        'title' => $file->getClientOriginalName(),
+                        'file_path' => '/storage/' . $filePath,
+                        'file_type' => $file->getClientOriginalExtension(),
+                        'file_size' => $file->getSize(),
+                    ]);
+                }
+                Log::info('Documents uploaded and attached.');
+            }
+
+            return redirect()->route('trainer.courses.index')
+                ->with('success', 'Course created with premium features!');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::warning('Validation failed during course creation.', ['errors' => $e->errors()]);
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Fatal error during course creation.', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'An unexpected error occurred: ' . $e->getMessage()]);
+        }
     }
 
     /**
