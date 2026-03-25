@@ -20,6 +20,11 @@ class DashboardController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
+        // If trainer, redirect to trainer dashboard
+        if ($user->is_trainer) {
+            return redirect()->route('trainer.dashboard');
+        }
+
         // Enrolled courses (from Enrollments table)
         // For now, if no enrollments, let's also pull approved admissions
         $enrolledIds = Enrollment::where('user_id', $user->id)->pluck('course_id');
@@ -77,7 +82,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        return Inertia::render('Dashboard', [
+        return view('dashboard', [
             'stats' => $stats,
             'enrolledCourses' => $enrolledCourses,
             'upcomingClasses' => $upcomingClasses,

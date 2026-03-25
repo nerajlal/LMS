@@ -13,7 +13,7 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::withCount(['lessons', 'enrollments'])->get();
-        return Inertia::render('Courses/Index', compact('courses'));
+        return view('courses.index', compact('courses'));
     }
 
     public function show($id)
@@ -22,7 +22,7 @@ class CourseController extends Controller
         $isEnrolled = false;
         
         if (auth()->check()) {
-            if (auth()->user()->isAdmin() || auth()->user()->isTrainer()) {
+            if (auth()->user()->is_admin || auth()->user()->is_trainer) {
                 $isEnrolled = true;
             } else {
                 $isEnrolled = Enrollment::where('user_id', auth()->id())
@@ -40,7 +40,7 @@ class CourseController extends Controller
             }
         }
 
-        return Inertia::render('Courses/Show', [
+        return view('courses.show', [
             'course' => $course,
             'isEnrolled' => $isEnrolled
         ]);

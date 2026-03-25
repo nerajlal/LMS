@@ -15,21 +15,14 @@ class AdmissionController extends Controller
         $admissions = Admission::where('user_id', auth()->id())
             ->with(['course', 'batch'])
             ->latest()
-            ->get()
-            ->map(fn($a) => [
-                'id'           => $a->id,
-                'course'       => $a->course?->title,
-                'batch'        => $a->batch?->name,
-                'status'       => $a->status,
-                'submitted_at' => $a->created_at->format('Y-m-d'),
-            ]);
+            ->get();
 
-        return Inertia::render('Admissions/Index', compact('admissions'));
+        return view('admissions.index', compact('admissions'));
     }
 
     public function create()
     {
-        return Inertia::render('Admissions/Create', [
+        return view('admissions.create', [
             'courses' => Course::all(),
             'batches' => Batch::all(),
         ]);

@@ -32,6 +32,6 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        return Inertia::render('Admin/Dashboard', compact('stats', 'recentAdmissions'));
+        return view('admin.dashboard', compact('stats', 'recentAdmissions'));
     }
 }

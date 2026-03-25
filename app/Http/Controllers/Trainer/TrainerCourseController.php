@@ -14,13 +14,9 @@ class TrainerCourseController extends Controller
      */
     public function index()
     {
-        // For now, trainers see all courses since we don't have a trainer-course assignment pivot.
-        // In a real app, this would be: Course::where('trainer_id', auth()->id())->get();
-        // Since we seeded `instructor_name`, we can filter by exact string match if needed, but 
-        // displaying all courses they have access to is a good start.
         $courses = Course::withCount(['lessons', 'enrollments'])->get();
 
-        return Inertia::render('Trainer/Courses/Index', [
+        return view('trainer.courses.index', [
             'courses' => $courses
         ]);
     }
@@ -31,7 +27,7 @@ class TrainerCourseController extends Controller
     public function show($id)
     {
         $course = Course::with(['lessons', 'studyMaterials'])->findOrFail($id);
-        return Inertia::render('Trainer/Courses/Show', [
+        return view('trainer.courses.show', [
             'course' => $course
         ]);
     }

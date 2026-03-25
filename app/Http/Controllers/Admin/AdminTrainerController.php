@@ -20,7 +20,7 @@ class AdminTrainerController extends Controller
             ->latest()
             ->paginate(20);
 
-        return Inertia::render('Admin/Trainers/Index', compact('trainers'));
+        return view('admin.trainers.index', compact('trainers'));
     }
 
     /**
@@ -28,7 +28,7 @@ class AdminTrainerController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Trainers/Create');
+        return view('admin.trainers.create');
     }
 
     /**

@@ -19,7 +19,7 @@ class AdminFeeController extends Controller
             'total_collected' => Fee::where('status', 'paid')->sum('paid_amount'),
         ];
 
-        return Inertia::render('Admin/Fees/Index', compact('fees', 'stats'));
+        return view('admin.fees.index', compact('fees', 'stats'));
     }
 
     public function markPaid(Fee $fee)

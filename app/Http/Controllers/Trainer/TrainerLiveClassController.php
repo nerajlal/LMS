@@ -14,10 +14,9 @@ class TrainerLiveClassController extends Controller
      */
     public function index()
     {
-        // View all LiveClasses. Usually filtered by trainer's assigned courses.
         $classes = LiveClass::with('course')->latest()->get();
 
-        return Inertia::render('Trainer/LiveClasses/Index', [
+        return view('trainer.live-classes.index', [
             'classes' => $classes
         ]);
     }
@@ -28,7 +27,7 @@ class TrainerLiveClassController extends Controller
     public function create()
     {
         $courses = \App\Models\Course::select('id', 'title')->get();
-        return Inertia::render('Trainer/LiveClasses/Create', [
+        return view('trainer.live-classes.create', [
             'courses' => $courses
         ]);
     }

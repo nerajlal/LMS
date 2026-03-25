@@ -15,7 +15,7 @@ class AdminAdmissionController extends Controller
             ->latest()
             ->paginate(20);
 
-        return Inertia::render('Admin/Admissions/Index', compact('admissions'));
+        return view('admin.admissions.index', compact('admissions'));
     }
 
     public function approve(Admission $admission)

@@ -15,12 +15,12 @@ class AdminCourseController extends Controller
         $courses = Course::withCount(['admissions', 'enrollments', 'lessons'])
             ->latest()
             ->paginate(15);
-        return Inertia::render('Admin/Courses/Index', compact('courses'));
+        return view('admin.courses.index', compact('courses'));
     }
 
     public function create()
     {
-        return Inertia::render('Admin/Courses/Create');
+        return view('admin.courses.create');
     }
 
     public function store(Request $request)
@@ -39,7 +39,7 @@ class AdminCourseController extends Controller
 
     public function edit(Course $course)
     {
-        return Inertia::render('Admin/Courses/Create', compact('course'));
+        return view('admin.courses.create', compact('course'));
     }
 
     public function update(Request $request, Course $course)

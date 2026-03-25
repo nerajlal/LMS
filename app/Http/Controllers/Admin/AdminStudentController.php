@@ -16,6 +16,6 @@ class AdminStudentController extends Controller
             ->latest()
             ->paginate(20);
 
-        return Inertia::render('Admin/Students/Index', compact('students'));
+        return view('admin.students.index', compact('students'));
     }
 }
