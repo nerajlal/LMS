@@ -19,9 +19,9 @@
         @foreach($courses as $course)
         <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
             <div class="relative h-[200px] overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=600" 
-                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                <img src="{{ $course->thumbnail ?? 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=600' }}" 
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="{{ $course->title }}">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div class="absolute top-[12px] right-[12px] px-[10px] py-[4px] bg-white/20 backdrop-blur-md rounded-[6px] text-[10px] font-[700] text-white uppercase tracking-widest">
                     {{ $course->lessons_count }} Lessons
                 </div>
