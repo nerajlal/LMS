@@ -38,9 +38,15 @@
                         <i class="bi bi-files text-primary text-xl"></i>
                         <span>{{ count($course->studyMaterials) }} Materials</span>
                     </div>
-                    <div class="flex items-center gap-2.5 text-white/80 text-[13px] font-[700] uppercase tracking-wider border-l border-white/10 pl-6">
-                        <i class="bi bi-people-fill text-primary text-xl"></i>
-                        <span>{{ $course->enrollments_count ?? 0 }} Enrolled</span>
+                    <!-- Delete Course Button -->
+                    <div class="flex items-center gap-2.5 border-l border-white/10 pl-6">
+                        <form action="{{ route('trainer.courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course and all its content? This action cannot be undone.');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all text-[11px] font-[900] uppercase tracking-widest rounded-[8px] border border-red-500/30">
+                                <i class="bi bi-trash3-fill"></i> Delete Course
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -137,4 +137,23 @@ class TrainerCourseController extends Controller
 
         return redirect()->back()->with('success', 'Study material uploaded successfully!');
     }
+
+    /**
+     * Remove the specified course from storage.
+     */
+    public function destroy($id)
+    {
+        $course = Course::findOrFail($id);
+
+        // Delete thumbnail if it exists and is not a default URL
+        if ($course->thumbnail && str_starts_with($course->thumbnail, '/storage/')) {
+            $path = str_replace('/storage/', '', $course->thumbnail);
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+        }
+
+        $course->delete();
+
+        return redirect()->route('trainer.courses.index')
+            ->with('success', 'Course and all associated content deleted successfully!');
+    }
 }
