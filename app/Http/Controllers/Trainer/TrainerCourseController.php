@@ -13,11 +13,69 @@ class TrainerCourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::withCount(['lessons', 'enrollments'])->get();
+        $courses = Course::withCount(['lessons', 'enrollments'])
+            ->latest()
+            ->get();
+    
+        return view('trainer.courses.index', compact('courses'));
+    }
 
-        return view('trainer.courses.index', [
-            'courses' => $courses
+    /**
+     * Show form to create a new course.
+     */
+    public function create()
+    {
+        return view('trainer.courses.create');
+    }
+
+    /**
+     * Store a newly created course.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'thumbnail' => 'nullable|file|image|max:2048',
+            'youtube_link' => 'nullable|url',
+            'price' => 'nullable|numeric|min:0',
+            'learning_outcomes' => 'nullable|string',
+            'documents.*' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240', // 10MB per file
         ]);
+
+        $thumbnailPath = null;
+        if ($request->hasFile('thumbnail')) {
+            $thumbnailPath = '/storage/' . $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        $course = Course::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'thumbnail' => $thumbnailPath ?? 'https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=600',
+            'instructor_name' => auth()->user()->name,
+            'price' => $request->price ?? 0,
+            'youtube_link' => $request->youtube_link,
+            'learning_outcomes' => $request->learning_outcomes,
+        ]);
+
+        // Handle initial documents if provided
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $file) {
+                $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9.\-]/', '_', $file->getClientOriginalName());
+                $filePath = $file->storeAs('study_materials', $fileName, 'public');
+
+                \App\Models\StudyMaterial::create([
+                    'course_id' => $course->id,
+                    'title' => $file->getClientOriginalName(),
+                    'file_path' => '/storage/' . $filePath,
+                    'file_type' => $file->getClientOriginalExtension(),
+                    'file_size' => $file->getSize(),
+                ]);
+            }
+        }
+
+        return redirect()->route('trainer.courses.index')
+            ->with('success', 'Course created with premium features!');
     }
 
     /**

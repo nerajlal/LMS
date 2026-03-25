@@ -41,7 +41,7 @@ class TrainerStudyMaterialController extends Controller
                 'title' => $request->title,
                 'file_path' => '/storage/' . $filePath,
                 'file_type' => $file->getClientOriginalExtension(),
-                'file_size' => number_format($file->getSize() / 1048576, 1) . ' MB',
+                'file_size' => $file->getSize(),
             ]);
         }
 

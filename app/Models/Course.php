@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    protected $fillable = ['title', 'description', 'thumbnail', 'price', 'instructor_name'];
+    protected $fillable = ['title', 'description', 'thumbnail', 'price', 'instructor_name', 'youtube_link', 'learning_outcomes'];
 
     public function lessons()   { return $this->hasMany(Lesson::class); }
 

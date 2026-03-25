@@ -4,11 +4,15 @@
 
 @section('content')
 <div class="space-y-8">
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-6">
         <div>
-            <h1 class="text-[24px] font-[800] text-navy tracking-tight">Assigned Courses</h1>
+            <h1 class="text-3xl font-[800] text-navy tracking-tight uppercase">My Courses</h1>
             <p class="text-muted mt-1 font-[500] text-[14px]">Manage your curriculum and student materials</p>
         </div>
+        <a href="{{ route('trainer.courses.create') }}" class="px-8 py-3.5 bg-primary text-white font-[800] text-[13px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
+            <i class="bi bi-plus-lg text-lg"></i>
+            <span>Add New Course</span>
+        </a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

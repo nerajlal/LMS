@@ -107,8 +107,7 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     Route::get('/', [TrainerController::class, 'index'])->name('dashboard');
     
     // Trainer exclusive module routes
-    Route::get('/courses', [TrainerCourseController::class, 'index'])->name('courses.index');
-    Route::get('/courses/{course}', [TrainerCourseController::class, 'show'])->name('courses.show');
+    Route::resource('courses', TrainerCourseController::class);
     Route::post('/courses/{course}/lessons', [TrainerCourseController::class, 'storeLesson'])->name('courses.lessons.store');
     Route::post('/courses/{course}/materials', [TrainerCourseController::class, 'storeMaterial'])->name('courses.materials.store');
     

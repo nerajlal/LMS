@@ -83,7 +83,7 @@
                         <div class="flex-1 min-w-0">
                             <div class="text-sm font-bold text-slate-900 truncate leading-none mb-1.5">{{ $mat->title }}</div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                {{ strtoupper($mat->file_type) }} &bull; {{ number_format($mat->file_size / (1024 * 1024), 2) }} MB
+                                {{ strtoupper($mat->file_type) }} &bull; {{ is_numeric($mat->file_size) ? number_format($mat->file_size / (1024 * 1024), 2) . ' MB' : $mat->file_size }}
                             </div>
                         </div>
                         <a href="{{ $mat->file_path }}" target="_blank" class="p-2.5 rounded-[12px] bg-slate-50 text-slate-500 hover:bg-[#F37021] hover:text-white transition-all">
