@@ -6,7 +6,6 @@ use App\Models\Admission;
 use App\Models\Course;
 use App\Models\Batch;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class AdmissionController extends Controller
 {

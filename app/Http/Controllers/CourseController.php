@@ -6,7 +6,6 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use App\Models\Admission;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class CourseController extends Controller
 {

@@ -1,4 +1,4 @@
-@extends(Auth::user()->is_admin || Auth::user()->is_trainer ? 'layouts.admin' : 'layouts.app')
+@extends(auth()->user()->is_admin || auth()->user()->is_trainer ? 'layouts.admin' : 'layouts.app')
 
 @section('title', 'System Settings')
 
@@ -21,12 +21,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Primary Identity</label>
-                        <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}" required 
+                        <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" required 
                                class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Access Email</label>
-                        <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}" required 
+                        <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required 
                                class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
                     </div>
                 </div>

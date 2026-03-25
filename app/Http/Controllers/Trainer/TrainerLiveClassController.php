@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Trainer;
 use App\Http\Controllers\Controller;
 use App\Models\LiveClass;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class TrainerLiveClassController extends Controller
 {

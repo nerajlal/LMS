@@ -7,7 +7,7 @@
     <!-- Welcome Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <h1 class="text-3xl font-black text-slate-900 tracking-tight">Howdy, {{ Auth::user()->name }}! 👋</h1>
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight">Howdy, {{ auth()->user()->name }}! 👋</h1>
             <p class="text-slate-500 mt-1 font-medium text-sm">Welcome back to your learning journey. You're doing great!</p>
         </div>
         <div class="flex items-center gap-3 p-1.5 bg-white rounded-2xl border border-slate-100 shadow-sm">

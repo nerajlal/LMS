@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    /* Responsive YouTube Embeds */
+    .youtube-embed {
+        @apply aspect-video w-full rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white bg-black;
+    }
+    
+    .video-container {
+        @apply relative w-full pt-[56.25%]; /* 16:9 Aspect Ratio */
+    }
+    
+    .video-container iframe {
+        @apply absolute top-0 left-0 w-full h-full border-0;
+    }
+}

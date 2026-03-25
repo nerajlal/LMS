@@ -7,7 +7,6 @@ use App\Models\Course;
 use App\Models\Admission;
 use App\Models\Enrollment;
 use App\Models\Fee;
-use Inertia\Inertia;
 
 class DashboardController extends Controller
 {

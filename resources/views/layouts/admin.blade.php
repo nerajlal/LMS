@@ -13,8 +13,33 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- Tailwind & Vite -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer components {
+            .youtube-embed {
+                @apply aspect-video w-full rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white bg-black;
+            }
+            .video-container {
+                @apply relative w-full pt-[56.25%];
+            }
+            .video-container iframe {
+                @apply absolute top-0 left-0 w-full h-full border-0;
+            }
+        }
+    </style>
 
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -40,7 +65,7 @@
 
         <nav class="p-4 space-y-1">
             @php
-                $role = Auth::user()->is_admin ? 'admin' : 'trainer';
+                $role = auth()->user()->is_admin ? 'admin' : 'trainer';
                 $nav = $role === 'admin' ? [
                     ['label' => 'Dashboard', 'icon' => 'bi-speedometer2', 'route' => 'admin.dashboard'],
                     ['label' => 'Courses', 'icon' => 'bi-journal-bookmark', 'route' => 'admin.courses.index'],
@@ -90,11 +115,11 @@
 
             <div class="flex items-center gap-4">
                 <div class="text-right hidden sm:block">
-                    <div class="text-sm font-bold text-slate-900 leading-none">{{ Auth::user()->name }}</div>
-                    <div class="text-[11px] text-[#e3000f] font-bold uppercase tracking-wider mt-1">{{ $role }}</div>
+                    <div class="text-sm font-bold text-slate-900 leading-none">{{ auth()->user()->name }}</div>
+                    <div class="text-[11px] text-[#e3000f] font-bold uppercase tracking-wider mt-1">{{ auth()->user()->is_admin ? 'Admin' : (auth()->user()->is_trainer ? 'Trainer' : 'Student') }}</div>
                 </div>
                 <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#e3000f] font-bold border-2 border-white shadow-sm">
-                    {{ substr(Auth::user()->name, 0, 1) }}
+                    {{ substr(auth()->user()->name, 0, 1) }}
                 </div>
             </div>
         </div>

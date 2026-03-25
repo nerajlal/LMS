@@ -47,7 +47,7 @@
 
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Full Name</label>
-                        <input type="text" name="full_name" required value="{{ old('full_name', Auth::user()->name) }}" 
+                        <input type="text" name="full_name" required value="{{ old('full_name', auth()->user()->name) }}" 
                                placeholder="As per documents" 
                                class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
                         @error('full_name') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
@@ -63,7 +63,7 @@
 
                     <div class="md:col-span-2">
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Email Address</label>
-                        <input type="email" name="email" required value="{{ old('email', Auth::user()->email) }}" 
+                        <input type="email" name="email" required value="{{ old('email', auth()->user()->email) }}" 
                                placeholder="name@example.com" 
                                class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
                         @error('email') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
