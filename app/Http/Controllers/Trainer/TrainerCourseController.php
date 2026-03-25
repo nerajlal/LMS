@@ -37,7 +37,7 @@ class TrainerCourseController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'thumbnail' => 'nullable|file|image|max:2048',
-            'youtube_link' => 'nullable|url',
+            'youtube_link' => 'nullable|string',
             'price' => 'nullable|numeric|min:0',
             'learning_outcomes' => 'nullable|string',
             'documents.*' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240', // 10MB per file

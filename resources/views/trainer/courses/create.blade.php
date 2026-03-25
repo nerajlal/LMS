@@ -33,6 +33,23 @@
 
     <form action="{{ route('trainer.courses.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
         @csrf
+
+        @if ($errors->any())
+            <div class="p-6 bg-red-50 border border-red-100 text-red-600 rounded-[16px] animate-slide-up shadow-sm">
+                <div class="flex items-center gap-3 mb-3 pb-3 border-b border-red-100/50">
+                    <i class="bi bi-exclamation-triangle-fill text-xl"></i>
+                    <span class="text-[11px] font-[900] uppercase tracking-[0.2em]">Validation Error</span>
+                </div>
+                <ul class="space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li class="text-[13px] font-[700] flex items-center gap-2">
+                            <span class="w-1 h-1 bg-red-400 rounded-full"></span>
+                            {{ $error }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             <!-- Left Column: Primary Details -->
