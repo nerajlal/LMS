@@ -4,28 +4,65 @@
 
 @section('content')
 <div x-data="{ activeTab: 'lessons' }" class="space-y-10">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-            <div class="text-[10px] font-black text-[#F37021] uppercase tracking-[0.2em] mb-2">Course Management</div>
-            <h1 class="text-3xl font-black text-slate-900 tracking-tight">{{ $course->title }}</h1>
-        </div>
-        <div class="flex bg-white p-1.5 rounded-[12px] border border-slate-200 shadow-sm self-start md:self-center">
-            <button @click="activeTab = 'lessons'" 
-                    :class="activeTab === 'lessons' ? 'bg-[#F37021] text-white shadow-lg shadow-orange-500/20' : 'text-slate-500 hover:text-slate-900'"
-                    class="px-6 py-2.5 rounded-[12px] font-bold tracking-tight transition-all flex items-center gap-2 text-sm">
-                <i class="bi bi-play-circle"></i> Lessons
-            </button>
-            <button @click="activeTab = 'materials'" 
-                    :class="activeTab === 'materials' ? 'bg-[#F37021] text-white shadow-lg shadow-orange-500/20' : 'text-slate-500 hover:text-slate-900'"
-                    class="px-6 py-2.5 rounded-[12px] font-bold tracking-tight transition-all flex items-center gap-2 text-sm">
-                <i class="bi bi-file-earmark-pdf"></i> Materials
-            </button>
+    <!-- Header/Hero Section -->
+    <div class="relative bg-navy rounded-[16px] p-8 md:p-12 overflow-hidden shadow-xl shadow-navy/20">
+        <!-- Abstract Background Ornaments -->
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div class="space-y-4 max-w-3xl">
+                <div class="flex items-center gap-3">
+                    <span class="px-4 py-1.5 bg-primary text-white text-[10px] font-[900] uppercase tracking-[0.2em] rounded-[8px] shadow-lg shadow-orange-500/20">
+                        Master Curriculum
+                    </span>
+                    @if($course->price > 0)
+                        <span class="px-4 py-1.5 bg-white/10 text-white text-[10px] font-[900] uppercase tracking-[0.2em] rounded-[8px] border border-white/20">
+                            ₹{{ number_format($course->price, 2) }}
+                        </span>
+                    @else
+                        <span class="px-4 py-1.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-[900] uppercase tracking-[0.2em] rounded-[8px] border border-emerald-500/30">
+                            Free Course
+                        </span>
+                    @endif
+                </div>
+                <h1 class="text-4xl md:text-5xl font-[900] text-white tracking-tight leading-tight uppercase">{{ $course->title }}</h1>
+                <p class="text-white/60 text-lg font-[500] leading-relaxed line-clamp-2 max-w-2xl">{{ $course->description }}</p>
+                
+                <div class="flex flex-wrap items-center gap-6 pt-2">
+                    <div class="flex items-center gap-2.5 text-white/80 text-[13px] font-[700] uppercase tracking-wider">
+                        <i class="bi bi-play-circle-fill text-primary text-xl"></i>
+                        <span>{{ count($course->lessons) }} Lessons</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-white/80 text-[13px] font-[700] uppercase tracking-wider border-l border-white/10 pl-6">
+                        <i class="bi bi-files text-primary text-xl"></i>
+                        <span>{{ count($course->studyMaterials) }} Materials</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-white/80 text-[13px] font-[700] uppercase tracking-wider border-l border-white/10 pl-6">
+                        <i class="bi bi-people-fill text-primary text-xl"></i>
+                        <span>{{ $course->enrollments_count ?? 0 }} Enrolled</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Quick Actions (Tabs) -->
+            <div class="flex bg-white/10 backdrop-blur-md p-1.5 rounded-[16px] border border-white/10 self-start">
+                <button @click="activeTab = 'lessons'" 
+                        :class="activeTab === 'lessons' ? 'bg-primary text-white shadow-xl shadow-orange-500/30' : 'text-white/60 hover:text-white'"
+                        class="px-8 py-3.5 rounded-[12px] font-[800] uppercase tracking-widest text-[11px] transition-all flex items-center gap-3">
+                    <i class="bi bi-play-btn-fill"></i> Lessons
+                </button>
+                <button @click="activeTab = 'materials'" 
+                        :class="activeTab === 'materials' ? 'bg-primary text-white shadow-xl shadow-orange-500/30' : 'text-white/60 hover:text-white'"
+                        class="px-8 py-3.5 rounded-[12px] font-[800] uppercase tracking-widest text-[11px] transition-all flex items-center gap-3">
+                    <i class="bi bi-file-earmark-text-fill"></i> Resources
+                </button>
+            </div>
         </div>
     </div>
 
     @if ($errors->any())
-        <div class="p-4 bg-red-50 border border-red-100 text-red-600 rounded-[12px] text-sm font-bold animate-slide-up">
+        <div class="p-4 bg-red-50 border border-red-100 text-red-600 rounded-[12px] text-sm font-[800] uppercase tracking-wider">
             <ul class="list-disc list-inside">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -34,123 +71,181 @@
         </div>
     @endif
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        <!-- List Section -->
-        <div class="lg:col-span-2 space-y-6">
-            <!-- Lessons List -->
-            <div x-show="activeTab === 'lessons'" x-transition class="space-y-4">
-                <div class="flex items-center justify-between px-2">
-                    <h3 class="text-lg font-black text-slate-900 tracking-tight">Recorded Video Lessons</h3>
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ count($course->lessons) }} Total</span>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+        <!-- Main Content Area -->
+        <div class="lg:col-span-2 space-y-10">
+            
+            <!-- Learning Outcomes Widget (New) -->
+            @if($course->learning_outcomes)
+            <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex items-center gap-3 font-[900] text-navy uppercase text-[11px] tracking-widest">
+                    <i class="bi bi-patch-check-fill text-primary"></i>
+                    What students will master
                 </div>
-                <div class="grid gap-3">
+                <div class="p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach(explode("\n", $course->learning_outcomes) as $outcome)
+                            @if(trim($outcome))
+                            <div class="flex items-start gap-4 p-4 rounded-[12px] bg-slate-50 border border-transparent hover:border-primary/20 transition-all">
+                                <i class="bi bi-check-circle-fill text-primary mt-0.5"></i>
+                                <span class="text-[14px] font-[600] text-navy/80 leading-snug">{{ trim($outcome) }}</span>
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- YouTube Intro Banner (New) -->
+            @if($course->youtube_link)
+            <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex items-center gap-3 font-[900] text-navy uppercase text-[11px] tracking-widest">
+                    <i class="bi bi-youtube text-red-600"></i>
+                    Course Introduction Video
+                </div>
+                    <div class="aspect-video rounded-[12px] overflow-hidden shadow-inner">
+                        @php
+                            $youtubeId = '';
+                            if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $course->youtube_link, $matches)) {
+                                $youtubeId = $matches[1];
+                            }
+                        @endphp
+                        @if($youtubeId)
+                            <iframe class="w-full h-full" 
+                                    src="https://www.youtube.com/embed/{{ $youtubeId }}" 
+                                    frameborder="0" allowfullscreen></iframe>
+                        @else
+                            <div class="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
+                                <p class="text-[11px] font-[800] uppercase tracking-widest">Invalid YouTube Link</p>
+                            </div>
+                        @endif
+                    </div>
+            </div>
+            @endif
+
+            <!-- Tab Content: Lessons -->
+            <div x-show="activeTab === 'lessons'" x-transition class="space-y-6">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Recorded Curriculum</h3>
+                    <div class="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full text-[10px] font-[900] uppercase tracking-widest">Live Flow</div>
+                </div>
+                <div class="grid gap-4">
                     @forelse($course->lessons as $index => $lesson)
-                     <div class="bg-white p-4 rounded-[12px] border border-slate-100 shadow-sm flex items-center gap-4 group">
-                        <div class="w-10 h-10 rounded-[12px] bg-red-50 text-[#F37021] flex items-center justify-center font-black text-sm shrink-0">
-                            {{ $index + 1 }}
+                     <div class="bg-white p-5 rounded-[16px] border border-slate-100 shadow-sm flex items-center gap-6 group hover:border-primary/30 transition-all">
+                        <div class="w-12 h-12 rounded-[14px] bg-slate-50 text-navy flex items-center justify-center font-[900] text-base shrink-0 group-hover:bg-primary group-hover:text-white transition-all">
+                            {{ sprintf('%02d', $index + 1) }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-sm font-bold text-slate-900 truncate leading-none mb-1.5">{{ $lesson->title }}</div>
-                            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate">{{ $lesson->video_url }}</div>
+                            <div class="text-[15px] font-[800] text-navy truncate leading-none mb-2">{{ $lesson->title }}</div>
+                            <div class="text-[10px] text-muted font-[700] uppercase tracking-widest flex items-center gap-2">
+                                <i class="bi bi-play-circle text-primary"></i> Video Lesson &bull; Dynamic Order
+                            </div>
                         </div>
-                        <div class="p-2 text-slate-300 group-hover:text-[#F37021] transition-colors">
-                            <i class="bi bi-play-circle-fill text-2xl"></i>
-                        </div>
+                        <a href="{{ $lesson->video_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-primary transition-colors">
+                            <i class="bi bi-play-fill text-2xl"></i>
+                        </a>
                     </div>
                     @empty
-                    <div class="bg-white py-16 rounded-[12px] border border-slate-100 shadow-sm text-center">
-                        <div class="w-12 h-12 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                    <div class="bg-white py-20 rounded-[16px] border border-dashed border-slate-200 text-center">
+                        <div class="w-16 h-16 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
                             <i class="bi bi-camera-video"></i>
                         </div>
-                        <p class="text-slate-400 font-bold text-sm">No video lessons recorded yet.</p>
+                        <p class="text-slate-400 font-[800] text-xs uppercase tracking-widest">No video lessons recorded yet</p>
                     </div>
                     @endforelse
                 </div>
             </div>
 
-            <!-- Materials List -->
-            <div x-show="activeTab === 'materials'" x-transition x-cloak class="space-y-4">
+            <!-- Tab Content: Materials -->
+            <div x-show="activeTab === 'materials'" x-transition x-cloak class="space-y-6">
                 <div class="flex items-center justify-between px-2">
-                    <h3 class="text-lg font-black text-slate-900 tracking-tight">PDF Study Materials</h3>
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ count($course->studyMaterials) }} Files</span>
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Course Resources</h3>
+                    <div class="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full text-[10px] font-[900] uppercase tracking-widest">Downloadable</div>
                 </div>
-                <div class="grid gap-3">
+                <div class="grid gap-4">
                     @forelse($course->studyMaterials as $mat)
-                    <div class="bg-white p-4 rounded-[12px] border border-slate-100 shadow-sm flex items-center gap-4 group">
-                        <div class="w-12 h-12 rounded-[12px] bg-orange-50 text-orange-600 flex items-center justify-center text-2xl shrink-0">
+                    <div class="bg-white p-5 rounded-[16px] border border-slate-100 shadow-sm flex items-center gap-6 group hover:border-primary/30 transition-all">
+                        <div class="w-12 h-12 rounded-[14px] bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl shrink-0 group-hover:bg-emerald-500 group-hover:text-white transition-all">
                             <i class="bi bi-file-earmark-pdf-fill"></i>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-sm font-bold text-slate-900 truncate leading-none mb-1.5">{{ $mat->title }}</div>
-                            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                            <div class="text-[15px] font-[800] text-navy truncate leading-none mb-2">{{ $mat->title }}</div>
+                            <div class="text-[10px] text-muted font-[700] uppercase tracking-widest">
                                 {{ strtoupper($mat->file_type) }} &bull; {{ is_numeric($mat->file_size) ? number_format($mat->file_size / (1024 * 1024), 2) . ' MB' : $mat->file_size }}
                             </div>
                         </div>
-                        <a href="{{ $mat->file_path }}" target="_blank" class="p-2.5 rounded-[12px] bg-slate-50 text-slate-500 hover:bg-[#F37021] hover:text-white transition-all">
+                        <a href="{{ $mat->file_path }}" target="_blank" class="p-3 rounded-[12px] bg-slate-50 text-slate-400 hover:bg-navy hover:text-white transition-all">
                             <i class="bi bi-download text-lg"></i>
                         </a>
                     </div>
                     @empty
-                    <div class="bg-white py-16 rounded-[12px] border border-slate-100 shadow-sm text-center">
-                        <div class="w-12 h-12 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                    <div class="bg-white py-20 rounded-[16px] border border-dashed border-slate-200 text-center">
+                        <div class="w-16 h-16 bg-slate-50 text-slate-200 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
                             <i class="bi bi-file-earmark-text"></i>
                         </div>
-                        <p class="text-slate-400 font-bold text-sm">No materials uploaded yet.</p>
+                        <p class="text-slate-400 font-[800] text-xs uppercase tracking-widest">No materials uploaded yet</p>
                     </div>
                     @endforelse
                 </div>
             </div>
         </div>
 
-        <!-- Form Sidebar -->
-        <div class="space-y-8">
-            <!-- Add Lesson Form -->
-             <div x-show="activeTab === 'lessons'" x-transition class="bg-white p-8 rounded-[12px] border border-slate-200 shadow-sm space-y-6 sticky top-24 transition-all hover:shadow-lg">
-                <h3 class="text-sm font-black text-[#F37021] uppercase tracking-widest flex items-center gap-2">
-                    <i class="bi bi-plus-lg"></i> Append New Lesson
-                </h3>
+        <!-- Sticky Sidebar Forms -->
+        <div class="space-y-8 sticky top-24">
+            <!-- Add Lesson Widget -->
+             <div x-show="activeTab === 'lessons'" x-transition class="bg-white p-8 rounded-[16px] border border-slate-200 shadow-xl shadow-slate-200/20 space-y-6">
+                <div class="flex items-center gap-3 pb-4 border-b border-slate-50">
+                    <div class="w-10 h-10 bg-orange-50 rounded-[10px] flex items-center justify-center text-primary">
+                        <i class="bi bi-plus-lg text-lg"></i>
+                    </div>
+                    <h3 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mt-1">Append Lesson</h3>
+                </div>
                 <form action="{{ route('trainer.courses.lessons.store', $course->id) }}" method="POST" class="space-y-6">
                     @csrf
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pl-1">Lesson Title</label>
-                        <input type="text" name="title" required placeholder="e.g. Master the Foundations" 
-                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
+                        <label class="block text-[10px] font-[800] text-navy/40 uppercase tracking-widest mb-2 px-1">Lesson Title</label>
+                        <input type="text" name="title" required placeholder="Foundations & Setup" 
+                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm font-[700] text-navy">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pl-1">YouTube Embed URL</label>
-                        <input type="url" name="video_url" required placeholder="https://youtube.com/embed/..." 
-                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
+                        <label class="block text-[10px] font-[800] text-navy/40 uppercase tracking-widest mb-2 px-1">YouTube Link</label>
+                        <input type="url" name="video_url" required placeholder="https://youtube.com/..." 
+                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm font-[700] text-navy">
                     </div>
-                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-[12px] font-black text-xs uppercase tracking-widest hover:bg-[#F37021] transition-all shadow-xl shadow-slate-900/10">
-                        Add to Lesson List
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[12px] font-[800] text-[11px] uppercase tracking-widest hover:bg-primary transition-all shadow-xl shadow-navy/10">
+                        Add to Curriculum
                     </button>
                 </form>
             </div>
 
-            <!-- Add Material Form -->
-            <div x-show="activeTab === 'materials'" x-transition x-cloak class="bg-white p-8 rounded-[12px] border border-slate-200 shadow-sm space-y-6 sticky top-24 transition-all hover:shadow-lg">
-                <h3 class="text-sm font-black text-orange-600 uppercase tracking-widest flex items-center gap-2">
-                    <i class="bi bi-cloud-arrow-up"></i> Upload Document
-                </h3>
+            <!-- Add Material Widget -->
+            <div x-show="activeTab === 'materials'" x-transition x-cloak class="bg-white p-8 rounded-[16px] border border-slate-200 shadow-xl shadow-slate-200/20 space-y-6">
+                <div class="flex items-center gap-3 pb-4 border-b border-slate-50">
+                    <div class="w-10 h-10 bg-emerald-50 rounded-[10px] flex items-center justify-center text-emerald-600">
+                        <i class="bi bi-cloud-arrow-up text-lg"></i>
+                    </div>
+                    <h3 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mt-1">Upload Material</h3>
+                </div>
                 <form action="{{ route('trainer.courses.materials.store', $course->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pl-1">Material Name</label>
-                        <input type="text" name="title" required placeholder="e.g. week_1_handout.pdf" 
-                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-orange-500/20 focus:bg-white transition-all text-sm font-bold">
+                        <label class="block text-[10px] font-[800] text-navy/40 uppercase tracking-widest mb-2 px-1">Resource Name</label>
+                        <input type="text" name="title" required placeholder="Course Handout PDF" 
+                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all text-sm font-[700] text-navy">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pl-1">File (PDF/DOC/ZIP)</label>
+                        <label class="block text-[10px] font-[800] text-navy/40 uppercase tracking-widest mb-2 px-1">Select File</label>
                         <div class="relative group">
                             <input type="file" name="file" required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                            <div class="px-4 py-8 bg-slate-50 border-2 border-dashed border-slate-200 rounded-[12px] text-center group-hover:border-orange-200 transition-colors">
-                                <i class="bi bi-file-earmark-plus text-2xl text-slate-300"></i>
-                                <div class="text-xs font-bold text-slate-400 mt-2">Click or Drop File Here</div>
+                            <div class="px-4 py-10 bg-slate-50 border-2 border-dashed border-slate-100 rounded-[12px] text-center group-hover:border-emerald-200 transition-colors">
+                                <i class="bi bi-file-earmark-plus text-3xl text-slate-200"></i>
+                                <div class="text-[10px] font-[800] text-slate-300 uppercase tracking-widest mt-2">Browse Files</div>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-[12px] font-black text-xs uppercase tracking-widest hover:bg-orange-600 transition-all shadow-xl shadow-slate-900/10">
-                        Start Secure Upload
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[12px] font-[800] text-[11px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-navy/10">
+                        Secure Upload
                     </button>
                 </form>
             </div>
