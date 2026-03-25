@@ -26,14 +26,14 @@
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Full Name</label>
                     <input type="text" name="name" required placeholder="Instructor Name" 
                            class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all text-sm font-bold">
-                    @error('name') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
+                    @error('name') <p class="mt-2 text-xs font-bold text-orange-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Professional Email</label>
                     <input type="email" name="email" required placeholder="instructor@theaceindia.com" 
                            class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all text-sm font-bold">
-                    @error('email') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
+                    @error('email') <p class="mt-2 text-xs font-bold text-orange-600">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-6">
@@ -41,7 +41,7 @@
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Access Password</label>
                         <input type="password" name="password" required 
                                class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-600/20 focus:bg-white transition-all text-sm font-bold">
-                        @error('password') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
+                        @error('password') <p class="mt-2 text-xs font-bold text-orange-600">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Confirm Access</label>

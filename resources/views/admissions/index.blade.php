@@ -25,7 +25,7 @@
                     @forelse($admissions as $admission)
                     <tr class="hover:bg-slate-50/30 transition-colors group">
                         <td class="px-8 py-6">
-                            <div class="text-sm font-bold text-slate-900 group-hover:text-[#e3000f] transition-colors leading-tight">
+                            <div class="text-sm font-bold text-slate-900 group-hover:text-[#F37021] transition-colors leading-tight">
                                 {{ $admission->course->title ?? 'N/A' }}
                             </div>
                         </td>
@@ -52,7 +52,7 @@
                         </td>
                         <td class="px-8 py-6 text-right">
                             @if($admission->status === 'approved')
-                                <a href="{{ route('courses.show', $admission->course_id) }}" class="inline-flex items-center gap-2 text-[#e3000f] font-black text-[10px] uppercase tracking-widest hover:underline">
+                                <a href="{{ route('courses.show', $admission->course_id) }}" class="inline-flex items-center gap-2 text-[#F37021] font-black text-[10px] uppercase tracking-widest hover:underline">
                                     Start Learning <i class="bi bi-play-circle-fill text-base"></i>
                                 </a>
                             @else
@@ -67,7 +67,7 @@
                                 <i class="bi bi-file-earmark-text"></i>
                             </div>
                             <p class="text-slate-400 font-bold italic">No applications found.</p>
-                            <a href="{{ route('courses.index') }}" class="mt-4 inline-block text-[#e3000f] font-black uppercase tracking-widest text-[10px] hover:underline">
+                            <a href="{{ route('courses.index') }}" class="mt-4 inline-block text-[#F37021] font-black uppercase tracking-widest text-[10px] hover:underline">
                                 Browse Courses <i class="bi bi-arrow-right"></i>
                             </a>
                         </td>

@@ -33,7 +33,7 @@
                     <tr class="hover:bg-slate-50/30 transition-colors group">
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-4">
-                                <div class="w-10 h-10 rounded-2xl bg-[#e3000f]/10 text-[#e3000f] flex items-center justify-center font-black text-xs border border-white shadow-sm">
+                                <div class="w-10 h-10 rounded-2xl bg-[#F37021]/10 text-[#F37021] flex items-center justify-center font-black text-xs border border-white shadow-sm">
                                     {{ substr($student->name, 0, 1) }}
                                 </div>
                                 <div>
@@ -62,7 +62,7 @@
                             {{ $student->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-8 py-6 text-right">
-                            <button class="p-2 text-slate-300 hover:text-[#e3000f] transition-colors">
+                            <button class="p-2 text-slate-300 hover:text-[#F37021] transition-colors">
                                 <i class="bi bi-three-dots-vertical text-xl"></i>
                             </button>
                         </td>

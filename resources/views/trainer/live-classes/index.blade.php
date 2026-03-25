@@ -9,7 +9,7 @@
             <h1 class="text-2xl font-black text-slate-900 tracking-tight">Live Class Schedule</h1>
             <p class="text-sm text-slate-500 font-medium italic">Manage your upcoming interactive sessions with students</p>
         </div>
-        <a href="{{ route('trainer.live-classes.create') }}" class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#e3000f] text-white font-black rounded-2xl hover:bg-[#cc0000] transition-all shadow-lg shadow-red-500/20 text-xs uppercase tracking-widest">
+        <a href="{{ route('trainer.live-classes.create') }}" class="inline-flex items-center gap-2 px-6 py-3.5 bg-[#F37021] text-white font-black rounded-2xl hover:bg-[#E6631E] transition-all shadow-lg shadow-orange-500/20 text-xs uppercase tracking-widest">
             <i class="bi bi-calendar-plus text-base"></i> Schedule New Class
         </a>
     </div>
@@ -30,7 +30,7 @@
                     @forelse($classes as $class)
                     <tr class="hover:bg-slate-50/30 transition-colors group">
                         <td class="px-8 py-6">
-                            <div class="text-sm font-bold text-slate-900 group-hover:text-[#e3000f] transition-colors">{{ $class->title }}</div>
+                            <div class="text-sm font-bold text-slate-900 group-hover:text-[#F37021] transition-colors">{{ $class->title }}</div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Instructor: {{ $class->instructor_name }}</div>
                         </td>
                         <td class="px-8 py-6">

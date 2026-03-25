@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="p-8 flex-1 flex flex-col">
-                <h4 class="text-xl font-bold text-slate-900 mb-4 group-hover:text-[#e3000f] transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
+                <h4 class="text-xl font-bold text-slate-900 mb-4 group-hover:text-[#F37021] transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
                 
                 <div class="flex items-center gap-6 mb-8 text-xs font-bold text-slate-400 uppercase tracking-widest">
                     <div class="flex items-center gap-2">
@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="mt-auto">
-                    <a href="{{ route('trainer.courses.show', $course->id) }}" class="flex items-center justify-center gap-2 w-full py-3.5 bg-slate-900 text-white font-black rounded-2xl hover:bg-[#e3000f] transition-all shadow-lg hover:shadow-red-500/20 text-xs uppercase tracking-widest">
+                    <a href="{{ route('trainer.courses.show', $course->id) }}" class="flex items-center justify-center gap-2 w-full py-3.5 bg-slate-900 text-white font-black rounded-2xl hover:bg-[#F37021] transition-all shadow-lg hover:shadow-orange-500/20 text-xs uppercase tracking-widest">
                         Manage Content <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>

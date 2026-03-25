@@ -17,7 +17,7 @@
                 ['label' => 'Total Students', 'value' => $stats['total_students'], 'icon' => 'bi-people', 'color' => 'bg-blue-50 text-blue-600'],
                 ['label' => 'Total Revenue', 'value' => '₹' . number_format($stats['total_revenue']), 'icon' => 'bi-cash-coin', 'color' => 'bg-emerald-50 text-emerald-600'],
                 ['label' => 'Pending Admissions', 'value' => $stats['pending_admissions'], 'icon' => 'bi-hourglass-split', 'color' => 'bg-amber-50 text-amber-600'],
-                ['label' => 'Active Courses', 'value' => $stats['total_courses'], 'icon' => 'bi-journal-check', 'color' => 'bg-[#e3000f]/10 text-[#e3000f]'],
+                ['label' => 'Active Courses', 'value' => $stats['total_courses'], 'icon' => 'bi-journal-check', 'color' => 'bg-[#F37021]/10 text-[#F37021]'],
             ];
         @endphp
 
@@ -40,7 +40,7 @@
         <div class="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden flex flex-col">
             <div class="p-8 border-b border-slate-50 flex items-center justify-between">
                 <h3 class="text-lg font-black text-slate-900 tracking-tight">Recent Admission Requests</h3>
-                <a href="{{ route('admin.admissions.index') }}" class="text-[10px] font-black text-[#e3000f] uppercase tracking-widest hover:underline">View All Requests</a>
+                <a href="{{ route('admin.admissions.index') }}" class="text-[10px] font-black text-[#F37021] uppercase tracking-widest hover:underline">View All Requests</a>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
@@ -79,13 +79,13 @@
         <!-- Sidebar Actions -->
         <div class="space-y-8">
             <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#e3000f]/20 rounded-full blur-3xl"></div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#F37021]/20 rounded-full blur-3xl"></div>
                 <h3 class="text-lg font-black mb-8 flex items-center gap-2">
-                    <i class="bi bi-gear-fill text-[#e3000f]"></i> Quick Setup
+                    <i class="bi bi-gear-fill text-[#F37021]"></i> Quick Setup
                 </h3>
                 <div class="space-y-4">
                     <a href="{{ route('admin.courses.create') }}" class="flex items-center gap-4 bg-white/5 hover:bg-white/10 p-4 rounded-2xl transition-all border border-white/10 group">
-                        <div class="w-10 h-10 bg-[#e3000f] rounded-xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="w-10 h-10 bg-[#F37021] rounded-xl flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
                             <i class="bi bi-journal-plus"></i>
                         </div>
                         <span class="text-xs font-bold uppercase tracking-widest">New Course</span>

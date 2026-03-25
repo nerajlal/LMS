@@ -22,17 +22,17 @@
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Primary Identity</label>
                         <input type="text" name="name" value="{{ old('name', auth()->user()->name) }}" required 
-                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Access Email</label>
                         <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required 
-                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                               class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                     </div>
                 </div>
 
                 <div class="pt-4">
-                    <button type="submit" class="px-8 py-4 bg-slate-900 text-white font-black text-xs rounded-xl hover:bg-[#e3000f] transition-all uppercase tracking-widest shadow-lg shadow-slate-900/10">
+                    <button type="submit" class="px-8 py-4 bg-slate-900 text-white font-black text-xs rounded-xl hover:bg-[#F37021] transition-all uppercase tracking-widest shadow-lg shadow-slate-900/10">
                         Synchronize Profile
                     </button>
                     @if (session('status') === 'profile-updated')
@@ -54,22 +54,22 @@
                 <div class="md:col-span-2">
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Current Password</label>
                     <input type="password" name="current_password" required 
-                           class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                           class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                 </div>
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">New Password</label>
                     <input type="password" name="password" required 
-                           class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                           class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                 </div>
                 <div>
                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 pl-1">Confirm New Credentials</label>
                     <input type="password" name="password_confirmation" required 
-                           class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                           class="w-full px-5 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                 </div>
             </div>
 
             <div class="pt-4">
-                <button type="submit" class="px-8 py-4 bg-slate-900 text-white font-black text-xs rounded-xl hover:bg-[#e3000f] transition-all uppercase tracking-widest shadow-lg shadow-slate-900/10 active:scale-95">
+                <button type="submit" class="px-8 py-4 bg-slate-900 text-white font-black text-xs rounded-xl hover:bg-[#F37021] transition-all uppercase tracking-widest shadow-lg shadow-slate-900/10 active:scale-95">
                     Update Credentials
                 </button>
             </div>

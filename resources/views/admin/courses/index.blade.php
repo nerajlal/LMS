@@ -9,7 +9,7 @@
             <h1 class="text-3xl font-black text-slate-900 tracking-tight">System Courses</h1>
             <p class="text-slate-500 mt-1 font-medium italic">Manage the complete catalog of educational programs</p>
         </div>
-        <a href="{{ route('admin.courses.create') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-[#e3000f] text-white font-black rounded-2xl hover:bg-[#cc0000] transition-all shadow-xl shadow-red-500/20 text-xs uppercase tracking-widest">
+        <a href="{{ route('admin.courses.create') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-[#F37021] text-white font-black rounded-2xl hover:bg-[#E6631E] transition-all shadow-xl shadow-orange-500/20 text-xs uppercase tracking-widest">
             <i class="bi bi-plus-circle-fill text-base"></i> Launch New Course
         </a>
     </div>
@@ -43,12 +43,12 @@
                     @forelse($courses as $course)
                     <tr class="hover:bg-slate-50/30 transition-colors group">
                         <td class="px-8 py-6 max-w-xs">
-                            <div class="text-sm font-bold text-slate-900 group-hover:text-[#e3000f] transition-colors leading-tight mb-2 line-clamp-1">{{ $course->title }}</div>
+                            <div class="text-sm font-bold text-slate-900 group-hover:text-[#F37021] transition-colors leading-tight mb-2 line-clamp-1">{{ $course->title }}</div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ID: {{ $course->id }}</div>
                         </td>
                         <td class="px-8 py-6">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[#e3000f] font-black text-[10px] border border-white">
+                                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[#F37021] font-black text-[10px] border border-white">
                                     {{ substr($course->instructor_name, 0, 1) }}
                                 </div>
                                 <div class="text-[11px] font-bold text-slate-600 uppercase tracking-widest leading-none">{{ $course->instructor_name }}</div>
@@ -61,7 +61,7 @@
                                     <div class="text-[8px] text-slate-400 font-black uppercase tracking-widest">Lessons</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="text-xs font-black text-[#e3000f] leading-none mb-1">{{ $course->enrollments_count }}</div>
+                                    <div class="text-xs font-black text-[#F37021] leading-none mb-1">{{ $course->enrollments_count }}</div>
                                     <div class="text-[8px] text-slate-400 font-black uppercase tracking-widest">Enrolled</div>
                                 </div>
                             </div>

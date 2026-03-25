@@ -26,7 +26,7 @@
         @php
             $statCards = [
                 ['label' => 'Enrolled', 'value' => $stats['enrolled'], 'icon' => 'bi-journal-bookmark', 'color' => 'bg-blue-50 text-blue-600'],
-                ['label' => 'Live Classes', 'value' => $stats['liveClasses'], 'icon' => 'bi-camera-video', 'color' => 'bg-red-50 text-[#e3000f]'],
+                ['label' => 'Live Classes', 'value' => $stats['liveClasses'], 'icon' => 'bi-camera-video', 'color' => 'bg-red-50 text-[#F37021]'],
                 ['label' => 'Completed', 'value' => $stats['completed'], 'icon' => 'bi-check2-circle', 'color' => 'bg-emerald-50 text-emerald-600'],
                 ['label' => 'Fees Due', 'value' => '₹'.$stats['feesDue'], 'icon' => 'bi-currency-dollar', 'color' => 'bg-amber-50 text-amber-600'],
             ];
@@ -50,7 +50,7 @@
         <div class="lg:col-span-2 space-y-8">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-black text-slate-900 tracking-tight">Continue Learning</h2>
-                <a href="{{ route('courses.index') }}" class="text-sm font-bold text-[#e3000f] hover:underline">View All</a>
+                <a href="{{ route('courses.index') }}" class="text-sm font-bold text-[#F37021] hover:underline">View All</a>
             </div>
 
             <div class="space-y-4">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-bold text-slate-900 mb-2 truncate group-hover:text-[#e3000f] transition-colors leading-tight">{{ $course['title'] }}</h3>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2 truncate group-hover:text-[#F37021] transition-colors leading-tight">{{ $course['title'] }}</h3>
                         <div class="flex items-center gap-6 mb-4">
                             <div class="flex items-center gap-1.5 text-xs font-bold text-slate-400">
                                 <i class="bi bi-person text-base"></i> {{ $course['instructor'] }}
@@ -74,13 +74,13 @@
                         </div>
                         <div class="flex items-center gap-4">
                             <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-[#e3000f] transition-all duration-500 rounded-full" style="width: {{ $course['progress'] }}%"></div>
+                                <div class="h-full bg-[#F37021] transition-all duration-500 rounded-full" style="width: {{ $course['progress'] }}%"></div>
                             </div>
                             <span class="text-xs font-black text-slate-900">{{ $course['progress'] }}%</span>
                         </div>
                     </div>
                     <div class="hidden sm:block">
-                        <a href="{{ route('courses.show', $course['id']) }}" class="p-3 rounded-2xl bg-slate-50 text-slate-400 hover:bg-[#e3000f] hover:text-white transition-all">
+                        <a href="{{ route('courses.show', $course['id']) }}" class="p-3 rounded-2xl bg-slate-50 text-slate-400 hover:bg-[#F37021] hover:text-white transition-all">
                             <i class="bi bi-chevron-right text-xl"></i>
                         </a>
                     </div>
@@ -91,7 +91,7 @@
                         <i class="bi bi-journal-x"></i>
                     </div>
                     <p class="text-slate-500 font-bold">You aren't enrolled in any courses yet.</p>
-                    <a href="{{ route('courses.index') }}" class="mt-4 inline-flex items-center gap-2 text-[#e3000f] font-black uppercase tracking-widest text-xs hover:underline">
+                    <a href="{{ route('courses.index') }}" class="mt-4 inline-flex items-center gap-2 text-[#F37021] font-black uppercase tracking-widest text-xs hover:underline">
                         Find a Course <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -103,22 +103,22 @@
         <div class="space-y-12">
             <!-- Upcoming Classes -->
             <div class="bg-slate-900 p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-red-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-orange-600/20 rounded-full blur-3xl"></div>
                 <h3 class="text-lg font-black mb-6 flex items-center gap-2">
-                    <i class="bi bi-broadcast text-[#e3000f]"></i> Live Sessions
+                    <i class="bi bi-broadcast text-[#F37021]"></i> Live Sessions
                 </h3>
                 <div class="space-y-6">
                     @forelse($upcomingClasses as $class)
                     <div class="relative pl-6 border-l-2 border-red-500/30 group">
-                        <div class="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-red-500"></div>
-                        <h4 class="text-sm font-bold text-white mb-1 group-hover:text-[#e3000f] transition-colors leading-tight">{{ $class['title'] }}</h4>
+                        <div class="absolute -left-[5px] top-1 w-2 h-2 rounded-full bg-orange-600"></div>
+                        <h4 class="text-sm font-bold text-white mb-1 group-hover:text-[#F37021] transition-colors leading-tight">{{ $class['title'] }}</h4>
                         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{{ $class['time'] }}</p>
                     </div>
                     @empty
                     <p class="text-sm text-slate-500 italic">No classes scheduled today.</p>
                     @endforelse
                 </div>
-                <button class="w-full mt-10 py-3 bg-[#e3000f] hover:bg-[#cc0000] rounded-xl text-xs font-black uppercase tracking-widest transition-all">
+                <button class="w-full mt-10 py-3 bg-[#F37021] hover:bg-[#E6631E] rounded-xl text-xs font-black uppercase tracking-widest transition-all">
                     View Schedule
                 </button>
             </div>
@@ -129,12 +129,12 @@
                 <div class="space-y-1">
                     @foreach($topInstructors as $instructor)
                     <div class="flex items-center gap-4 p-3 rounded-2xl hover:bg-white transition-all group">
-                        <img src="{{ $instructor['avatar'] }}" class="w-11 h-11 rounded-xl object-cover shadow-sm group-hover:ring-2 ring-[#e3000f] ring-offset-2 transition-all">
+                        <img src="{{ $instructor['avatar'] }}" class="w-11 h-11 rounded-xl object-cover shadow-sm group-hover:ring-2 ring-[#F37021] ring-offset-2 transition-all">
                         <div class="flex-1">
                             <div class="text-sm font-bold text-slate-900">{{ $instructor['name'] }}</div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{{ $instructor['courses'] }} Courses</div>
                         </div>
-                        <button class="p-2 text-slate-300 hover:text-[#e3000f] transition-colors">
+                        <button class="p-2 text-slate-300 hover:text-[#F37021] transition-colors">
                             <i class="bi bi-plus-circle text-xl"></i>
                         </button>
                     </div>

@@ -37,7 +37,7 @@
                 <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden flex flex-col h-full max-h-[600px]">
                     <div class="p-8 border-b border-slate-50">
                         <h3 class="text-lg font-black text-slate-900 tracking-tight">Course Curriculum</h3>
-                        <div class="text-[10px] font-black text-[#e3000f] uppercase tracking-widest mt-1">{{ count($course->lessons) }} Total Lessons</div>
+                        <div class="text-[10px] font-black text-[#F37021] uppercase tracking-widest mt-1">{{ count($course->lessons) }} Total Lessons</div>
                     </div>
                     <div class="flex-1 overflow-y-auto p-4 space-y-2">
                         @foreach($course->lessons as $index => $lesson)
@@ -45,14 +45,14 @@
                                 :class="activeVideo === '{{ $lesson->video_url }}' ? 'bg-red-50 border-red-100' : 'hover:bg-slate-50 border-transparent'"
                                 class="w-full flex items-center gap-4 p-4 rounded-2xl border transition-all text-left group">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm shrink-0 transition-colors"
-                                 :class="activeVideo === '{{ $lesson->video_url }}' ? 'bg-[#e3000f] text-white shadow-lg shadow-red-500/20' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'">
+                                 :class="activeVideo === '{{ $lesson->video_url }}' ? 'bg-[#F37021] text-white shadow-lg shadow-orange-500/20' : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'">
                                 {{ $index + 1 }}
                             </div>
                             <div class="flex-1 min-w-0">
-                                <div class="text-sm font-bold text-slate-900 truncate leading-tight mb-1" :class="activeVideo === '{{ $lesson->video_url }}' ? 'text-[#e3000f]' : ''">{{ $lesson->title }}</div>
+                                <div class="text-sm font-bold text-slate-900 truncate leading-tight mb-1" :class="activeVideo === '{{ $lesson->video_url }}' ? 'text-[#F37021]' : ''">{{ $lesson->title }}</div>
                                 <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Video Lesson</div>
                             </div>
-                            <i class="bi bi-play-circle-fill text-xl text-slate-200 group-hover:text-[#e3000f] transition-all" :class="activeVideo === '{{ $lesson->video_url }}' ? 'text-[#e3000f] scale-110' : ''"></i>
+                            <i class="bi bi-play-circle-fill text-xl text-slate-200 group-hover:text-[#F37021] transition-all" :class="activeVideo === '{{ $lesson->video_url }}' ? 'text-[#F37021] scale-110' : ''"></i>
                         </button>
                         @endforeach
                     </div>
@@ -67,14 +67,14 @@
             <div class="lg:col-span-3 space-y-10">
                 <div>
                     <nav class="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">
-                        <a href="{{ route('courses.index') }}" class="hover:text-[#e3000f]">Courses</a>
+                        <a href="{{ route('courses.index') }}" class="hover:text-[#F37021]">Courses</a>
                         <i class="bi bi-chevron-right text-[8px]"></i>
                         <span class="text-slate-900">Featured Course</span>
                     </nav>
                     <h1 class="text-5xl font-black text-slate-900 tracking-tight leading-[1.1] mb-6">{{ $course->title }}</h1>
                     <div class="flex flex-wrap items-center gap-6">
                         <div class="flex items-center gap-2">
-                            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#e3000f] font-black border-2 border-white shadow-sm">
+                            <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#F37021] font-black border-2 border-white shadow-sm">
                                 {{ substr($course->instructor_name, 0, 1) }}
                             </div>
                             <div class="text-sm">
@@ -111,7 +111,7 @@
                                 <i class="bi bi-play-circle text-slate-400 text-xl"></i>
                                 <span class="text-sm font-bold text-slate-700 leading-none">{{ $lesson->title }}</span>
                             </div>
-                            <span class="text-[10px] font-black text-[#e3000f] uppercase tracking-widest">Preview</span>
+                            <span class="text-[10px] font-black text-[#F37021] uppercase tracking-widest">Preview</span>
                         </div>
                         @endforeach
                     </div>
@@ -128,23 +128,23 @@
                         <div class="flex items-baseline gap-2 mb-2">
                             <span class="text-4xl font-black text-slate-900 tracking-tight">₹{{ number_format($course->price) }}</span>
                             <span class="text-slate-400 font-bold line-through text-lg">₹{{ number_format($course->price * 1.5) }}</span>
-                            <span class="text-[#e3000f] font-black text-sm uppercase tracking-widest ml-auto">30% OFF</span>
+                            <span class="text-[#F37021] font-black text-sm uppercase tracking-widest ml-auto">30% OFF</span>
                         </div>
                         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">Lifetime access with one-time payment</p>
                         
-                        <a href="{{ route('admissions.create', ['course_id' => $course->id]) }}" class="block w-full py-5 bg-[#e3000f] text-white text-center font-black rounded-2xl hover:bg-[#cc0000] transition-all transform hover:-translate-y-1 shadow-xl shadow-red-500/30 uppercase tracking-widest mb-4">
+                        <a href="{{ route('admissions.create', ['course_id' => $course->id]) }}" class="block w-full py-5 bg-[#F37021] text-white text-center font-black rounded-2xl hover:bg-[#E6631E] transition-all transform hover:-translate-y-1 shadow-xl shadow-red-500/30 uppercase tracking-widest mb-4">
                             Enroll in Course
                         </a>
                         
                         <div class="space-y-4 pt-4">
                             <div class="flex items-center gap-3 text-sm font-bold text-slate-700">
-                                <i class="bi bi-infinite text-[#e3000f] text-lg"></i> Lifetime Access
+                                <i class="bi bi-infinite text-[#F37021] text-lg"></i> Lifetime Access
                             </div>
                             <div class="flex items-center gap-3 text-sm font-bold text-slate-700">
-                                <i class="bi bi-patch-check text-[#e3000f] text-lg"></i> Certificate of Completion
+                                <i class="bi bi-patch-check text-[#F37021] text-lg"></i> Certificate of Completion
                             </div>
                             <div class="flex items-center gap-3 text-sm font-bold text-slate-700">
-                                <i class="bi bi-phone text-[#e3000f] text-lg"></i> Access on mobile and TV
+                                <i class="bi bi-phone text-[#F37021] text-lg"></i> Access on mobile and TV
                             </div>
                         </div>
                     </div>

@@ -6,7 +6,7 @@
 <div class="space-y-16">
     <!-- Header -->
     <div class="text-center max-w-2xl mx-auto">
-        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-4">Master Your <span class="text-[#e3000f]">Future</span></h1>
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-4">Master Your <span class="text-[#F37021]">Future</span></h1>
         <p class="text-slate-500 font-medium">Choose from our curated selection of professional courses designed to take your skills to the next level.</p>
     </div>
 
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="p-8 flex-1 flex flex-col">
-                <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-[#e3000f] transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
+                <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-[#F37021] transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
                 <div class="text-xs font-bold text-slate-400 mb-6 italic">by {{ $course->instructor_name }}</div>
                 
                 <div class="flex items-center justify-between mt-auto pt-6 border-t border-slate-50">
@@ -31,7 +31,7 @@
                         <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Price</div>
                         <div class="text-2xl font-black text-slate-900">₹{{ number_format($course->price) }}</div>
                     </div>
-                    <a href="{{ route('courses.show', $course->id) }}" class="px-6 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#e3000f] transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-red-500/20">
+                    <a href="{{ route('courses.show', $course->id) }}" class="px-6 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#F37021] transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-orange-500/20">
                         View Details
                     </a>
                 </div>

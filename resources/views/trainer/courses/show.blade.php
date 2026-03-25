@@ -7,17 +7,17 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-            <div class="text-[10px] font-black text-[#e3000f] uppercase tracking-[0.2em] mb-2">Course Management</div>
+            <div class="text-[10px] font-black text-[#F37021] uppercase tracking-[0.2em] mb-2">Course Management</div>
             <h1 class="text-3xl font-black text-slate-900 tracking-tight">{{ $course->title }}</h1>
         </div>
         <div class="flex bg-white p-1.5 rounded-2xl border border-slate-200 shadow-sm self-start md:self-center">
             <button @click="activeTab = 'lessons'" 
-                    :class="activeTab === 'lessons' ? 'bg-[#e3000f] text-white shadow-lg shadow-red-500/20' : 'text-slate-500 hover:text-slate-900'"
+                    :class="activeTab === 'lessons' ? 'bg-[#F37021] text-white shadow-lg shadow-orange-500/20' : 'text-slate-500 hover:text-slate-900'"
                     class="px-6 py-2.5 rounded-xl font-bold tracking-tight transition-all flex items-center gap-2 text-sm">
                 <i class="bi bi-play-circle"></i> Lessons
             </button>
             <button @click="activeTab = 'materials'" 
-                    :class="activeTab === 'materials' ? 'bg-[#e3000f] text-white shadow-lg shadow-red-500/20' : 'text-slate-500 hover:text-slate-900'"
+                    :class="activeTab === 'materials' ? 'bg-[#F37021] text-white shadow-lg shadow-orange-500/20' : 'text-slate-500 hover:text-slate-900'"
                     class="px-6 py-2.5 rounded-xl font-bold tracking-tight transition-all flex items-center gap-2 text-sm">
                 <i class="bi bi-file-earmark-pdf"></i> Materials
             </button>
@@ -46,14 +46,14 @@
                 <div class="grid gap-3">
                     @forelse($course->lessons as $index => $lesson)
                     <div class="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-4 group">
-                        <div class="w-10 h-10 rounded-xl bg-red-50 text-[#e3000f] flex items-center justify-center font-black text-sm shrink-0">
+                        <div class="w-10 h-10 rounded-xl bg-red-50 text-[#F37021] flex items-center justify-center font-black text-sm shrink-0">
                             {{ $index + 1 }}
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="text-sm font-bold text-slate-900 truncate leading-none mb-1.5">{{ $lesson->title }}</div>
                             <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate">{{ $lesson->video_url }}</div>
                         </div>
-                        <div class="p-2 text-slate-300 group-hover:text-[#e3000f] transition-colors">
+                        <div class="p-2 text-slate-300 group-hover:text-[#F37021] transition-colors">
                             <i class="bi bi-play-circle-fill text-2xl"></i>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                                 {{ strtoupper($mat->file_type) }} &bull; {{ number_format($mat->file_size / (1024 * 1024), 2) }} MB
                             </div>
                         </div>
-                        <a href="{{ $mat->file_path }}" target="_blank" class="p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-[#e3000f] hover:text-white transition-all">
+                        <a href="{{ $mat->file_path }}" target="_blank" class="p-2.5 rounded-xl bg-slate-50 text-slate-500 hover:bg-[#F37021] hover:text-white transition-all">
                             <i class="bi bi-download text-lg"></i>
                         </a>
                     </div>
@@ -106,7 +106,7 @@
         <div class="space-y-8">
             <!-- Add Lesson Form -->
             <div x-show="activeTab === 'lessons'" x-transition class="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm space-y-6 sticky top-24 transition-all hover:shadow-lg">
-                <h3 class="text-sm font-black text-[#e3000f] uppercase tracking-widest flex items-center gap-2">
+                <h3 class="text-sm font-black text-[#F37021] uppercase tracking-widest flex items-center gap-2">
                     <i class="bi bi-plus-lg"></i> Append New Lesson
                 </h3>
                 <form action="{{ route('trainer.courses.lessons.store', $course->id) }}" method="POST" class="space-y-6">
@@ -114,14 +114,14 @@
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pl-1">Lesson Title</label>
                         <input type="text" name="title" required placeholder="e.g. Master the Foundations" 
-                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 pl-1">YouTube Embed URL</label>
                         <input type="url" name="video_url" required placeholder="https://youtube.com/embed/..." 
-                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#e3000f]/20 focus:bg-white transition-all text-sm font-bold">
+                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-[#F37021]/20 focus:bg-white transition-all text-sm font-bold">
                     </div>
-                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#e3000f] transition-all shadow-xl shadow-slate-900/10">
+                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#F37021] transition-all shadow-xl shadow-slate-900/10">
                         Add to Lesson List
                     </button>
                 </form>

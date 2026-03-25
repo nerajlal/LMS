@@ -78,7 +78,7 @@
                             @if($fee->status !== 'paid')
                                 <form action="{{ route('admin.fees.mark-paid', $fee->id) }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="px-4 py-2 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#e3000f] transition-all shadow-lg hover:shadow-red-500/20 active:scale-95">
+                                    <button type="submit" class="px-4 py-2 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#F37021] transition-all shadow-lg hover:shadow-orange-500/20 active:scale-95">
                                         Mark as Paid
                                     </button>
                                 </form>
