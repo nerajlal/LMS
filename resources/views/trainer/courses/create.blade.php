@@ -84,17 +84,17 @@
 
                         <div>
                             <label class="block text-[11px] font-[800] text-navy/60 uppercase tracking-widest mb-3 px-1">Course Documentation (PDFs/Guides)</label>
-                            <div class="mt-1 flex justify-center px-6 pt-10 pb-10 border-2 border-slate-200 border-dashed rounded-[16px] hover:border-primary/50 hover:bg-slate-50/20 transition-all group">
+                            <div @click="$refs.documentInput.click()" class="mt-1 flex justify-center px-6 pt-10 pb-10 border-2 border-slate-200 border-dashed rounded-[16px] cursor-pointer hover:border-primary/50 hover:bg-slate-50/20 transition-all group">
                                 <div class="space-y-3 text-center">
                                     <div class="w-16 h-16 bg-slate-100 rounded-[14px] flex items-center justify-center text-slate-400 mx-auto transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                                         <i class="bi bi-cloud-arrow-up text-3xl"></i>
                                     </div>
-                                    <div class="flex text-sm text-slate-600">
-                                        <label for="documents" class="relative cursor-pointer bg-white rounded-md font-[800] text-primary hover:text-orange-600 focus-within:outline-none">
+                                    <div class="flex text-sm text-slate-600 justify-center">
+                                        <span class="relative rounded-md font-[800] text-primary hover:text-orange-600">
                                             <span>Upload course files</span>
-                                            <input id="documents" name="documents[]" type="file" class="sr-only" multiple accept=".pdf,.doc,.docx,.zip">
-                                        </label>
-                                        <p class="pl-1 font-[500]">or drag and drop</p>
+                                            <input x-ref="documentInput" name="documents[]" type="file" class="sr-only" multiple accept=".pdf,.doc,.docx,.zip">
+                                        </span>
+                                        <p class="pl-1 font-[500] text-slate-500">or drag and drop</p>
                                     </div>
                                     <p class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest">
                                         PDF, DOCX, ZIP UP TO 10MB EACH
@@ -131,18 +131,16 @@
                         <span class="text-[11px] font-[900] text-navy uppercase tracking-widest mt-0.5">Course Visual</span>
                     </div>
                     <div class="p-8 space-y-6">
-                        <div class="relative aspect-video rounded-[12px] bg-slate-100 overflow-hidden border-2 border-slate-50 shadow-inner group/preview">
-                            <template x-if="thumbnailPreview">
-                                <img :src="thumbnailPreview" class="w-full h-full object-cover">
-                            </template>
-                            <template x-if="!thumbnailPreview">
-                                <div class="w-full h-full flex flex-col items-center justify-center text-slate-300">
-                                    <i class="bi bi-image text-5xl mb-3"></i>
-                                    <span class="text-[11px] font-[800] uppercase tracking-widest">No Preview</span>
-                                </div>
-                            </template>
+                        <div @click="$refs.thumbnailInput.click()" class="relative aspect-video rounded-[12px] bg-slate-100 overflow-hidden border-2 border-slate-50 shadow-inner group/preview cursor-pointer">
+                            <img :src="thumbnailPreview" x-show="thumbnailPreview" class="w-full h-full object-cover">
+                            
+                            <div x-show="!thumbnailPreview" class="w-full h-full flex flex-col items-center justify-center text-slate-300">
+                                <i class="bi bi-image text-5xl mb-3"></i>
+                                <span class="text-[11px] font-[800] uppercase tracking-widest">No Preview Selected</span>
+                            </div>
+                            
                             <div class="absolute inset-0 bg-navy/60 opacity-0 group-hover/preview:opacity-100 transition-opacity flex items-center justify-center">
-                                <label for="thumbnail" class="cursor-pointer px-6 py-2.5 bg-white text-navy font-[800] text-[11px] uppercase tracking-widest rounded-full shadow-lg">Change Cover</label>
+                                <span class="px-6 py-2.5 bg-white text-navy font-[800] text-[11px] uppercase tracking-widest rounded-full shadow-lg">Change Cover</span>
                             </div>
                         </div>
 
@@ -150,7 +148,7 @@
                             <p class="text-[11px] text-slate-500 font-[600] leading-relaxed italic">
                                 "The first thing students see is your cover. Make it high-quality and relevant."
                             </p>
-                            <input id="thumbnail" type="file" name="thumbnail" accept="image/*" class="hidden" 
+                            <input x-ref="thumbnailInput" type="file" name="thumbnail" accept="image/*" class="hidden" 
                                    @change="handleFileChange($event)">
                         </div>
                     </div>
