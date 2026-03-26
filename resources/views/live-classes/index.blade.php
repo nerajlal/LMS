@@ -41,9 +41,9 @@
                     <h3 class="text-xl font-[800] text-navy leading-tight group-hover:text-primary transition-colors line-clamp-2">{{ $class->title }}</h3>
                     <span @class([
                         'px-3 py-1 rounded-[8px] text-[10px] font-[800] uppercase tracking-widest',
-                        'bg-emerald-50 text-emerald-600' => $class->status === 'live',
-                        'bg-amber-50 text-amber-600' => $class->status === 'upcoming',
-                        'bg-slate-50 text-slate-500' => $class->status === 'completed',
+                        'bg-emerald-50 text-emerald-600' => strtolower($class->status) === 'live',
+                        'bg-amber-50 text-amber-600' => in_array(strtolower($class->status), ['upcoming', 'scheduled']),
+                        'bg-slate-50 text-slate-500' => strtolower($class->status) === 'completed',
                     ])>
                         {{ $class->status }}
                     </span>
@@ -60,14 +60,27 @@
                     </div>
                 </div>
 
+                @php
+                    $startTime = \Carbon\Carbon::parse($class->start_time);
+                    $endTime = $startTime->copy()->addMinutes($class->duration);
+                    $now = \Carbon\Carbon::now();
+                    $isLive = $now->between($startTime, $endTime) || strtolower($class->status) === 'live';
+                    $isUpcoming = $now->lt($startTime) && strtolower($class->status) !== 'live';
+                    $isEnded = $now->gt($endTime) && strtolower($class->status) !== 'live';
+                @endphp
+
                 <div class="mt-auto pt-6 border-t border-border flex items-center justify-between">
-                    @if($class->status === 'live')
-                        <a href="{{ $class->zoom_link }}" target="_blank" class="flex-1 text-center bg-primary text-white py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all">
+                    @if($isLive)
+                        <a href="{{ $class->zoom_link }}" target="_blank" class="flex-1 text-center bg-primary text-white py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest shadow-lg shadow-orange-500/20 hover:bg-orange-600 transition-all flex items-center justify-center gap-2">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                            </span>
                             Join Session Now
                         </a>
-                    @elseif($class->status === 'upcoming')
-                        <button class="flex-1 text-center bg-navy text-white py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest opacity-50 cursor-not-allowed">
-                            Starts Soon
+                    @elseif($isUpcoming)
+                        <button class="flex-1 text-center bg-navy text-white py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest hover:bg-navy/90 transition-all">
+                            Starts {{ $startTime->diffForHumans() }}
                         </button>
                     @else
                         <button class="flex-1 text-center bg-slate-100 text-slate-400 py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest cursor-not-allowed">

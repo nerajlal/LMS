@@ -47,36 +47,35 @@ class DatabaseSeeder extends Seeder
         );
 
         // ── Seed Courses & Enrollments for testing ────────────────
-        $course1 = Course::create([
-            'title' => 'Advanced Laravel Mastery',
-            'instructor_name' => 'Expert Trainer',
-            'price' => 4999,
-            'description' => 'Master advanced Laravel concepts including Design Patterns and Architecture.',
-        ]);
+        // $course1 = Course::create([
+        //     'title' => 'Advanced Laravel Mastery',
+        //     'instructor_name' => 'Expert Trainer',
+        //     'price' => 4999,
+        //     'description' => 'Master advanced Laravel concepts including Design Patterns and Architecture.',
+        // ]);
 
-        $course2 = Course::create([
-            'title' => 'Premium UI Design',
-            'instructor_name' => 'Expert Trainer',
-            'price' => 2999,
-            'description' => 'Learn the secrets of high-fidelity web design using Tailwind and Alpine.',
-        ]);
+        // $course2 = Course::create([
+        //     'title' => 'Premium UI Design',
+        //     'instructor_name' => 'Expert Trainer',
+        //     'price' => 2999,
+        //     'description' => 'Learn the secrets of high-fidelity web design using Tailwind and Alpine.',
+        // ]);
 
         /*
-        // Enroll student in these courses with different progress
-        Admission::create([
-            'user_id' => $student->id,
-            'course_id' => $course1->id,
-            'status' => 'approved',
-            'progress' => 65,
-        ]);
-
-        Admission::create([
-            'user_id' => $student->id,
-            'course_id' => $course2->id,
-            'status' => 'approved',
-            'progress' => 20,
-        ]);
-        */
+         // Enroll student in these courses with different progress
+         Admission::create([
+         'user_id' => $student->id,
+         'course_id' => $course1->id,
+         'status' => 'approved',
+         'progress' => 65,
+         ]);
+         Admission::create([
+         'user_id' => $student->id,
+         'course_id' => $course2->id,
+         'status' => 'approved',
+         'progress' => 20,
+         ]);
+         */
 
         $this->command->info('✅ EduLMS reset to clean state successfully!');
         $this->command->info('   Admin:   admin@edulms.com / password');
