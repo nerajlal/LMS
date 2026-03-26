@@ -30,7 +30,8 @@ class DashboardController extends Controller
             ->with(['course' => function($query) {
                 $query->withCount('lessons');
             }])
-            ->get();
+            ->get()
+            ->filter(fn($a) => $a->course !== null);
 
         $enrolledCourses = $admissions->map(function($admission) {
             return [

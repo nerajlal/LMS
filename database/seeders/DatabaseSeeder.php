@@ -61,6 +61,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'Learn the secrets of high-fidelity web design using Tailwind and Alpine.',
         ]);
 
+        /*
         // Enroll student in these courses with different progress
         Admission::create([
             'user_id' => $student->id,
@@ -75,6 +76,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'approved',
             'progress' => 20,
         ]);
+        */
 
         $this->command->info('✅ EduLMS reset to clean state successfully!');
         $this->command->info('   Admin:   admin@edulms.com / password');

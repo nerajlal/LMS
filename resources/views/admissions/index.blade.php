@@ -39,8 +39,8 @@
         <div class="bg-white rounded-[12px] border border-border shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
             <div class="flex flex-col md:flex-row items-stretch">
                 <!-- Course Thumbnail -->
-                <div class="md:w-[200px] h-[160px] md:h-auto relative shrink-0 overflow-hidden">
-                    <img src="{{ $admission->course->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" 
+                <div class="md:w-[200px] h-[160px] md:h-auto relative shrink-0 overflow-hidden text-slate-300">
+                    <img src="{{ $admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                     <div class="absolute inset-0 bg-navy/20 group-hover:bg-navy/0 transition-colors"></div>
                     
@@ -65,10 +65,10 @@
                         <div class="flex items-start justify-between gap-4 mb-3">
                             <div>
                                 <h3 class="text-xl font-[900] text-navy leading-tight group-hover:text-primary transition-colors line-clamp-1 mb-1">
-                                    {{ $admission->course->title }}
+                                    {{ $admission->course?->title ?? 'Unknown Course' }}
                                 </h3>
                                 <div class="flex items-center gap-2 text-[10px] font-[800] text-muted uppercase tracking-[0.2em] italic">
-                                    by {{ $admission->course->instructor_name }}
+                                    by {{ $admission->course?->instructor_name ?? 'Instructor' }}
                                 </div>
                             </div>
                             <div class="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full text-[10px] font-[800] text-navy uppercase tracking-widest shrink-0 shadow-sm">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <p class="text-[14px] text-muted font-[500] line-clamp-2 mb-6 leading-relaxed">
-                            {{ Str::limit($admission->course->description, 120) }}
+                            {{ Str::limit($admission->course?->description ?? 'No description available.', 120) }}
                         </p>
                     </div>
 
@@ -112,11 +112,11 @@
                             <div class="flex items-center gap-6 text-[12px] font-[800] text-navy/40 uppercase tracking-widest">
                                 <span class="flex items-center gap-2">
                                     <i class="bi bi-play-circle-fill text-primary"></i>
-                                    {{ $admission->course->lessons_count ?? 0 }} LESSONS
+                                    {{ $admission->course?->lessons_count ?? 0 }} LESSONS
                                 </span>
                                 <span class="flex items-center gap-2">
                                     <i class="bi bi-folder-fill text-primary"></i>
-                                    {{ $admission->course->study_materials_count ?? 0 }} RESOURCES
+                                    {{ $admission->course?->study_materials_count ?? 0 }} RESOURCES
                                 </span>
                             </div>
                             
