@@ -38,7 +38,7 @@
     </div>
 
     <!-- Active Sessions Tab -->
-    <div x-show="activeTab === 'active'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div x-show="activeTab === 'active'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="max-w-6xl mx-auto space-y-6">
         @forelse($activeClasses as $class)
             @php
                 $startTime = \Carbon\Carbon::parse($class->start_time);
@@ -49,82 +49,87 @@
                 $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
             @endphp
             
-            <div class="group bg-white rounded-[24px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col">
-                <!-- Top Section: Visual & Overlay -->
-                <div class="relative h-[220px] overflow-hidden">
+            <div class="group bg-white rounded-[24px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
+                <!-- Left: Thumbnail & Badges -->
+                <div class="relative w-full md:w-[280px] h-[180px] md:h-auto overflow-hidden shrink-0">
                     <img src="{{ $class->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                     
-                    <!-- Glassmorphism Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent flex flex-col justify-end p-8">
+                    <!-- Status Overlays -->
+                    <div class="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors duration-500 p-4">
                         @if($isLive && $isEnrolled)
-                        <div class="absolute top-6 left-6 flex items-center gap-2 px-3 py-1.5 bg-rose-500 text-white rounded-full text-[10px] font-[900] uppercase tracking-widest shadow-lg animate-pulse">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-rose-500 text-white rounded-full text-[10px] font-[900] uppercase tracking-widest shadow-lg animate-pulse">
                             <span class="relative flex h-2 w-2">
                                 <span class="absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                             </span>
-                            Active Now
+                            Live Now
                         </div>
                         @elseif($isEnrolled)
-                        <div class="absolute top-6 left-6 px-3 py-1 bg-primary text-white rounded-full text-[9px] font-[900] uppercase tracking-widest shadow-md">
+                        <div class="inline-flex px-3 py-1 bg-primary text-white rounded-full text-[9px] font-[900] uppercase tracking-widest shadow-md">
                             Your Course
                         </div>
                         @endif
-
-                        <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2 drop-shadow-md">
-                            {{ $class->course?->title ?? 'Industry Insights' }}
-                        </div>
-                        <h3 class="text-2xl font-[800] text-white leading-tight drop-shadow-lg">{{ $class->title }}</h3>
                     </div>
                 </div>
 
-                <!-- Bottom Section: Details -->
-                <div class="p-8 flex-1 flex flex-col">
-                    <div class="grid grid-cols-2 gap-6 mb-8 pt-2">
-                        <div class="bg-slate-50 p-4 rounded-[16px] border border-slate-100 group-hover:bg-white group-hover:border-primary/20 transition-all">
-                            <div class="text-[10px] font-[800] text-muted uppercase tracking-widest mb-1 flex gap-1.5"><i class="bi bi-person-badge text-primary"></i> Instructor</div>
-                            <div class="text-navy font-[800] text-[15px] truncate">{{ $class->instructor_name }}</div>
+                <!-- Middle: Details -->
+                <div class="flex-1 p-6 md:p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-border/50">
+                    <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">
+                        {{ $class->course?->title ?? 'Industry Insights' }}
+                    </div>
+                    <h3 class="text-2xl font-[800] text-navy leading-tight mb-4 group-hover:text-primary transition-colors">{{ $class->title }}</h3>
+                    
+                    <div class="flex flex-wrap items-center gap-6">
+                        <div class="flex items-center gap-2 text-[14px] font-[600] text-muted">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <span>{{ $class->instructor_name }}</span>
                         </div>
-                        <div class="bg-slate-50 p-4 rounded-[16px] border border-slate-100 group-hover:bg-white group-hover:border-primary/20 transition-all">
-                            <div class="text-[10px] font-[800] text-muted uppercase tracking-widest mb-1 flex gap-1.5"><i class="bi bi-clock text-primary"></i> Duration</div>
-                            <div class="text-navy font-[800] text-[15px]">{{ $class->duration }} Mins</div>
+                        <div class="flex items-center gap-2 text-[14px] font-[600] text-muted">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
+                                <i class="bi bi-clock"></i>
+                            </div>
+                            <span>{{ $class->duration }} Mins</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="flex items-center gap-4 px-5 py-4 bg-navy/[0.03] rounded-[16px] border border-dashed border-navy/10 mb-8">
-                        <div class="w-10 h-10 rounded-[10px] bg-navy text-white flex items-center justify-center text-[12px] font-[900] flex-col leading-none shadow-md">
+                <!-- Right: Schedule & Action -->
+                <div class="w-full md:w-[280px] p-6 md:p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-[14px] bg-navy text-white flex items-center justify-center text-[14px] font-[900] flex-col leading-none shadow-md">
                             <span>{{ $startTime->format('d') }}</span>
-                            <span class="text-[8px] uppercase opacity-60">{{ $startTime->format('M') }}</span>
+                            <span class="text-[9px] uppercase opacity-60">{{ $startTime->format('M') }}</span>
                         </div>
                         <div>
-                            <div class="text-navy font-[800] text-[14px]">{{ $startTime->format('g:i A') }} • Local Time</div>
-                            <div class="text-[11px] font-[600] text-muted uppercase tracking-widest italic">{{ $startTime->calendar() }}</div>
+                            <div class="text-navy font-[800] text-[15px]">{{ $startTime->format('g:i A') }}</div>
+                            <div class="text-[11px] font-[600] text-muted uppercase tracking-widest italic leading-none mt-1">{{ $startTime->calendar() }}</div>
                         </div>
                     </div>
 
-                    <div class="mt-auto">
-                        @if(!$isEnrolled)
-                            <a href="{{ route('courses.show', $class->course_id) }}" class="w-full flex items-center justify-center gap-3 py-4 bg-primary text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all">
-                                Enroll to Join <i class="bi bi-arrow-right-short text-xl"></i>
-                            </a>
-                        @elseif($isLive)
-                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full flex items-center justify-center gap-3 py-4 bg-navy text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-opacity-90 hover:-translate-y-1 transition-all">
-                                Join Session Now <i class="bi bi-camera-video text-lg ml-2"></i>
-                            </a>
-                        @else
-                            <button class="w-full py-4 bg-slate-100 text-navy rounded-[16px] font-[800] uppercase tracking-widest opacity-90 cursor-default flex flex-col items-center justify-center leading-none border border-navy/10">
-                                <span class="text-[14px]">Upcoming Session</span>
-                                <span class="text-[9px] mt-1 opacity-60 text-primary">Starts {{ $startTime->diffForHumans() }}</span>
-                            </button>
-                        @endif
-                    </div>
+                    @if(!$isEnrolled)
+                        <a href="{{ route('courses.show', $class->course_id) }}" class="w-full py-3.5 bg-primary text-white rounded-[16px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all text-center">
+                            Enroll to Join
+                        </a>
+                    @elseif($isLive)
+                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-navy text-white rounded-[16px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-opacity-90 hover:-translate-y-1 transition-all text-center">
+                            Join Now <i class="bi bi-camera-video ml-1"></i>
+                        </a>
+                    @else
+                        <div class="w-full py-3.5 bg-white border border-navy/10 text-navy rounded-[16px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col justify-center leading-none">
+                            <span class="opacity-40 text-[10px] mb-1">Starts In</span>
+                            <span>{{ $startTime->diffForHumans(null, true) }}</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         @empty
-            <div class="md:col-span-2 bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200 p-20 text-center">
+            <div class="bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200 p-20 text-center">
                 <i class="bi bi-camera-video-off text-4xl text-slate-300 mb-6 block"></i>
                 <h3 class="text-2xl font-[900] text-navy mb-3">No Active Classes</h3>
-                <p class="text-muted font-[500] max-w-sm mx-auto">Check back literal for upcoming interactive sessions.</p>
+                <p class="text-muted font-[500] max-w-sm mx-auto">Check back litearlly for upcoming interactive sessions.</p>
             </div>
         @endforelse
     </div>
