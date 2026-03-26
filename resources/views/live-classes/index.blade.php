@@ -3,7 +3,7 @@
 @section('title', 'Live Interactive Classes - EduLMS')
 
 @section('content')
-<div class="space-y-12">
+<div class="space-y-12" x-data="{ activeTab: 'active' }">
     <!-- Header with Dynamic Aura -->
     <div class="relative overflow-hidden rounded-[20px] bg-navy p-10 md:p-14 text-white shadow-2xl">
         <div class="absolute top-[-50px] right-[-50px] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px]"></div>
@@ -23,9 +23,23 @@
         </div>
     </div>
 
-    <!-- Live Classes Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-        @forelse($classes as $class)
+    <!-- Tabs Navigation -->
+    <div class="flex items-center gap-2 p-1.5 bg-slate-100 rounded-[16px] w-fit mx-auto border border-slate-200/50 shadow-inner">
+        <button @click="activeTab = 'active'" 
+                :class="activeTab === 'active' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
+                class="px-8 py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest transition-all">
+            Active Sessions
+        </button>
+        <button @click="activeTab = 'past'" 
+                :class="activeTab === 'past' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
+                class="px-8 py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest transition-all">
+            Past Sessions
+        </button>
+    </div>
+
+    <!-- Active Sessions Tab -->
+    <div x-show="activeTab === 'active'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        @forelse($activeClasses as $class)
             @php
                 $startTime = \Carbon\Carbon::parse($class->start_time);
                 $endTime = $startTime->copy()->addMinutes($class->duration);
@@ -51,6 +65,10 @@
                             </span>
                             Active Now
                         </div>
+                        @elseif($isEnrolled)
+                        <div class="absolute top-6 left-6 px-3 py-1 bg-primary text-white rounded-full text-[9px] font-[900] uppercase tracking-widest shadow-md">
+                            Your Course
+                        </div>
                         @endif
 
                         <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2 drop-shadow-md">
@@ -63,24 +81,16 @@
                 <!-- Bottom Section: Details -->
                 <div class="p-8 flex-1 flex flex-col">
                     <div class="grid grid-cols-2 gap-6 mb-8 pt-2">
-                        <!-- Instructor Card -->
                         <div class="bg-slate-50 p-4 rounded-[16px] border border-slate-100 group-hover:bg-white group-hover:border-primary/20 transition-all">
-                            <div class="text-[10px] font-[800] text-muted uppercase tracking-widest mb-1 items-center flex gap-1.5">
-                                <i class="bi bi-person-badge text-primary"></i> Instructor
-                            </div>
+                            <div class="text-[10px] font-[800] text-muted uppercase tracking-widest mb-1 flex gap-1.5"><i class="bi bi-person-badge text-primary"></i> Instructor</div>
                             <div class="text-navy font-[800] text-[15px] truncate">{{ $class->instructor_name }}</div>
                         </div>
-
-                        <!-- Date/Time Card -->
                         <div class="bg-slate-50 p-4 rounded-[16px] border border-slate-100 group-hover:bg-white group-hover:border-primary/20 transition-all">
-                            <div class="text-[10px] font-[800] text-muted uppercase tracking-widest mb-1 items-center flex gap-1.5">
-                                <i class="bi bi-clock text-primary"></i> Duration
-                            </div>
+                            <div class="text-[10px] font-[800] text-muted uppercase tracking-widest mb-1 flex gap-1.5"><i class="bi bi-clock text-primary"></i> Duration</div>
                             <div class="text-navy font-[800] text-[15px]">{{ $class->duration }} Mins</div>
                         </div>
                     </div>
 
-                    <!-- Full Schedule View -->
                     <div class="flex items-center gap-4 px-5 py-4 bg-navy/[0.03] rounded-[16px] border border-dashed border-navy/10 mb-8">
                         <div class="w-10 h-10 rounded-[10px] bg-navy text-white flex items-center justify-center text-[12px] font-[900] flex-col leading-none shadow-md">
                             <span>{{ $startTime->format('d') }}</span>
@@ -92,24 +102,19 @@
                         </div>
                     </div>
 
-                    <!-- Action Button -->
                     <div class="mt-auto">
                         @if(!$isEnrolled)
                             <a href="{{ route('courses.show', $class->course_id) }}" class="w-full flex items-center justify-center gap-3 py-4 bg-primary text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all">
                                 Enroll to Join <i class="bi bi-arrow-right-short text-xl"></i>
                             </a>
                         @elseif($isLive)
-                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full flex items-center justify-center gap-3 py-4 bg-navy text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-navy/90 hover:-translate-y-1 transition-all">
+                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full flex items-center justify-center gap-3 py-4 bg-navy text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-opacity-90 hover:-translate-y-1 transition-all">
                                 Join Session Now <i class="bi bi-camera-video text-lg ml-2"></i>
                             </a>
-                        @elseif($isUpcoming)
+                        @else
                             <button class="w-full py-4 bg-slate-100 text-navy rounded-[16px] font-[800] uppercase tracking-widest opacity-90 cursor-default flex flex-col items-center justify-center leading-none border border-navy/10">
                                 <span class="text-[14px]">Upcoming Session</span>
                                 <span class="text-[9px] mt-1 opacity-60 text-primary">Starts {{ $startTime->diffForHumans() }}</span>
-                            </button>
-                        @else
-                            <button class="w-full py-4 bg-slate-100 text-slate-400 rounded-[16px] font-[800] uppercase tracking-widest cursor-not-allowed">
-                                Session Ended
                             </button>
                         @endif
                     </div>
@@ -117,11 +122,35 @@
             </div>
         @empty
             <div class="md:col-span-2 bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200 p-20 text-center">
-                <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-8 text-primary shadow-sm">
-                    <i class="bi bi-camera-video-off text-3xl"></i>
+                <i class="bi bi-camera-video-off text-4xl text-slate-300 mb-6 block"></i>
+                <h3 class="text-2xl font-[900] text-navy mb-3">No Active Classes</h3>
+                <p class="text-muted font-[500] max-w-sm mx-auto">Check back literal for upcoming interactive sessions.</p>
+            </div>
+        @endforelse
+    </div>
+
+    <!-- Past Sessions Tab -->
+    <div x-show="activeTab === 'past'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="space-y-6 max-w-5xl mx-auto">
+        @forelse($pastClasses as $class)
+            <div class="bg-white p-6 rounded-[20px] border border-border flex flex-col md:flex-row items-center gap-8 group hover:border-primary/20 transition-all">
+                <div class="w-full md:w-[200px] h-[120px] rounded-[14px] overflow-hidden shrink-0">
+                    <img src="{{ $class->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500">
                 </div>
-                <h3 class="text-2xl font-[900] text-navy mb-3">No Classes Currently Scheduled</h3>
-                <p class="text-muted text-lg font-[500] max-w-sm mx-auto">Instructors haven't posted any sessions for today. Check back soon for new opportunities!</p>
+                <div class="flex-1">
+                    <div class="text-[10px] font-[900] text-primary uppercase tracking-[0.2em] mb-1">Session Concluded</div>
+                    <h4 class="text-xl font-[800] text-navy mb-2">{{ $class->title }}</h4>
+                    <div class="flex flex-wrap gap-4 text-[13px] font-[600] text-muted">
+                        <span class="flex items-center gap-1.5"><i class="bi bi-person-badge"></i> {{ $class->instructor_name }}</span>
+                        <span class="flex items-center gap-1.5"><i class="bi bi-calendar-check"></i> {{ \Carbon\Carbon::parse($class->start_time)->format('M d, Y') }}</span>
+                    </div>
+                </div>
+                <div class="shrink-0 pt-4 md:pt-0">
+                    <span class="px-5 py-2.5 bg-slate-50 text-slate-400 rounded-full text-[12px] font-[800] uppercase tracking-widest border border-slate-100">Ended</span>
+                </div>
+            </div>
+        @empty
+            <div class="bg-slate-50 rounded-[24px] p-16 text-center border-2 border-dashed border-slate-200">
+                <h3 class="text-xl font-[800] text-navy">No Past Sessions Yet</h3>
             </div>
         @endforelse
     </div>
