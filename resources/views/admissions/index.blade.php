@@ -3,150 +3,168 @@
 @section('title', 'My Learning - The Ace India')
 
 @section('content')
-<div class="space-y-10">
-    <!-- Header -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-            <h1 class="text-3xl font-[900] text-navy tracking-tight uppercase">My Courses</h1>
-            <p class="text-muted mt-1 font-[500]">Manage your learning journey and course progress</p>
+<div class="space-y-12" x-data="{ activeTab: 'ongoing' }">
+    <!-- Cinematic Aura Header -->
+    <!-- <div class="relative overflow-hidden rounded-[12px] bg-navy p-10 md:p-14 text-white shadow-2xl"> -->
+        <!-- <div class="absolute top-[-50px] right-[-50px] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px]"></div>
+        <div class="absolute bottom-[-50px] left-[-50px] w-[200px] h-[200px] bg-sky-500/10 rounded-full blur-[80px]"></div>
+        
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div class="max-w-2xl">
+                <span class="inline-block px-4 py-1 bg-white/10 backdrop-blur-md rounded-full text-[11px] font-[800] uppercase tracking-[0.2em] mb-4 border border-white/10">Personal Workspace</span>
+                <h1 class="text-4xl md:text-5xl font-[900] tracking-tight mb-4">Your Learning <span class="text-primary">Empire</span></h1>
+                <p class="text-slate-300 text-lg font-[500] leading-relaxed">Manage your course progress, download study materials, and continue your journey toward mastery. Every lesson is a step forward.</p>
+            </div>
+            <div class="flex items-center gap-6 group cursor-default">
+                <div class="w-[70px] h-[70px] rounded-[12px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-lg group-hover:scale-105 transition-transform">
+                    <i class="bi bi-person-workspace text-primary text-3xl"></i>
+                </div>
+            </div>
         </div>
-        <div class="flex items-center gap-3">
-            <a href="{{ route('courses.index') }}" class="px-6 py-3 bg-accent text-primary font-[800] text-[12px] uppercase tracking-widest rounded-[12px] hover:bg-primary hover:text-white transition-all shadow-sm">
-                Browse More Courses <i class="bi bi-plus-lg ml-2"></i>
-            </a>
+    </div> -->
+
+    <!-- Stat Insight Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-[12px] border border-border shadow-sm flex items-center gap-6 group hover:border-primary/20 transition-all">
+            <div class="w-14 h-14 rounded-[12px] bg-primary/10 text-primary flex items-center justify-center text-2xl shadow-inner group-hover:bg-primary group-hover:text-white transition-all">
+                <i class="bi bi-lightning-charge"></i>
+            </div>
+            <div>
+                <div class="text-[11px] font-[800] text-muted uppercase tracking-widest mb-1">Ongoing</div>
+                <div class="text-2xl font-[900] text-navy">{{ $stats['in_progress'] }} Courses</div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-[12px] border border-border shadow-sm flex items-center gap-6 group hover:border-primary/20 transition-all">
+            <div class="w-14 h-14 rounded-[12px] bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl shadow-inner group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                <i class="bi bi-award"></i>
+            </div>
+            <div>
+                <div class="text-[11px] font-[800] text-muted uppercase tracking-widest mb-1">Accomplished</div>
+                <div class="text-2xl font-[900] text-navy">{{ $stats['completed'] }} Certificates</div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-[12px] border border-border shadow-sm flex items-center gap-6 group hover:border-primary/20 transition-all">
+            <div class="w-14 h-14 rounded-[12px] bg-sky-100 text-sky-600 flex items-center justify-center text-2xl shadow-inner group-hover:bg-sky-500 group-hover:text-white transition-all">
+                <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+                <div class="text-[11px] font-[800] text-muted uppercase tracking-widest mb-1">Pending</div>
+                <div class="text-2xl font-[900] text-navy">{{ $stats['pending'] }} Requests</div>
+            </div>
         </div>
     </div>
 
-    @php $currentStatus = request()->query('status', 'approved'); @endphp
-    <div class="flex items-center gap-8 border-b border-border pb-1">
-        <a href="{{ route('enrollments.index', ['status' => 'approved']) }}" 
-           class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 transition-all {{ $currentStatus === 'approved' ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-navy' }}">
+    <!-- Navigation Tabs -->
+    <div class="flex items-center gap-2 p-1.5 bg-slate-100 rounded-[12px] w-fit mx-auto shadow-inner border border-slate-200/50">
+        <button @click="activeTab = 'ongoing'" 
+                :class="activeTab === 'ongoing' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
+                class="px-8 py-3 rounded-[10px] text-[13px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
             In Progress
-        </a>
-        <a href="{{ route('enrollments.index', ['status' => 'completed']) }}" 
-           class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 transition-all {{ $currentStatus === 'completed' ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-navy' }}">
+        </button>
+        <button @click="activeTab = 'done'" 
+                :class="activeTab === 'done' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
+                class="px-8 py-3 rounded-[10px] text-[13px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
             Completed
-        </a>
-        <a href="{{ route('enrollments.index', ['status' => 'pending']) }}" 
-           class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 transition-all {{ $currentStatus === 'pending' ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-navy' }}">
-            Pending Approval
-        </a>
+        </button>
+        <button @click="activeTab = 'waiting'" 
+                :class="activeTab === 'waiting' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
+                class="px-8 py-3 rounded-[10px] text-[13px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
+            Pending
+        </button>
     </div>
 
-    <!-- Course List -->
-    <div class="space-y-6">
-        @forelse($admissions as $admission)
-        <div class="bg-white rounded-[12px] border border-border shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
-            <div class="flex flex-col md:flex-row items-stretch">
-                <!-- Course Thumbnail -->
-                <div class="md:w-[200px] h-[160px] md:h-auto relative shrink-0 overflow-hidden text-slate-300">
-                    <img src="{{ $admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" 
-                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute inset-0 bg-navy/20 group-hover:bg-navy/0 transition-colors"></div>
-                    
-                    @if($admission->status === 'approved')
-                    <div class="absolute top-4 left-4">
-                        <span class="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] shadow-lg">
-                            Active
-                        </span>
+    <!-- Tab Contents -->
+    <div class="space-y-8">
+        <!-- In Progress Tab -->
+        <div x-show="activeTab === 'ongoing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="space-y-6">
+            @forelse($inProgress as $admission)
+                <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
+                    <div class="relative w-full md:w-[280px] h-[200px] md:h-auto overflow-hidden shrink-0">
+                        <img src="{{ $admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <div class="absolute inset-0 bg-gradient-to-r from-navy/60 to-transparent flex flex-col justify-end p-6">
+                            <span class="inline-flex px-3 py-1 bg-primary text-white text-[9px] font-[900] uppercase tracking-widest rounded-full shadow-lg w-fit">Active Learning</span>
+                        </div>
                     </div>
-                    @else
-                    <div class="absolute top-4 left-4">
-                        <span class="px-3 py-1.5 bg-amber-500 text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] shadow-lg">
-                            {{ ucfirst($admission->status) }}
-                        </span>
-                    </div>
-                    @endif
-                </div>
-
-                <!-- Course Info -->
-                <div class="flex-1 p-8 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-start justify-between gap-4 mb-3">
-                            <div>
-                                <h3 class="text-xl font-[900] text-navy leading-tight group-hover:text-primary transition-colors line-clamp-1 mb-1">
-                                    {{ $admission->course?->title ?? 'Unknown Course' }}
-                                </h3>
-                                <div class="flex items-center gap-2 text-[10px] font-[800] text-muted uppercase tracking-[0.2em] italic">
-                                    by {{ $admission->course?->instructor_name ?? 'Instructor' }}
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full text-[10px] font-[800] text-navy uppercase tracking-widest shrink-0 shadow-sm">
-                                <i class="bi bi-mortarboard text-primary"></i>
-                                <span>{{ $admission->batch->name ?? 'Universal' }}</span>
+                    <div class="flex-1 p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border/50">
+                        <div>
+                            <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">{{ $admission->course?->category ?? 'Specialization' }}</div>
+                            <h3 class="text-2xl font-[800] text-navy mb-4 group-hover:text-primary transition-colors">{{ $admission->course?->title }}</h3>
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="flex items-center gap-2 text-[13px] font-[600] text-muted"><i class="bi bi-play-circle text-primary"></i> {{ $admission->course?->lessons_count ?? 0 }} Lessons</div>
+                                <div class="flex items-center gap-2 text-[13px] font-[600] text-muted"><i class="bi bi-file-earmark text-primary"></i> {{ $admission->course?->study_materials_count ?? 0 }} Materials</div>
                             </div>
                         </div>
-                        <p class="text-[14px] text-muted font-[500] line-clamp-2 mb-6 leading-relaxed">
-                            {{ Str::limit($admission->course?->description ?? 'No description available.', 120) }}
-                        </p>
-                    </div>
-
-                    <div class="space-y-6">
-                        <!-- Progress Section -->
                         <div class="space-y-3">
-                            <div class="flex items-center justify-between text-[11px] font-[900] uppercase tracking-[0.2em]">
-                                <span class="text-muted/60">Your Progress</span>
-                                <span class="text-primary bg-accent px-2 py-0.5 rounded-[4px]">
-                                    @if($admission->status === 'approved')
-                                        {{ $admission->progress ?? 0 }}% COMPLETE
-                                    @else
-                                        LOCKED - PENDING
-                                    @endif
-                                </span>
+                            <div class="flex items-center justify-between text-[11px] font-[900] uppercase tracking-widest text-muted">
+                                <span>Curriculum Progress</span>
+                                <span class="text-navy">{{ $admission->progress ?? 0 }}%</span>
                             </div>
-                            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner p-[1px]">
-                                <div @class([
-                                    'h-full rounded-full transition-all duration-1000 shadow-sm relative',
-                                    'bg-gradient-to-r from-primary to-orange-400' => $admission->status === 'approved',
-                                    'bg-slate-200' => $admission->status !== 'approved',
-                                ]) :style="'width: ' + ({{ $admission->status === 'approved' ? ($admission->progress ?? 0) : 0 }}) + '%'">
-                                    @if($admission->status === 'approved')
-                                    <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
-                                    @endif
-                                </div>
+                            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner relative">
+                                <div class="h-full bg-gradient-to-r from-primary to-orange-400 rounded-full transition-all duration-1000" style="width: {{ $admission->progress ?? 0 }}%"></div>
                             </div>
                         </div>
+                    </div>
+                    <div class="w-full md:w-[260px] p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
+                        <a href="{{ route('courses.show', $admission->course_id) }}" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary hover:-translate-y-1 transition-all text-center">
+                            Continue <i class="bi bi-arrow-right-short text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-[12px] p-20 text-center">
+                    <h3 class="text-xl font-[800] text-navy mb-3">No ongoing courses</h3>
+                    <p class="text-muted font-[500] max-w-sm mx-auto mb-8">Ready to add something new to your library?</p>
+                    <a href="{{ route('courses.index') }}" class="px-10 py-4 bg-primary text-white rounded-[12px] font-[800] uppercase tracking-widest text-[13px] shadow-xl shadow-orange-500/20">Explore Catalog</a>
+                </div>
+            @endforelse
+        </div>
 
-                        <!-- Footer Actions -->
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 border-t border-slate-50 mt-2">
-                            <div class="flex items-center gap-6 text-[12px] font-[800] text-navy/40 uppercase tracking-widest">
-                                <span class="flex items-center gap-2">
-                                    <i class="bi bi-play-circle-fill text-primary"></i>
-                                    {{ $admission->course?->lessons_count ?? 0 }} LESSONS
-                                </span>
-                                <span class="flex items-center gap-2">
-                                    <i class="bi bi-folder-fill text-primary"></i>
-                                    {{ $admission->course?->study_materials_count ?? 0 }} RESOURCES
-                                </span>
-                            </div>
-                            
-                            @if($admission->status === 'approved')
-                                <a href="{{ route('courses.show', $admission->course_id) }}" class="inline-flex items-center justify-center gap-3 px-8 py-3 bg-navy text-white text-[11px] font-[900] uppercase tracking-[0.2em] rounded-[12px] hover:bg-primary hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-navy/10 group/btn">
-                                    CONTINUE LEARNING
-                                    <i class="bi bi-arrow-right text-[14px] group-hover/btn:translate-x-1 transition-transform"></i>
-                                </a>
-                            @else
-                                <div class="px-5 py-2.5 bg-amber-50 text-amber-600 text-[10px] font-[900] uppercase tracking-[0.2em] rounded-full flex items-center gap-2 border border-amber-100 animate-pulse">
-                                    <i class="bi bi-shield-check"></i> AWAITING ADMISSION APPROVAL
-                                </div>
-                            @endif
+        <!-- Completed Tab -->
+        <div x-show="activeTab === 'done'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            @forelse($completed as $admission)
+                <div class="bg-white p-6 rounded-[12px] border border-border shadow-sm flex items-center gap-6 group hover:border-emerald-500/20 transition-all">
+                    <div class="w-24 h-24 rounded-[12px] overflow-hidden shrink-0 grayscale group-hover:grayscale-0 transition-all shadow-md">
+                        <img src="{{ $admission->course?->thumbnail }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-[10px] font-[900] text-emerald-500 uppercase tracking-widest mb-1">Course Completed</div>
+                        <h4 class="text-lg font-[800] text-navy truncate group-hover:text-emerald-600 mb-2">{{ $admission->course?->title }}</h4>
+                        <div class="flex items-center gap-4 text-[12px] font-[600] text-muted">
+                            <span class="flex items-center gap-1.5"><i class="bi bi-award text-emerald-500"></i> Certificate Issued</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            @empty
+                <div class="md:col-span-2 bg-slate-50 rounded-[12px] p-16 text-center border-2 border-dashed border-slate-200">
+                    <h3 class="text-xl font-[800] text-navy">No accomplishments yet</h3>
+                </div>
+            @endforelse
         </div>
-        @empty
-        <div class="bg-white rounded-[12px] border border-dashed border-border py-24 text-center">
-            <div class="w-20 h-20 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
-                <i class="bi bi-book"></i>
-            </div>
-            <h3 class="text-xl font-[800] text-navy mb-2">No active enrollments found</h3>
-            <p class="text-muted font-[500] max-w-md mx-auto mb-8">You haven't enrolled in any courses yet. Start your learning journey today by browsing our catalog!</p>
-            <a href="{{ route('courses.index') }}" class="inline-flex items-center gap-3 px-10 py-4 bg-primary text-white font-[800] text-[13px] uppercase tracking-widest rounded-[12px] hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/20">
-                Browse All Courses <i class="bi bi-arrow-right text-lg"></i>
-            </a>
+
+        <!-- Pending Tab -->
+        <div x-show="activeTab === 'waiting'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="max-w-4xl mx-auto space-y-4">
+            @forelse($pending as $admission)
+                <div class="bg-white p-6 rounded-[12px] border border-border flex items-center justify-between group">
+                    <div class="flex items-center gap-6">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+                            <i class="bi bi-shield-lock"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-[15px] font-[800] text-navy">{{ $admission->course?->title }}</h4>
+                            <div class="text-[12px] font-[600] text-muted italic">Awaiting instructor verification</div>
+                        </div>
+                    </div>
+                    <span class="px-4 py-1.5 bg-amber-50 text-amber-600 text-[10px] font-[900] uppercase tracking-widest rounded-full border border-amber-100">
+                        {{ $admission->status }}
+                    </span>
+                </div>
+            @empty
+                <div class="bg-slate-50 rounded-[12px] p-16 text-center border-2 border-dashed border-slate-200 italic">
+                    All application requests are processed.
+                </div>
+            @endforelse
         </div>
-        @endforelse
     </div>
+</div>
 </div>
 @endsection

@@ -9,26 +9,37 @@ use Illuminate\Http\Request;
 
 class AdmissionController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $status = $request->query('status', 'approved'); // Default to approved (In Progress)
+        $userId = auth()->id();
         
-        $query = Admission::where('user_id', auth()->id())
+        $allAdmissions = Admission::where('user_id', $userId)
             ->with(['course' => function($query) {
                 $query->withCount(['lessons', 'studyMaterials']);
-            }, 'batch']);
+            }, 'batch'])
+            ->latest()
+            ->get();
 
-        if ($status === 'completed') {
-            $query->where('status', 'approved')->where('progress', 100);
-        } elseif ($status === 'pending') {
-            $query->whereIn('status', ['pending', 'rejected']);
-        } else {
-            $query->where('status', 'approved')->where('progress', '<', 100);
-        }
+        // Categorize for Tabbed UI
+        $inProgress = $allAdmissions->filter(function($a) {
+            return $a->status === 'approved' && ($a->progress ?? 0) < 100;
+        });
 
-        $admissions = $query->latest()->get();
+        $completed = $allAdmissions->filter(function($a) {
+            return $a->status === 'approved' && ($a->progress ?? 0) == 100;
+        });
 
-        return view('admissions.index', compact('admissions'));
+        $pending = $allAdmissions->filter(function($a) {
+            return in_array($a->status, ['pending', 'rejected']);
+        });
+
+        $stats = [
+            'in_progress' => $inProgress->count(),
+            'completed'   => $completed->count(),
+            'pending'     => $pending->count(),
+        ];
+
+        return view('admissions.index', compact('inProgress', 'completed', 'pending', 'stats'));
     }
 
     public function create()
