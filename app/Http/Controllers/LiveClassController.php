@@ -14,14 +14,14 @@ class LiveClassController extends Controller
         
         // Get all course IDs where the user has an admission
         $enrolledCourseIds = \App\Models\Admission::where('user_id', $userId)
-            ->pluck('course_id');
+            ->pluck('course_id')
+            ->toArray();
 
-        // Filter live classes by these course IDs
-        $classes = LiveClass::whereIn('course_id', $enrolledCourseIds)
-            ->with('course')
+        // Fetch ALL live classes
+        $classes = LiveClass::with('course')
             ->latest()
             ->get();
 
-        return view('live-classes.index', compact('classes'));
+        return view('live-classes.index', compact('classes', 'enrolledCourseIds'));
     }
 }

@@ -32,6 +32,7 @@
                 $now = \Carbon\Carbon::now();
                 $isLive = $now->between($startTime, $endTime) || strtolower($class->status) === 'live';
                 $isUpcoming = $now->lt($startTime) && strtolower($class->status) !== 'live';
+                $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
             @endphp
             
             <div class="group bg-white rounded-[24px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col">
@@ -42,7 +43,7 @@
                     
                     <!-- Glassmorphism Overlay -->
                     <div class="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent flex flex-col justify-end p-8">
-                        @if($isLive)
+                        @if($isLive && $isEnrolled)
                         <div class="absolute top-6 left-6 flex items-center gap-2 px-3 py-1.5 bg-rose-500 text-white rounded-full text-[10px] font-[900] uppercase tracking-widest shadow-lg animate-pulse">
                             <span class="relative flex h-2 w-2">
                                 <span class="absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -93,12 +94,16 @@
 
                     <!-- Action Button -->
                     <div class="mt-auto">
-                        @if($isLive)
-                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full flex items-center justify-center gap-3 py-4 bg-primary text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all">
-                                Join Session Now <i class="bi bi-arrow-right-short text-xl"></i>
+                        @if(!$isEnrolled)
+                            <a href="{{ route('courses.show', $class->course_id) }}" class="w-full flex items-center justify-center gap-3 py-4 bg-primary text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all">
+                                Enroll to Join <i class="bi bi-arrow-right-short text-xl"></i>
+                            </a>
+                        @elseif($isLive)
+                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full flex items-center justify-center gap-3 py-4 bg-navy text-white rounded-[16px] font-[800] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-navy/90 hover:-translate-y-1 transition-all">
+                                Join Session Now <i class="bi bi-camera-video text-lg ml-2"></i>
                             </a>
                         @elseif($isUpcoming)
-                            <button class="w-full py-4 bg-navy text-white rounded-[16px] font-[800] uppercase tracking-widest opacity-90 cursor-default flex flex-col items-center justify-center leading-none">
+                            <button class="w-full py-4 bg-slate-100 text-navy rounded-[16px] font-[800] uppercase tracking-widest opacity-90 cursor-default flex flex-col items-center justify-center leading-none border border-navy/10">
                                 <span class="text-[14px]">Upcoming Session</span>
                                 <span class="text-[9px] mt-1 opacity-60 text-primary">Starts {{ $startTime->diffForHumans() }}</span>
                             </button>
