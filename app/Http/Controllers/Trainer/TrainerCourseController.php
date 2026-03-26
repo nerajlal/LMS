@@ -17,7 +17,9 @@ class TrainerCourseController extends Controller
     public function index()
     {
         $courses = Course::where('instructor_name', auth()->user()->name)
-            ->withCount(['lessons', 'enrollments'])
+            ->withCount(['lessons', 'admissions as enrollments_count' => function($query) {
+                $query->where('status', 'approved');
+            }])
             ->latest()
             ->get();
     
