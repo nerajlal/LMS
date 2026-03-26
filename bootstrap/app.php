@@ -20,5 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (\Illuminate\Http\Exceptions\PostTooLargeException $e, \Illuminate\Http\Request $request) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'The total size of uploaded files exceeds the server limit (' . ini_get('post_max_size') . '). Please upload smaller files or increase post_max_size in php.ini.']);
+        });
     })->create();

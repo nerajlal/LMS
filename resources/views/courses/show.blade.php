@@ -5,8 +5,23 @@
 @section('content')
 <div x-data="{ 
     isEnrolled: {{ $isEnrolled ? 'true' : 'false' }},
-    activeVideo: '{{ count($course->lessons) > 0 ? $course->lessons[0]->video_url : "" }}',
-    activeTitle: '{{ count($course->lessons) > 0 ? $course->lessons[0]->title : "Select a lesson" }}'
+    activeVideo: '',
+    activeTitle: '{{ count($course->lessons) > 0 ? $course->lessons[0]->title : "Select a lesson" }}',
+    getEmbedUrl(url) {
+        if (!url) return '';
+        let videoId = '';
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&?\/\s]{11})/;
+        const match = url.match(regex);
+        if (match && match[1]) {
+            return 'https://www.youtube.com/embed/' + match[1] + '?rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&autoplay=1';
+        }
+        return url;
+    },
+    init() {
+        @if(count($course->lessons) > 0)
+            this.activeVideo = this.getEmbedUrl('{{ $course->lessons[0]->video_url }}');
+        @endif
+    }
 }">
     
     @if($isEnrolled)
@@ -17,7 +32,9 @@
             <div class="lg:col-span-2 flex-1 space-y-6">
                 <div class="aspect-video bg-black rounded-[12px] overflow-hidden shadow-lg relative border-border">
                     <template x-if="activeVideo">
-                        <iframe :src="activeVideo" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="absolute inset-0 scale-[1.1] origin-center">
+                            <iframe :src="activeVideo" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
                     </template>
                     <template x-if="!activeVideo">
                         <div class="w-full h-full flex flex-col items-center justify-center text-muted space-y-4">
@@ -41,7 +58,7 @@
                     </div>
                     <div class="flex-1 overflow-y-auto p-[12px] space-y-[8px]">
                         @foreach($course->lessons as $index => $lesson)
-                        <button @click="activeVideo = '{{ $lesson->video_url }}'; activeTitle = '{{ $lesson->title }}'" 
+                        <button @click="activeVideo = getEmbedUrl('{{ $lesson->video_url }}'); activeTitle = '{{ $lesson->title }}'" 
                                 :class="activeVideo === '{{ $lesson->video_url }}' ? 'bg-accent border-primary/20' : 'hover:bg-border/10 border-transparent'"
                                 class="w-full flex items-center gap-[12px] p-[12px] rounded-[8px] border transition-all text-left group">
                             <div class="w-[36px] h-[36px] rounded-[6px] flex items-center justify-center font-[800] text-[12px] shrink-0 transition-colors"

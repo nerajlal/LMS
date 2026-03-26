@@ -6,13 +6,35 @@
 <div class="max-w-5xl mx-auto py-8 px-4" x-data="{ 
     thumbnailPreview: null,
     files: [],
-    handleFileChange(e) {
+    maxSize: {{ (int) ini_get('post_max_size') * 1024 * 1024 }},
+    sizeError: '',
+    handleThumbnailChange(e) {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > this.maxSize) {
+                this.sizeError = 'Thumbnail is too large. Max allowed is ' + (this.maxSize / 1024 / 1024) + 'MB';
+                e.target.value = '';
+                return;
+            }
+            this.sizeError = '';
             const reader = new FileReader();
             reader.onload = (e) => this.thumbnailPreview = e.target.result;
             reader.readAsDataURL(file);
         }
+    },
+    validateAllFiles() {
+        let total = 0;
+        const docs = this.$refs.documentInput.files;
+        const thumb = this.$refs.thumbnailInput.files[0];
+        if (thumb) total += thumb.size;
+        for (let f of docs) total += f.size;
+        
+        if (total > this.maxSize) {
+            this.sizeError = 'Total upload size (' + (total / 1024 / 1024).toFixed(2) + 'MB) exceeds server limit (' + (this.maxSize / 1024 / 1024) + 'MB).';
+            return false;
+        }
+        this.sizeError = '';
+        return true;
     }
 }">
     <!-- Top Header -->
@@ -31,7 +53,13 @@
         </div>
     </div>
 
-    <form action="{{ route('trainer.courses.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+    <!-- Client-side Error Message -->
+    <div x-show="sizeError" x-transition class="mb-8 p-4 bg-orange-50 border border-orange-100 text-orange-700 rounded-[12px] flex items-center gap-3 text-[13px] font-[700] shadow-sm">
+        <i class="bi bi-exclamation-circle-fill text-xl"></i>
+        <span x-text="sizeError"></span>
+    </div>
+
+    <form action="{{ route('trainer.courses.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8" @submit.prevent="if(validateAllFiles()) $el.submit()">
         @csrf
 
         @if ($errors->any())
@@ -109,7 +137,7 @@
                                     <div class="flex text-sm text-slate-600 justify-center">
                                         <span class="relative rounded-md font-[800] text-primary hover:text-orange-600">
                                             <span>Upload course files</span>
-                                            <input x-ref="documentInput" name="documents[]" type="file" class="sr-only" multiple accept=".pdf,.doc,.docx,.zip">
+                                            <input x-ref="documentInput" name="documents[]" type="file" class="sr-only" multiple accept=".pdf,.doc,.docx,.zip" @change="validateAllFiles()">
                                         </span>
                                         <p class="pl-1 font-[500] text-slate-500">or drag and drop</p>
                                     </div>
@@ -166,7 +194,7 @@
                                 "The first thing students see is your cover. Make it high-quality and relevant."
                             </p>
                             <input x-ref="thumbnailInput" type="file" name="thumbnail" accept="image/*" class="hidden" 
-                                   @change="handleFileChange($event)">
+                                   @change="handleThumbnailChange($event)">
                         </div>
                     </div>
                 </div>

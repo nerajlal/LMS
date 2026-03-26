@@ -3,7 +3,25 @@
 @section('title', 'Manage: ' . $course->title)
 
 @section('content')
-<div x-data="{ activeTab: 'lessons' }" class="space-y-10">
+<div x-data="{ 
+    activeTab: 'lessons',
+    showVideoModal: false,
+    currentVideoUrl: '',
+    currentVideoTitle: '',
+    playVideo(url, title) {
+        let videoId = '';
+        const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&?\/\s]{11})/;
+        const match = url.match(regex);
+        if (match && match[1]) {
+            videoId = match[1];
+            this.currentVideoUrl = 'https://www.youtube.com/embed/' + videoId + '?rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&autoplay=1';
+            this.currentVideoTitle = title;
+            this.showVideoModal = true;
+        } else {
+            alert('Invalid YouTube URL');
+        }
+    }
+}" class="space-y-10">
     <!-- Header/Hero Section -->
     <div class="relative bg-navy rounded-[16px] p-8 md:p-12 overflow-hidden shadow-xl shadow-navy/20">
         <!-- Abstract Background Ornaments -->
@@ -148,9 +166,9 @@
                                 <i class="bi bi-play-circle text-primary"></i> Video Lesson &bull; Dynamic Order
                             </div>
                         </div>
-                        <a href="{{ $lesson->video_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-primary transition-colors">
+                        <button @click="playVideo('{{ $lesson->video_url }}', '{{ $lesson->title }}')" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-primary transition-colors">
                             <i class="bi bi-play-fill text-2xl"></i>
-                        </a>
+                        </button>
                     </div>
                     @empty
                     <div class="bg-white py-20 rounded-[16px] border border-dashed border-slate-200 text-center">
@@ -254,6 +272,51 @@
                         Secure Upload
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Playback Modal -->
+    <div x-show="showVideoModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-[2000] flex items-center justify-center p-4 sm:p-6 bg-navy/95 backdrop-blur-sm"
+         x-cloak>
+        
+        <div @click.away="showVideoModal = false; currentVideoUrl = ''" 
+             class="relative w-full max-w-5xl bg-black rounded-[24px] overflow-hidden shadow-2xl border border-white/10 animate-scale-up">
+            
+            <!-- Modal Header -->
+            <div class="absolute top-0 left-0 right-0 p-6 flex items-center justify-between z-10 bg-gradient-to-b from-black/80 to-transparent">
+                <h3 class="text-white font-[800] text-[15px] uppercase tracking-widest truncate max-w-[80%]" x-text="currentVideoTitle"></h3>
+                <button @click="showVideoModal = false; currentVideoUrl = ''" class="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-primary transition-all group">
+                    <i class="bi bi-x-lg group-hover:rotate-90 transition-transform"></i>
+                </button>
+            </div>
+
+            <!-- Video Container with Masking to Hide Branding/Sharing -->
+            <div class="relative w-full overflow-hidden bg-black" style="aspect-ratio: 16/9;">
+                <template x-if="showVideoModal">
+                    <div class="absolute inset-0 scale-[1.1] origin-center">
+                        <iframe :src="currentVideoUrl" 
+                                class="w-full h-full" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen></iframe>
+                    </div>
+                </template>
+                <!-- Protective Layer (Optional: prevents some clicks but might break controls) -->
+                <div class="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black/20 to-transparent pointer-events-none"></div>
+            </div>
+
+            <!-- Modal Footer (Confidentiality Notice) -->
+            <div class="p-4 bg-navy/50 flex items-center justify-center gap-3">
+                <i class="bi bi-shield-lock-fill text-primary"></i>
+                <span class="text-[10px] font-[900] text-white/40 uppercase tracking-[0.3em]">Confidential Curriculum Content • Proprietary to The Ace India</span>
             </div>
         </div>
     </div>
