@@ -5,7 +5,7 @@
 @section('content')
 <div class="space-y-12" x-data="{ activeTab: 'active' }">
     <!-- Header with Dynamic Aura -->
-    <div class="relative overflow-hidden rounded-[20px] bg-navy p-10 md:p-14 text-white shadow-2xl">
+    <div class="relative overflow-hidden rounded-[12px] bg-navy p-10 md:p-14 text-white shadow-2xl">
         <div class="absolute top-[-50px] right-[-50px] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px]"></div>
         <div class="absolute bottom-[-50px] left-[-50px] w-[200px] h-[200px] bg-orange-500/10 rounded-full blur-[80px]"></div>
         
@@ -16,7 +16,7 @@
                 <p class="text-slate-300 text-lg font-[500] leading-relaxed">Join real-time, high-impact sessions with industry experts and your peers. Direct feedback, real-world insights, and collaborative learning.</p>
             </div>
             <div class="flex items-center gap-4 group cursor-default">
-                <div class="w-[70px] h-[70px] rounded-[18px] bg-primary flex items-center justify-center shadow-lg shadow-orange-500/40 group-hover:scale-105 transition-transform">
+                <div class="w-[70px] h-[70px] rounded-[12px] bg-primary flex items-center justify-center shadow-lg shadow-orange-500/40 group-hover:scale-105 transition-transform">
                     <i class="bi bi-broadcast text-3xl"></i>
                 </div>
             </div>
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Tabs Navigation -->
-    <div class="flex items-center gap-2 p-1.5 bg-slate-100 rounded-[16px] w-fit mx-auto border border-slate-200/50 shadow-inner">
+    <div class="flex items-center gap-2 p-1.5 bg-slate-100 rounded-[12px] w-fit mx-auto border border-slate-200/50 shadow-inner">
         <button @click="activeTab = 'active'" 
                 :class="activeTab === 'active' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
                 class="px-8 py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest transition-all">
@@ -49,7 +49,7 @@
                 $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
             @endphp
             
-            <div class="group bg-white rounded-[24px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
+            <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
                 <!-- Left: Thumbnail & Badges -->
                 <div class="relative w-full md:w-[280px] h-[180px] md:h-auto overflow-hidden shrink-0">
                     <img src="{{ $class->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
@@ -99,7 +99,7 @@
                 <!-- Right: Schedule & Action -->
                 <div class="w-full md:w-[280px] p-6 md:p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-[14px] bg-navy text-white flex items-center justify-center text-[14px] font-[900] flex-col leading-none shadow-md">
+                        <div class="w-12 h-12 rounded-[12px] bg-navy text-white flex items-center justify-center text-[14px] font-[900] flex-col leading-none shadow-md">
                             <span>{{ $startTime->format('d') }}</span>
                             <span class="text-[9px] uppercase opacity-60">{{ $startTime->format('M') }}</span>
                         </div>
@@ -110,15 +110,15 @@
                     </div>
 
                     @if(!$isEnrolled)
-                        <a href="{{ route('courses.show', $class->course_id) }}" class="w-full py-3.5 bg-primary text-white rounded-[16px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all text-center">
+                        <a href="{{ route('courses.show', $class->course_id) }}" class="w-full py-3.5 bg-primary text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all text-center">
                             Enroll to Join
                         </a>
                     @elseif($isLive)
-                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-navy text-white rounded-[16px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-opacity-90 hover:-translate-y-1 transition-all text-center">
+                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-opacity-90 hover:-translate-y-1 transition-all text-center">
                             Join Now <i class="bi bi-camera-video ml-1"></i>
                         </a>
                     @else
-                        <div class="w-full py-3.5 bg-white border border-navy/10 text-navy rounded-[16px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col justify-center leading-none">
+                        <div class="w-full py-3.5 bg-white border border-navy/10 text-navy rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col justify-center leading-none">
                             <span class="opacity-40 text-[10px] mb-1">Starts In</span>
                             <span>{{ $startTime->diffForHumans(null, true) }}</span>
                         </div>
@@ -126,10 +126,10 @@
                 </div>
             </div>
         @empty
-            <div class="bg-slate-50 rounded-[32px] border-2 border-dashed border-slate-200 p-20 text-center">
+            <div class="bg-slate-50 rounded-[12px] border-2 border-dashed border-slate-200 p-20 text-center">
                 <i class="bi bi-camera-video-off text-4xl text-slate-300 mb-6 block"></i>
                 <h3 class="text-2xl font-[900] text-navy mb-3">No Active Classes</h3>
-                <p class="text-muted font-[500] max-w-sm mx-auto">Check back litearlly for upcoming interactive sessions.</p>
+                <p class="text-muted font-[500] max-w-sm mx-auto">Check back literal for upcoming interactive sessions.</p>
             </div>
         @endforelse
     </div>
@@ -137,8 +137,8 @@
     <!-- Past Sessions Tab -->
     <div x-show="activeTab === 'past'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="space-y-6 max-w-5xl mx-auto">
         @forelse($pastClasses as $class)
-            <div class="bg-white p-6 rounded-[20px] border border-border flex flex-col md:flex-row items-center gap-8 group hover:border-primary/20 transition-all">
-                <div class="w-full md:w-[200px] h-[120px] rounded-[14px] overflow-hidden shrink-0">
+            <div class="bg-white p-6 rounded-[12px] border border-border flex flex-col md:flex-row items-center gap-8 group hover:border-primary/20 transition-all">
+                <div class="w-full md:w-[200px] h-[120px] rounded-[12px] overflow-hidden shrink-0">
                     <img src="{{ $class->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" class="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500">
                 </div>
                 <div class="flex-1">
@@ -154,7 +154,7 @@
                 </div>
             </div>
         @empty
-            <div class="bg-slate-50 rounded-[24px] p-16 text-center border-2 border-dashed border-slate-200">
+            <div class="bg-slate-50 rounded-[12px] p-16 text-center border-2 border-dashed border-slate-200">
                 <h3 class="text-xl font-[800] text-navy">No Past Sessions Yet</h3>
             </div>
         @endforelse
