@@ -43,10 +43,72 @@
                         </div>
                     </template>
                 </div>
-                <div>
-                    <h1 class="text-[24px] font-[800] text-navy tracking-tight" x-text="activeTitle"></h1>
-                    <p class="text-[14px] text-muted font-[500] mt-2 italic">Part of: {{ $course->title }}</p>
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-[24px] font-[800] text-navy tracking-tight" x-text="activeTitle"></h1>
+                        <p class="text-[14px] text-muted font-[500] mt-2 italic">Part of: {{ $course->title }}</p>
+                    </div>
+                    <button @click="fetch('{{ route('courses.progress.update', $course->id) }}', { 
+                                        method: 'POST', 
+                                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' }
+                                    }).then(r => r.json()).then(data => {
+                                        if(data.success) {
+                                            alert('Progress updated to ' + data.new_progress + '%!');
+                                        }
+                                    })" 
+                            class="px-6 py-2.5 bg-primary text-white text-[12px] font-[800] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Mark as Completed
+                    </button>
                 </div>
+
+                @if($course->description)
+                <div class="text-[14px] text-muted font-[500] leading-relaxed mt-4 bg-border/20 p-4 rounded-[8px] border-l-4 border-primary/20">
+                    {!! nl2br(e($course->description)) !!}
+                </div>
+                @endif
+
+                <!-- Learning Outcomes (Enrolled View) -->
+                <div class="bg-white p-[24px] rounded-[12px] border border-border shadow-sm space-y-6 mt-8">
+                    <h3 class="text-[18px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">What you'll learn</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                        @if($course->learning_outcomes)
+                            @foreach(explode("\n", $course->learning_outcomes) as $outcome)
+                                @if(trim($outcome))
+                                <div class="flex items-start gap-3 text-[13px] text-navy font-[600] leading-relaxed">
+                                    <div class="w-[20px] h-[20px] rounded-full bg-accent text-primary flex items-center justify-center text-[10px] shrink-0 mt-0.5"><i class="bi bi-check-lg"></i></div>
+                                    <span>{{ trim($outcome) }}</span>
+                                </div>
+                                @endif
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Study Materials (Enrolled View) -->
+                @if($course->studyMaterials->count() > 0)
+                <div class="space-y-6 mt-10">
+                    <h3 class="text-[18px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">Study Materials</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($course->studyMaterials as $material)
+                        <div class="flex items-center justify-between p-4 bg-white rounded-[12px] border border-border hover:border-primary/20 hover:shadow-md transition-all group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-accent text-primary rounded-[8px] flex items-center justify-center text-lg">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[13px] font-[700] text-navy line-clamp-1">{{ $material->title }}</div>
+                                    <div class="text-[10px] text-muted font-[800] uppercase tracking-widest">{{ $material->file_type }} • {{ is_numeric($material->file_size) ? round($material->file_size / 1024 / 1024, 2) . ' MB' : $material->file_size }}</div>
+                                </div>
+                            </div>
+                            <a href="{{ $material->file_path }}" target="_blank" class="w-8 h-8 rounded-full bg-slate-50 text-navy flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm">
+                                <i class="bi bi-download text-sm"></i>
+                            </a>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
 
             <!-- Curriculum Sidebar -->
@@ -108,6 +170,13 @@
                     @endif
 
                     <h1 class="text-[40px] font-[800] text-navy tracking-tight leading-[1.1] mb-6">{{ $course->title }}</h1>
+                    
+                    @if($course->description)
+                    <div class="text-[16px] text-muted font-[500] leading-relaxed mb-6 max-w-3xl">
+                        {!! nl2br(e($course->description)) !!}
+                    </div>
+                    @endif
+
                     <div class="flex flex-wrap items-center gap-6">
                         <div class="flex items-center gap-3">
                             <div class="w-[40px] h-[40px] rounded-full bg-accent text-primary flex items-center justify-center font-[800] border-2 border-white shadow-sm hover:scale-105 transition-transform">
@@ -121,7 +190,7 @@
                         <div class="h-[32px] w-[1px] bg-border hidden sm:block"></div>
                         <div class="flex items-center gap-2 text-amber-500 text-[20px]">
                             <i class="bi bi-star-fill"></i>
-                            <span class="text-navy font-[800] text-[16px]">4.9 <span class="text-muted font-[600] text-[13px]">(124 Reviews)</span></span>
+                            <span class="text-navy font-[800] text-[16px]">{{ number_format(4.5 + (($course->id % 5) / 10), 1) }} <span class="text-muted font-[600] text-[13px]">({{ 50 + ($course->id * 7 % 200) }} Reviews)</span></span>
                         </div>
                     </div>
                 </div>
@@ -149,8 +218,8 @@
                     </div>
                 </div>
 
-                <!-- Study Materials for Enrolled Students -->
-                @if($isEnrolled && $course->studyMaterials->count() > 0)
+                <!-- Study Materials for Marketing View -->
+                @if($course->studyMaterials->count() > 0)
                 <div class="space-y-6">
                     <h3 class="text-[20px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">Course Resources</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -207,7 +276,7 @@
                             @endif
                         </div>
                         <p class="text-[11px] font-[800] text-muted uppercase tracking-[0.15em] mb-6 flex items-center gap-2">
-                            <i class="bi bi-clock text-primary"></i> 2 days left at this price
+                            <i class="bi bi-clock text-primary"></i> Last updated {{ $course->updated_at->format('M Y') }}
                         </p>
                         
                         <a href="{{ route('admissions.create', ['course_id' => $course->id]) }}" class="block w-full py-[16px] bg-primary text-white text-center font-[700] rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/10 uppercase tracking-widest mb-6">

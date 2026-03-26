@@ -24,34 +24,30 @@ class DashboardController extends Controller
             return redirect()->route('trainer.dashboard');
         }
 
-        // Enrolled courses (from Enrollments table)
-        // For now, if no enrollments, let's also pull approved admissions
-        $enrolledIds = Enrollment::where('user_id', $user->id)->pluck('course_id');
-        $approvedAdmissionIds = Admission::where('user_id', $user->id)
+        // Enrolled courses (from Enrollments table + Approved Admissions)
+        $admissions = Admission::where('user_id', $user->id)
             ->where('status', 'approved')
-            ->pluck('course_id');
+            ->with(['course' => function($query) {
+                $query->withCount('lessons');
+            }])
+            ->get();
 
-        $activeCourseIds = $enrolledIds->merge($approvedAdmissionIds)->unique();
-
-        $enrolledCourses = Course::whereIn('id', $activeCourseIds)
-            ->withCount('lessons')
-            ->get()
-            ->map(function($course) {
-                // Mocking progress for now
-                return [
-                    'id' => $course->id,
-                    'title' => $course->title,
-                    'instructor' => $course->instructor_name,
-                    'progress' => rand(10, 90), // Mock progress
-                    'lessons_count' => $course->lessons_count,
-                ];
-            });
+        $enrolledCourses = $admissions->map(function($admission) {
+            return [
+                'id' => $admission->course->id,
+                'title' => $admission->course->title,
+                'instructor' => $admission->course->instructor_name,
+                'progress' => $admission->progress ?? 0,
+                'lessons_count' => $admission->course->lessons_count,
+                'thumbnail' => $admission->course->thumbnail
+            ];
+        });
 
         $stats = [
-            'enrolled'       => $activeCourseIds->count(),
-            'completed'      => 0,
-            'wishlist'       => 0,
-            'certifications' => 0,
+            'enrolled'       => $admissions->count(),
+            'completed'      => $admissions->where('progress', 100)->count(),
+            'wishlist'       => 0, // No wishlist table currently
+            'certifications' => $admissions->where('progress', 100)->count(), // Assuming cert on 100%
         ];
 
         $upcomingClasses = \App\Models\LiveClass::where('status', 'upcoming')
@@ -63,7 +59,7 @@ class DashboardController extends Controller
                     'id' => $class->id,
                     'title' => $class->title,
                     'time' => \Carbon\Carbon::parse($class->start_time)->format('M d, Y - g:i A'),
-                    'host' => $class->instructor_name, // Optional based on UI
+                    'host' => $class->instructor_name,
                 ];
             });
 

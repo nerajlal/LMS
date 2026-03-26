@@ -41,7 +41,7 @@
                     @forelse($enrolledCourses as $course)
                     <div class="flex items-center gap-[20px] py-[16px] border-b border-border last:border-0 group">
                         <div class="w-[80px] h-[56px] rounded-[8px] overflow-hidden shrink-0 bg-border">
-                            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                            <img src="{{ $course['thumbnail'] ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=200' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                         </div>
                         <div class="flex-1 overflow-hidden">
                             <div class="text-navy font-[700] text-[15px] mb-[6px] truncate">{{ $course['title'] }}</div>

@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
     // Enrollments (Aliases for Admissions)
     Route::get('/enrollments', [AdmissionController::class, 'index'])->name('enrollments.index');
+    Route::post('/courses/{course}/progress', [CourseController::class, 'updateProgress'])->name('courses.progress.update');
 
     // Live Classes
     Route::get('/live-classes', [LiveClassController::class, 'index'])->name('live-classes.index');

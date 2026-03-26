@@ -17,7 +17,7 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        $course = Course::with(['lessons', 'batches'])->findOrFail($id);
+        $course = Course::with(['lessons', 'batches', 'studyMaterials'])->findOrFail($id);
         $isEnrolled = false;
         
         if (auth()->check()) {
@@ -42,6 +42,24 @@ class CourseController extends Controller
         return view('courses.show', [
             'course' => $course,
             'isEnrolled' => $isEnrolled
+        ]);
+    }
+
+    public function updateProgress(Request $request, $id)
+    {
+        $admission = Admission::where('user_id', auth()->id())
+            ->where('course_id', $id)
+            ->firstOrFail();
+
+        $course = Course::withCount('lessons')->find($id);
+        $increment = $course->lessons_count > 0 ? floor(100 / $course->lessons_count) : 10;
+        
+        $newProgress = min(100, ($admission->progress ?? 0) + $increment);
+        $admission->update(['progress' => $newProgress]);
+
+        return response()->json([
+            'success' => true,
+            'new_progress' => $newProgress
         ]);
     }
 }

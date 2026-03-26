@@ -17,17 +17,20 @@
         </div>
     </div>
 
-    <!-- Tabs -->
+    @php $currentStatus = request()->query('status', 'approved'); @endphp
     <div class="flex items-center gap-8 border-b border-border pb-1">
-        <button class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 border-primary text-primary transition-all">
+        <a href="{{ route('enrollments.index', ['status' => 'approved']) }}" 
+           class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 transition-all {{ $currentStatus === 'approved' ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-navy' }}">
             In Progress
-        </button>
-        <button class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 border-transparent text-muted hover:text-navy transition-all">
+        </a>
+        <a href="{{ route('enrollments.index', ['status' => 'completed']) }}" 
+           class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 transition-all {{ $currentStatus === 'completed' ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-navy' }}">
             Completed
-        </button>
-        <button class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 border-transparent text-muted hover:text-navy transition-all">
+        </a>
+        <a href="{{ route('enrollments.index', ['status' => 'pending']) }}" 
+           class="pb-4 px-2 text-[13px] font-[800] uppercase tracking-[0.15em] border-b-2 transition-all {{ $currentStatus === 'pending' ? 'border-primary text-primary' : 'border-transparent text-muted hover:text-navy' }}">
             Pending Approval
-        </button>
+        </a>
     </div>
 
     <!-- Course List -->
@@ -85,7 +88,7 @@
                                 <span class="text-muted/60">Your Progress</span>
                                 <span class="text-primary bg-accent px-2 py-0.5 rounded-[4px]">
                                     @if($admission->status === 'approved')
-                                        45% COMPLETE
+                                        {{ $admission->progress ?? 0 }}% COMPLETE
                                     @else
                                         LOCKED - PENDING
                                     @endif
@@ -94,9 +97,9 @@
                             <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner p-[1px]">
                                 <div @class([
                                     'h-full rounded-full transition-all duration-1000 shadow-sm relative',
-                                    'bg-gradient-to-r from-primary to-orange-400 w-[45%]' => $admission->status === 'approved',
-                                    'bg-slate-200 w-0' => $admission->status !== 'approved',
-                                ])>
+                                    'bg-gradient-to-r from-primary to-orange-400' => $admission->status === 'approved',
+                                    'bg-slate-200' => $admission->status !== 'approved',
+                                ]) :style="'width: ' + ({{ $admission->status === 'approved' ? ($admission->progress ?? 0) : 0 }}) + '%'">
                                     @if($admission->status === 'approved')
                                     <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
                                     @endif
@@ -113,7 +116,7 @@
                                 </span>
                                 <span class="flex items-center gap-2">
                                     <i class="bi bi-folder-fill text-primary"></i>
-                                    {{ $admission->course->studyMaterials->count() ?? 0 }} RESOURCES
+                                    {{ $admission->course->study_materials_count ?? 0 }} RESOURCES
                                 </span>
                             </div>
                             

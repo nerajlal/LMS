@@ -37,11 +37,30 @@
                     <h2 class="text-[18px] font-[800] text-navy">My Recent Courses</h2>
                     <a href="{{ route('trainer.courses.index') }}" class="text-primary text-[13px] font-[700] hover:underline">See all</a>
                 </div>
-                <div class="py-[48px] text-center">
-                    <div class="w-[64px] h-[64px] bg-border text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 text-[24px]">
-                        <i class="bi bi-journal-x"></i>
+                <div class="p-[0_24px]">
+                    @forelse($recentCourses as $course)
+                    <div class="flex items-center gap-[20px] py-[16px] border-b border-border last:border-0 group">
+                        <div class="w-[80px] h-[56px] rounded-[8px] overflow-hidden shrink-0 bg-border">
+                            <img src="{{ $course->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=200' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
+                        </div>
+                        <div class="flex-1 overflow-hidden">
+                            <div class="text-navy font-[700] text-[15px] mb-[4px] truncate">{{ $course->title }}</div>
+                            <div class="flex items-center gap-[12px] text-[12px] text-muted">
+                                <span>{{ $course->lessons_count }} Lessons</span>
+                                <span>•</span>
+                                <span>{{ $course->admissions->count() }} Students</span>
+                            </div>
+                        </div>
+                        <a href="{{ route('trainer.courses.show', $course->id) }}" class="bg-border text-navy px-[16px] py-[8px] rounded-[6px] text-[13px] font-[700] hover:bg-navy hover:text-white transition-all">Manage</a>
                     </div>
-                    <p class="text-muted text-[14px]">No courses assigned yet.</p>
+                    @empty
+                    <div class="py-[48px] text-center">
+                        <div class="w-[64px] h-[64px] bg-border text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4 text-[24px]">
+                            <i class="bi bi-journal-x"></i>
+                        </div>
+                        <p class="text-muted text-[14px]">No courses assigned yet.</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>

@@ -9,14 +9,24 @@ use Illuminate\Http\Request;
 
 class AdmissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $admissions = Admission::where('user_id', auth()->id())
+        $status = $request->query('status', 'approved'); // Default to approved (In Progress)
+        
+        $query = Admission::where('user_id', auth()->id())
             ->with(['course' => function($query) {
-                $query->withCount('lessons');
-            }, 'batch'])
-            ->latest()
-            ->get();
+                $query->withCount(['lessons', 'studyMaterials']);
+            }, 'batch']);
+
+        if ($status === 'completed') {
+            $query->where('status', 'approved')->where('progress', 100);
+        } elseif ($status === 'pending') {
+            $query->whereIn('status', ['pending', 'rejected']);
+        } else {
+            $query->where('status', 'approved')->where('progress', '<', 100);
+        }
+
+        $admissions = $query->latest()->get();
 
         return view('admissions.index', compact('admissions'));
     }
