@@ -133,10 +133,10 @@
                             ['label' => 'Courses',      'icon' => 'bi-play-circle',    'route' => 'enrollments.index'],
                             ['label' => 'Browse',       'icon' => 'bi-grid',           'route' => 'courses.index'],
                             ['label' => 'Live Classes', 'icon' => 'bi-camera-video',   'route' => 'live-classes.index'],
-                            ['label' => 'Resources',    'icon' => 'bi-file-earmark',   'route' => 'materials.index'],
+                            // ['label' => 'Resources',    'icon' => 'bi-file-earmark',   'route' => 'materials.index'],
                             ['label' => 'Billing',      'icon' => 'bi-credit-card',    'route' => 'fees.index'],
                             ['label' => 'Profile',      'icon' => 'bi-person',         'route' => 'profile.edit'],
-                            ['label' => 'Register',     'icon' => 'bi-plus-circle',    'route' => 'admissions.create'],
+                            // ['label' => 'Register',     'icon' => 'bi-plus-circle',    'route' => 'admissions.create'],
                         ];
                     @endphp
 
