@@ -11,11 +11,11 @@ class FeeController extends Controller
      */
     public function index()
     {
-        $fees = \App\Models\Fee::with('course')
+        $allFees = \App\Models\Fee::with('course')
             ->where('user_id', auth()->id())
             ->get();
             
-        return view('fees.index', compact('fees'));
+        return view('fees.index', compact('allFees'));
     }
 
     /**

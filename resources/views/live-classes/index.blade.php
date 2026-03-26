@@ -31,7 +31,8 @@
                     </div>
                     <div class="text-[11px] font-[800] text-primary uppercase tracking-widest">{{ $class->course->title ?? 'N/A' }}</div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
+                <img src="{{ $class->course->thumbnail ?: 'https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&q=80&w=600' }}" 
+                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             </div>
 
             <!-- Right: Class Details -->

@@ -71,6 +71,25 @@
                         <i class="bi bi-chevron-right text-[8px]"></i>
                         <span class="text-navy">Course Detail</span>
                     </nav>
+                    @if($course->youtube_link)
+                    @php
+                        $videoId = '';
+                        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $course->youtube_link, $match)) {
+                            $videoId = $match[1];
+                        }
+                    @endphp
+                    @if($videoId)
+                    <div class="mb-10 rounded-[24px] overflow-hidden shadow-2xl border-4 border-white bg-black aspect-video relative group/trailer">
+                        <iframe src="https://www.youtube.com/embed/{{ $videoId }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="absolute top-4 left-4 pointer-events-none">
+                            <span class="px-3 py-1.5 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-full shadow-lg flex items-center gap-2">
+                                <i class="bi bi-play-fill text-[14px]"></i> Course Trailer
+                            </span>
+                        </div>
+                    </div>
+                    @endif
+                    @endif
+
                     <h1 class="text-[40px] font-[800] text-navy tracking-tight leading-[1.1] mb-6">{{ $course->title }}</h1>
                     <div class="flex flex-wrap items-center gap-6">
                         <div class="flex items-center gap-3">
@@ -91,19 +110,55 @@
                 </div>
 
                 <div class="bg-white p-[32px] rounded-[12px] border border-border shadow-sm space-y-6">
-                    <h3 class="text-[20px] font-[800] text-navy tracking-tight">What you'll learn</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
-                        @foreach(['Foundational Principles', 'Real-world Projects', 'Industry Best Practices', 'Advanced Techniques'] as $benefit)
-                        <div class="flex items-center gap-3 text-[14px] text-navy font-[500]">
-                            <div class="w-[20px] h-[20px] rounded-full bg-accent text-primary flex items-center justify-center text-[10px] shrink-0"><i class="bi bi-check-lg"></i></div>
-                            {{ $benefit }}
+                    <h3 class="text-[20px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">What you'll learn</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+                        @if($course->learning_outcomes)
+                            @foreach(explode("\n", $course->learning_outcomes) as $outcome)
+                                @if(trim($outcome))
+                                <div class="flex items-start gap-3 text-[14px] text-navy font-[600] leading-relaxed">
+                                    <div class="w-[22px] h-[22px] rounded-full bg-accent text-primary flex items-center justify-center text-[11px] shrink-0 mt-0.5"><i class="bi bi-check-lg"></i></div>
+                                    <span>{{ trim($outcome) }}</span>
+                                </div>
+                                @endif
+                            @endforeach
+                        @else
+                            @foreach(['Master foundational principles', 'Work on real-world projects', 'Learn industry best practices', 'Gain advanced technical skills'] as $benefit)
+                            <div class="flex items-start gap-3 text-[14px] text-navy font-[600] leading-relaxed">
+                                <div class="w-[22px] h-[22px] rounded-full bg-accent text-primary flex items-center justify-center text-[11px] shrink-0 mt-0.5"><i class="bi bi-check-lg"></i></div>
+                                <span>{{ $benefit }}</span>
+                            </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Study Materials for Enrolled Students -->
+                @if($isEnrolled && $course->studyMaterials->count() > 0)
+                <div class="space-y-6">
+                    <h3 class="text-[20px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">Course Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($course->studyMaterials as $material)
+                        <div class="flex items-center justify-between p-5 bg-white rounded-[12px] border border-border hover:border-primary/20 hover:shadow-md transition-all group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-accent text-primary rounded-[8px] flex items-center justify-center text-lg">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </div>
+                                <div>
+                                    <div class="text-[14px] font-[700] text-navy line-clamp-1">{{ $material->title }}</div>
+                                    <div class="text-[10px] text-muted font-[800] uppercase tracking-widest">{{ $material->file_type }} • {{ is_numeric($material->file_size) ? round($material->file_size / 1024 / 1024, 2) . ' MB' : $material->file_size }}</div>
+                                </div>
+                            </div>
+                            <a href="{{ $material->file_path }}" target="_blank" class="w-8 h-8 rounded-full bg-slate-50 text-navy flex items-center justify-center hover:bg-primary hover:text-white transition-all shadow-sm">
+                                <i class="bi bi-download text-sm"></i>
+                            </a>
                         </div>
                         @endforeach
                     </div>
                 </div>
+                @endif
 
                 <div class="space-y-6">
-                    <h3 class="text-[20px] font-[800] text-navy tracking-tight">Curriculum Preview</h3>
+                    <h3 class="text-[20px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">Curriculum Preview</h3>
                     <div class="space-y-[12px]">
                         @foreach($course->lessons->take(3) as $index => $lesson)
                         <div class="flex items-center justify-between p-[20px] bg-border/20 rounded-[8px] border border-transparent hover:border-border transition-all">
@@ -120,15 +175,23 @@
 
             <!-- Sticky Enrollment Card -->
             <div class="lg:col-span-4 sticky top-24">
-                <div class="bg-white p-[32px] rounded-[12px] border border-border shadow-md space-y-6 relative overflow-hidden">
+                <div class="bg-white p-[32px] rounded-[16px] border border-border shadow-xl shadow-navy/5 space-y-6 relative overflow-hidden">
                     <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600" class="w-full h-[200px] object-cover rounded-[8px] shadow-sm mb-6">
+                        <img src="{{ $course->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
+                             class="w-full h-[200px] object-cover rounded-[12px] shadow-sm mb-6 border border-border">
+                        
                         <div class="flex items-baseline gap-2 mb-2">
-                            <span class="text-[32px] font-[800] text-navy tracking-tight">₹{{ number_format($course->price) }}</span>
-                            <span class="text-muted font-[700] line-through text-[16px]">₹{{ number_format($course->price * 1.5) }}</span>
-                            <span class="text-primary font-[800] text-[12px] uppercase tracking-widest ml-auto">30% OFF</span>
+                            <span class="text-[36px] font-[900] text-navy tracking-tighter">₹{{ number_format($course->price) }}</span>
+                            @if($course->price > 0)
+                            <span class="text-muted font-[700] line-through text-[16px]">₹{{ number_format($course->price * 1.4) }}</span>
+                            <span class="px-2 py-0.5 bg-red-50 text-red-500 font-[800] text-[10px] uppercase tracking-widest rounded-[4px] ml-auto">Limited Offer</span>
+                            @else
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 font-[800] text-[11px] uppercase tracking-widest rounded-full ml-auto border border-emerald-100 italic">Free Enrollment</span>
+                            @endif
                         </div>
-                        <p class="text-[12px] font-[600] text-muted uppercase tracking-wider mb-6">Lifetime access with one-time payment</p>
+                        <p class="text-[11px] font-[800] text-muted uppercase tracking-[0.15em] mb-6 flex items-center gap-2">
+                            <i class="bi bi-clock text-primary"></i> 2 days left at this price
+                        </p>
                         
                         <a href="{{ route('admissions.create', ['course_id' => $course->id]) }}" class="block w-full py-[16px] bg-primary text-white text-center font-[700] rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/10 uppercase tracking-widest mb-6">
                             Enroll in Course
