@@ -193,6 +193,10 @@
                             <p class="text-[11px] text-slate-500 font-[600] leading-relaxed italic">
                                 "The first thing students see is your cover. Make it high-quality and relevant."
                             </p>
+                            <p class="text-[10px] text-primary font-[900] uppercase tracking-[0.1em] mt-3 bg-primary/5 py-2 px-4 rounded-[8px] border border-primary/10 inline-flex items-center gap-2">
+                                <i class="bi bi-aspect-ratio"></i>
+                                Recommended: 1280 x 720 px | Max: 2 MB
+                            </p>
                             <input x-ref="thumbnailInput" type="file" name="thumbnail" accept="image/*" class="hidden" 
                                    @change="handleThumbnailChange($event)">
                         </div>
