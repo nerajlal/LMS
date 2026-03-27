@@ -8,7 +8,7 @@
     <!-- Cinematic Header -->
     <div class="relative overflow-hidden rounded-[16px] bg-navy p-6 md:p-8 text-white shadow-xl">
         <div class="absolute top-[-20px] right-[-20px] w-[200px] h-[200px] bg-primary/20 rounded-full blur-[80px]"></div>
-        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="relative z-10 flex items-center justify-between">
             <div class="flex items-center gap-5">
                 <div class="w-14 h-14 rounded-[14px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-lg">
                     <i class="bi bi-folder2-open text-primary text-2xl"></i>
@@ -18,37 +18,43 @@
                     <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-0.5">Manage educational resources</p>
                 </div>
             </div>
-            <a href="{{ route('trainer.study-materials.create') }}" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
-                <i class="bi bi-plus-lg text-lg"></i>
-                <span>Add Resource</span>
-            </a>
         </div>
     </div>
 
-    <div class="bg-white rounded-[12px] border border-border shadow-sm overflow-hidden">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b border-border bg-slate-50/50">
-                    <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Resource Title</th>
-                    <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Target Course</th>
-                    <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Format</th>
-                    <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-center">Filesize</th>
-                    <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Actions</th>
-                </tr>
-            </thead>
+    <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto min-w-full scrollbar-hide">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-100 bg-slate-50/50">
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider min-w-[200px]">Resource Title</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden md:table-cell">Target Course</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden sm:table-cell">Format</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-center hidden lg:table-cell">Filesize</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Actions</th>
+                    </tr>
+                </thead>
             <tbody class="divide-y divide-border">
                 @forelse($materials as $material)
                 <tr class="hover:bg-slate-50/30 transition-colors group">
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-5">
                         <div class="text-[14px] font-[800] text-navy leading-tight group-hover:text-primary transition-colors">{{ $material->title }}</div>
+                        <div class="md:hidden mt-1.5 flex items-center gap-2">
+                             <span class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded-[4px] text-[9px] font-[900] uppercase tracking-widest border border-slate-200">
+                                {{ $material->course->title ?? 'General' }}
+                            </span>
+                        </div>
                     </td>
-                    <td class="px-6 py-4 text-[13px] font-[600] text-slate-500">{{ $material->course->title ?? 'Deleted Course' }}</td>
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-6 py-5 text-[13px] font-[600] text-slate-500 hidden md:table-cell">
+                        <div class="truncate max-w-[180px]">{{ $material->course->title ?? 'General' }}</div>
+                    </td>
+                    <td class="px-6 py-5 hidden sm:table-cell">
                         <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-[6px] text-[10px] font-[900] uppercase tracking-widest border border-slate-200">
                             {{ $material->file_type ?? 'PDF' }}
                         </span>
                     </td>
-                    <td class="px-6 py-4 text-[13px] font-[700] text-navy text-center">{{ $material->file_size ?? '2.4 MB' }}</td>
+                    <td class="px-6 py-5 text-[13px] font-[700] text-navy text-center hidden lg:table-cell">
+                        {{ $material->file_size ?? '2.4 MB' }}
+                    </td>
                     <td class="px-6 py-4 text-right">
                         <div class="flex items-center justify-end gap-2 text-right">
                             <form action="{{ route('trainer.study-materials.destroy', $material) }}" method="POST" onsubmit="return confirm('Remove this material?')">
@@ -71,8 +77,8 @@
                     </td>
                 </tr>
                 @endforelse
-            </tbody>
-        </table>
+            </table>
+        </div>
     </div>
 
     @if($materials->hasPages())
