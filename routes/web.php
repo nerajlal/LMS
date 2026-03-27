@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 
     // Admissions
     Route::resource('admissions', AdmissionController::class)->only(['index', 'create', 'store']);
+    Route::get('/admissions/{admission}/checkout', [AdmissionController::class, 'checkout'])->name('admissions.checkout');
+    Route::post('/admissions/{admission}/pay', [AdmissionController::class, 'pay'])->name('admissions.pay');
 
     // Enrollments (Aliases for Admissions)
     Route::get('/enrollments', [AdmissionController::class, 'index'])->name('enrollments.index');

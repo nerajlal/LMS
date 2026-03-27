@@ -62,11 +62,13 @@ class AdmissionController extends Controller
             'previous_education' => 'nullable|string',
         ]);
 
-        Admission::create([
+        $course = Course::findOrFail($data['course_id']);
+        
+        $admission = Admission::create([
             'user_id'   => auth()->id(),
             'course_id' => $data['course_id'],
             'batch_id'  => $data['batch_id'] ?? null,
-            'status'    => 'pending',
+            'status'    => ($course->price > 0) ? 'pending' : 'approved',
             'details'   => json_encode([
                 'full_name'          => $data['full_name'],
                 'phone'              => $data['phone'],
@@ -75,6 +77,45 @@ class AdmissionController extends Controller
             ]),
         ]);
 
-        return redirect()->route('admissions.index')->with('success', 'Application submitted!');
+        if ($course->price > 0) {
+            return redirect()->route('admissions.checkout', $admission->id)->with('info', 'Please complete the payment to start learning.');
+        }
+
+        return redirect()->route('admissions.index')->with('success', 'You have been enrolled successfully!');
+    }
+
+    public function checkout(Admission $admission)
+    {
+        // Ensure student owns this admission
+        if ($admission->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $admission->load('course');
+        return view('admissions.checkout', compact('admission'));
+    }
+
+    public function pay(Admission $admission)
+    {
+        // Ensure student owns this admission
+        if ($admission->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $course = $admission->course;
+
+        // Create a simulated payment record
+        \App\Models\Payment::create([
+            'user_id'    => auth()->id(),
+            'amount'     => $course->price,
+            'payment_id' => 'DUMMY_' . strtoupper(uniqid()),
+            'status'     => 'success',
+            'type'       => 'course_enrollment',
+        ]);
+
+        // Automatically Approve
+        $admission->update(['status' => 'approved']);
+
+        return redirect()->route('admissions.index')->with('success', 'Payment successful! Welcome to the course.');
     }
 }
