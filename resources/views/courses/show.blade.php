@@ -43,10 +43,10 @@
                         </div>
                     </template>
                 </div>
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h1 class="text-[24px] font-[800] text-navy tracking-tight" x-text="activeTitle"></h1>
-                        <p class="text-[14px] text-muted font-[500] mt-2 italic">Part of: {{ $course->title }}</p>
+                        <h1 class="text-[20px] md:text-[24px] font-[800] text-navy tracking-tight" x-text="activeTitle"></h1>
+                        <p class="text-[13px] md:text-[14px] text-muted font-[500] mt-1.5 md:mt-2 italic">Part of: {{ $course->title }}</p>
                     </div>
                     <button @click="fetch('{{ route('courses.progress.update', $course->id) }}', { 
                                         method: 'POST', 
@@ -56,7 +56,7 @@
                                             alert('Progress updated to ' + data.new_progress + '%!');
                                         }
                                     })" 
-                            class="px-6 py-2.5 bg-primary text-white text-[12px] font-[800] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+                            class="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 bg-primary text-white text-[11px] md:text-[12px] font-[800] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2">
                         <i class="bi bi-check-circle-fill"></i>
                         Mark as Completed
                     </button>
@@ -169,7 +169,7 @@
                     @endif
                     @endif
 
-                    <h1 class="text-[40px] font-[800] text-navy tracking-tight leading-[1.1] mb-6">{{ $course->title }}</h1>
+                    <h1 class="text-[28px] md:text-[40px] font-[800] text-navy tracking-tight leading-[1.2] md:leading-[1.1] mb-6">{{ $course->title }}</h1>
                     
                     @if($course->description)
                     <div class="text-[16px] text-muted font-[500] leading-relaxed mb-6 max-w-3xl">
@@ -195,7 +195,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-[32px] rounded-[12px] border border-border shadow-sm space-y-6">
+                <div class="bg-white p-5 md:p-8 rounded-[12px] border border-border shadow-sm space-y-6">
                     <h3 class="text-[20px] font-[800] text-navy tracking-tight uppercase tracking-[0.1em]">What you'll learn</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
                         @if($course->learning_outcomes)
@@ -261,7 +261,7 @@
 
             <!-- Sticky Enrollment Card -->
             <div class="lg:col-span-4 sticky top-24">
-                <div class="bg-white p-[32px] rounded-[16px] border border-border shadow-xl shadow-navy/5 space-y-6 relative overflow-hidden">
+                <div class="bg-white p-6 md:p-8 rounded-[16px] border border-border shadow-xl shadow-navy/5 space-y-6 relative overflow-hidden">
                     <div class="relative">
                         <img src="{{ $course->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
                              class="w-full h-[200px] object-cover rounded-[12px] shadow-sm mb-6 border border-border">

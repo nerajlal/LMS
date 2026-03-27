@@ -94,11 +94,26 @@
         @endif
     @else
         <!-- AUTH SIDEBAR VIEW (EXACT MATCH) -->
-        <div class="min-h-screen flex" x-data="{ sidebarOpen: true }">
+        <div class="min-h-screen flex" x-data="{ sidebarOpen: window.innerWidth > 768 }">
             
+            <!-- Backdrop for Mobile Overlay -->
+            <div x-show="sidebarOpen && window.innerWidth < 768" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="sidebarOpen = false"
+                 class="fixed inset-0 bg-navy/60 backdrop-blur-sm z-[1035] md:hidden"></div>
+
             <!-- Sidebar -->
             <aside 
-                :style="sidebarOpen ? 'width: 260px' : 'width: 72px'"
+                :class="{
+                    'w-[260px] translate-x-0': sidebarOpen,
+                    'w-[72px] translate-x-0': !sidebarOpen && window.innerWidth >= 768,
+                    '-translate-x-full w-[260px]': !sidebarOpen && window.innerWidth < 768
+                }"
                 class="bg-white border-r border-border flex flex-col fixed inset-y-0 left-0 z-[1040] transition-all duration-300 sidebar-shadow"
             >
                 <!-- Sidebar Header -->
@@ -170,13 +185,16 @@
 
             <!-- Main Content Area -->
             <div 
-                :style="sidebarOpen ? 'margin-left: 260px' : 'margin-left: 72px'"
-                class="flex-1 flex flex-col transition-all duration-300 min-h-screen"
+                :class="{
+                    'md:ml-[260px]': sidebarOpen,
+                    'md:ml-[72px]': !sidebarOpen
+                }"
+                class="flex-1 flex flex-col transition-all duration-300 min-h-screen ml-0"
             >
                 <!-- Header -->
-                <header class="h-[72px] bg-white border-b border-border flex items-center justify-between px-[32px] sticky top-0 z-[1030]">
-                    <div class="flex items-center gap-[20px] flex-1">
-                        <button @click="sidebarOpen = !sidebarOpen" class="text-muted text-[24px] cursor-pointer flex p-1 hover:bg-border rounded-[8px] transition-all">
+                <header class="h-[64px] md:h-[72px] bg-white border-b border-border flex items-center justify-between px-4 md:px-8 sticky top-0 z-[1030]">
+                    <div class="flex items-center gap-3 md:gap-5 flex-1">
+                        <button @click="sidebarOpen = !sidebarOpen" class="text-muted text-[24px] cursor-pointer flex p-1.5 hover:bg-border rounded-[8px] transition-all">
                             <i class="bi bi-list"></i>
                         </button>
 
@@ -204,9 +222,9 @@
                 </header>
 
                 <!-- Page Content -->
-                <main class="p-[32px] flex-1 bg-[#F4F4F4]">
+                <main class="p-4 md:p-8 flex-1 bg-[#F4F4F4]">
                     @if(session('success'))
-                        <div class="mb-[32px] p-[16px] bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-[12px] flex items-center gap-[12px] text-[14px] font-[600]">
+                        <div class="mb-6 md:mb-8 p-4 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-[12px] flex items-center gap-3 text-[14px] font-[600]">
                             <i class="bi bi-check-circle-fill"></i>
                             <span>{{ session('success') }}</span>
                         </div>

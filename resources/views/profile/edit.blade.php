@@ -13,8 +13,8 @@
                     <i class="bi bi-shield-lock text-primary text-3xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-[900] tracking-tight">Account & <span class="text-primary">Security</span></h1>
-                    <p class="text-slate-400 text-[12px] font-[600] uppercase tracking-widest mt-0.5">Manage your digital identity & credentials</p>
+                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight">Account & <span class="text-primary">Security</span></h1>
+                    <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-0.5">Manage your digital identity</p>
                 </div>
             </div>
 
@@ -76,11 +76,11 @@
         <div class="lg:col-span-8 space-y-8">
             <!-- Profile Information Card -->
             <div class="bg-white rounded-[16px] border border-border shadow-sm overflow-hidden group hover:border-primary/20 transition-all">
-                <div class="px-8 py-5 bg-slate-50/50 border-b border-border flex items-center justify-between">
-                    <h3 class="text-[14px] font-[800] text-navy uppercase tracking-wider">Profile Information</h3>
-                    <i class="bi bi-person-circle text-primary text-xl"></i>
+                <div class="px-5 md:px-8 py-4 md:py-5 bg-slate-50/50 border-b border-border flex items-center justify-between">
+                    <h3 class="text-[12px] md:text-[14px] font-[800] text-navy uppercase tracking-wider">Profile Information</h3>
+                    <i class="bi bi-person-circle text-primary text-lg md:text-xl"></i>
                 </div>
-                <div class="p-8">
+                <div class="p-5 md:p-8">
                     <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
                         @csrf @method('PATCH')
                         
@@ -111,11 +111,11 @@
 
             <!-- Password Update Card -->
             <div class="bg-white rounded-[16px] border border-border shadow-sm overflow-hidden group hover:border-primary/20 transition-all">
-                <div class="px-8 py-5 bg-slate-50/50 border-b border-border flex items-center justify-between">
-                    <h3 class="text-[14px] font-[800] text-navy uppercase tracking-wider">Credential Synchronization</h3>
-                    <i class="bi bi-key text-primary text-xl"></i>
+                <div class="px-5 md:px-8 py-4 md:py-5 bg-slate-50/50 border-b border-border flex items-center justify-between">
+                    <h3 class="text-[12px] md:text-[14px] font-[800] text-navy uppercase tracking-wider">Credential Synchronization</h3>
+                    <i class="bi bi-key text-primary text-lg md:text-xl"></i>
                 </div>
-                <div class="p-8">
+                <div class="p-5 md:p-8">
                     <form action="{{ route('password.update') }}" method="POST" class="space-y-6">
                         @csrf @method('put')
                         

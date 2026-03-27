@@ -19,39 +19,39 @@
             </div>
 
             <!-- Inline Stats -->
-            <div class="flex items-center gap-8 md:border-l border-white/10 md:pl-8">
+            <div class="flex items-center gap-4 sm:gap-8 md:border-l border-white/10 md:pl-8">
                 <div class="flex flex-col">
-                    <span class="text-[10px] font-[800] text-white/40 uppercase tracking-widest">Ongoing</span>
-                    <span class="text-xl font-[900] text-primary">{{ $stats['in_progress'] }}</span>
+                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Ongoing</span>
+                    <span class="text-lg md:text-xl font-[900] text-primary">{{ $stats['in_progress'] }}</span>
                 </div>
-                <div class="flex flex-col border-l border-white/10 pl-8">
-                    <span class="text-[10px] font-[800] text-white/40 uppercase tracking-widest">Pending</span>
-                    <span class="text-xl font-[900] text-white">{{ $stats['pending'] }}</span>
+                <div class="flex flex-col border-l border-white/10 pl-4 sm:pl-8">
+                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Pending</span>
+                    <span class="text-lg md:text-xl font-[900] text-white">{{ $stats['pending'] }}</span>
                 </div>
-                <div class="flex flex-col border-l border-white/10 pl-8">
-                    <span class="text-[10px] font-[800] text-white/40 uppercase tracking-widest">Done</span>
-                    <span class="text-xl font-[900] text-emerald-400">{{ $stats['completed'] }}</span>
+                <div class="flex flex-col border-l border-white/10 pl-4 sm:pl-8">
+                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Done</span>
+                    <span class="text-lg md:text-xl font-[900] text-emerald-400">{{ $stats['completed'] }}</span>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Navigation Tabs & Actions -->
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-2 p-1.5 bg-slate-100 rounded-[12px] shadow-inner border border-slate-200/50">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-center gap-2 p-1 md:p-1.5 bg-slate-100 rounded-[12px] shadow-inner border border-slate-200/50 w-full md:w-auto overflow-x-auto no-scrollbar whitespace-nowrap">
             <button @click="activeTab = 'ongoing'" 
                     :class="activeTab === 'ongoing' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
-                    class="px-6 py-2.5 rounded-[10px] text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
+                    class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-2.5 rounded-[10px] text-[11px] md:text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
                 In Progress
             </button>
             <button @click="activeTab = 'done'" 
                     :class="activeTab === 'done' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
-                    class="px-6 py-2.5 rounded-[10px] text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
+                    class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-2.5 rounded-[10px] text-[11px] md:text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
                 Completed
             </button>
             <button @click="activeTab = 'waiting'" 
                     :class="activeTab === 'waiting' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
-                    class="px-6 py-2.5 rounded-[10px] text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
+                    class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-2.5 rounded-[10px] text-[11px] md:text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
                 Pending
             </button>
         </div>
@@ -73,10 +73,10 @@
                             <span class="inline-flex px-3 py-1 bg-primary text-white text-[9px] font-[900] uppercase tracking-widest rounded-full shadow-lg w-fit">Active Learning</span>
                         </div>
                     </div>
-                    <div class="flex-1 p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border/50">
+                    <div class="flex-1 p-5 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border/50">
                         <div>
-                            <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">{{ $admission->course?->category ?? 'Specialization' }}</div>
-                            <h3 class="text-2xl font-[800] text-navy mb-4 group-hover:text-primary transition-colors">{{ $admission->course?->title }}</h3>
+                            <div class="text-[10px] md:text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">{{ $admission->course?->category ?? 'Specialization' }}</div>
+                            <h3 class="text-xl md:text-2xl font-[800] text-navy mb-4 group-hover:text-primary transition-colors leading-tight">{{ $admission->course?->title }}</h3>
                             <div class="flex items-center gap-6 mb-6">
                                 <div class="flex items-center gap-2 text-[13px] font-[600] text-muted"><i class="bi bi-play-circle text-primary"></i> {{ $admission->course?->lessons_count ?? 0 }} Lessons</div>
                                 <div class="flex items-center gap-2 text-[13px] font-[600] text-muted"><i class="bi bi-file-earmark text-primary"></i> {{ $admission->course?->study_materials_count ?? 0 }} Materials</div>
@@ -92,8 +92,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="w-full md:w-[260px] p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
-                        <a href="{{ route('courses.show', $admission->course_id) }}" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary hover:-translate-y-1 transition-all text-center">
+                    <div class="w-full md:w-[260px] p-5 md:p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
+                        <a href="{{ route('courses.show', $admission->course_id) }}" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[12px] md:text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary transition-all text-center">
                             Continue <i class="bi bi-arrow-right-short text-lg"></i>
                         </a>
                     </div>

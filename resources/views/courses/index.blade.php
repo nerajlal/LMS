@@ -3,11 +3,11 @@
 @section('title', 'Browser Our Courses - The Ace India')
 
 @section('content')
-<div class="space-y-16">
+<div class="space-y-10 md:space-y-16">
     <!-- Header -->
-    <div class="text-center max-w-2xl mx-auto">
-        <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-4">Master Your <span class="text-[#F37021]">Future</span></h1>
-        <p class="text-slate-500 font-medium">Choose from our curated selection of professional courses designed to take your skills to the next level.</p>
+    <div class="text-center max-w-2xl mx-auto px-4">
+        <h1 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">Master Your <span class="text-[#F37021]">Future</span></h1>
+        <p class="text-slate-500 font-medium text-sm md:text-base">Choose from our curated selection of professional courses designed to take your skills to the next level.</p>
     </div>
 
     <!-- Courses Grid -->
@@ -22,7 +22,7 @@
                     <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-bold text-white uppercase tracking-widest">{{ $course->lessons_count }} Lessons</span>
                 </div>
             </div>
-            <div class="p-8 flex-1 flex flex-col">
+            <div class="p-5 md:p-8 flex-1 flex flex-col">
                 <h4 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-[#F37021] transition-colors line-clamp-2 leading-tight">{{ $course->title }}</h4>
                 <div class="text-xs font-bold text-slate-400 mb-6 italic">by {{ $course->instructor_name }}</div>
                 

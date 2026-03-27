@@ -9,17 +9,17 @@
         <div class="absolute top-[-30px] right-[-30px] w-[200px] h-[200px] bg-primary/20 rounded-full blur-[80px] animate-pulse"></div>
         <div class="absolute bottom-[-50px] left-[-50px] w-[150px] h-[150px] bg-sky-500/10 rounded-full blur-[60px]"></div>
         
-        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-5">
-                <div class="w-16 h-16 rounded-[16px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-xl shadow-2xl group overflow-hidden">
+            <div class="flex items-center gap-4 md:gap-5">
+                <div class="w-14 h-14 md:w-16 md:h-16 rounded-[14px] md:rounded-[16px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-xl shadow-2xl group overflow-hidden shrink-0">
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=F37021&color=fff&bold=true" 
                          class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700">
                 </div>
                 <div>
-                    <h1 class="text-2xl font-[900] tracking-tight leading-tight">Welcome back, <span class="text-primary">{{ explode(' ', auth()->user()->name)[0] }}!</span></h1>
-                    <p class="text-slate-400 text-[12px] font-[600] uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
+                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight leading-tight">Welcome back, <span class="text-primary">{{ explode(' ', auth()->user()->name)[0] }}!</span></h1>
+                    <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
                         <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                        Identity Verified
+                        <span class="hidden sm:inline">Identity Verified</span>
+                        <span class="sm:hidden">Verified Student</span>
                     </p>
                 </div>
             </div>
@@ -81,8 +81,8 @@
                 
                 <div class="p-4 flex-1">
                     @forelse($enrolledCourses as $course)
-                    <div class="group bg-slate-50/30 hover:bg-white rounded-[14px] border border-transparent hover:border-border hover:shadow-xl p-3 mb-3 last:mb-0 transition-all duration-500 flex flex-col md:flex-row items-center gap-5">
-                        <div class="relative w-full md:w-[120px] h-[75px] rounded-[12px] overflow-hidden shrink-0 shadow-lg">
+                    <div class="group bg-slate-50/30 hover:bg-white rounded-[14px] border border-transparent hover:border-border hover:shadow-xl p-3 mb-3 last:mb-0 transition-all duration-500 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-5">
+                        <div class="relative w-full md:w-[120px] aspect-video md:h-[75px] rounded-[10px] md:rounded-[12px] overflow-hidden shrink-0 shadow-lg">
                             <img src="{{ $course['thumbnail'] ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=300' }}" 
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors"></div>
