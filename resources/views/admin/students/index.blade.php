@@ -62,9 +62,9 @@
                             {{ $student->created_at->format('M d, Y') }}
                         </td>
                         <td class="px-[24px] py-[16px] text-right">
-                            <button class="text-muted hover:text-primary transition-colors">
-                                <i class="bi bi-three-dots-vertical text-[20px]"></i>
-                            </button>
+                            <a href="{{ route('admin.admissions.index', ['user_id' => $student->id]) }}" class="text-[12px] font-[800] text-primary uppercase tracking-widest hover:underline">
+                                View History
+                            </a>
                         </td>
                     </tr>
                     @empty

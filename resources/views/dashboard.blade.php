@@ -163,7 +163,7 @@
                 </div>
                 <div class="p-4 space-y-1">
                     @forelse($topInstructors as $index => $instructor)
-                    <div class="flex items-center gap-4 p-3 rounded-[14px] hover:bg-slate-50 transition-colors group cursor-pointer">
+                    <a href="{{ route('courses.index', ['instructor' => $instructor['name']]) }}" class="flex items-center gap-4 p-3 rounded-[14px] hover:bg-slate-50 transition-colors group cursor-pointer border border-transparent hover:border-border">
                         <div class="relative">
                             <div class="w-11 h-11 rounded-full border-2 border-primary/20 group-hover:border-primary transition-colors p-[2px]">
                                 <img src="{{ $instructor['avatar'] }}" class="w-full h-full rounded-full object-cover">
@@ -181,13 +181,13 @@
                         <div class="text-primary opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0">
                             <i class="bi bi-chevron-right text-lg"></i>
                         </div>
-                    </div>
+                    </a>
                     @empty
                     <div class="p-6 text-center text-slate-400 italic text-[13px]">Establishing mentor network...</div>
                     @endforelse
                 </div>
                 <div class="p-4 border-t border-slate-50">
-                    <a href="{{ route('courses.index') }}" class="w-full block py-3 text-center text-[12px] font-[800] text-navy uppercase tracking-widest hover:text-primary transition-colors">See Performance <i class="bi bi-graph-up ml-1"></i></a>
+                    <a href="{{ route('courses.index') }}" class="w-full block py-3 text-center text-[12px] font-[800] text-navy uppercase tracking-widest hover:text-primary transition-colors">Explore Curriculum <i class="bi bi-graph-up ml-1"></i></a>
                 </div>
             </div>
         </div>

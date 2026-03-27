@@ -10,7 +10,9 @@
         </a>
         <div>
             <h1 class="text-3xl font-[800] text-navy tracking-tight uppercase">Upload Material</h1>
-            <p class="text-muted text-[14px] font-[500] mt-1">Select a course and upload relevant PDFs or documents.</p>
+            <p class="text-muted text-[14px] font-[500] mt-1 italic opacity-80">
+                <i class="bi bi-info-circle mr-1"></i> Add new study materials, PDFs, or research documents to your course curriculum here.
+            </p>
         </div>
     </div>
 

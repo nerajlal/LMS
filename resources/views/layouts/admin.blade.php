@@ -160,18 +160,21 @@
                     </button>
 
                     <!-- Search Bar -->
-                    <div class="hidden md:flex items-center relative w-[300px]">
+                    <form action="{{ auth()->user()->is_admin ? route('admin.courses.index') : route('trainer.courses.index') }}" method="GET" class="hidden md:flex items-center relative w-[300px]">
                         <i class="bi bi-search absolute left-[12px] text-muted text-[14px]"></i>
-                        <input type="text" placeholder="Quick search for anything.." 
+                        <input type="text" name="search" placeholder="Quick search for anything.." 
                                class="w-full pl-[36px] pr-[12px] py-[8px] bg-transparent border-none text-[14px] focus:outline-none font-[500]">
-                    </div>
+                    </form>
                 </div>
 
                 <div class="flex items-center gap-[20px]">
-                    <i class="bi bi-envelope text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
+                    @php $notificationCount = 0; @endphp
+                    {{-- <i class="bi bi-envelope text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i> --}}
                     <div class="relative">
                         <i class="bi bi-bell text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
-                        <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">2</span>
+                        @if($notificationCount > 0)
+                            <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">{{ $notificationCount }}</span>
+                        @endif
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="text-right hidden sm:block">

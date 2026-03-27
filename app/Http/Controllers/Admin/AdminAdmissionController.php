@@ -8,11 +8,15 @@ use Illuminate\Http\Request;
 
 class AdminAdmissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $admissions = Admission::with(['user', 'course', 'batch'])
-            ->latest()
-            ->paginate(20);
+        $query = Admission::with(['user', 'course', 'batch'])->latest();
+
+        if ($request->has('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        $admissions = $query->paginate(20);
 
         return view('admin.admissions.index', compact('admissions'));
     }

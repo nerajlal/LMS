@@ -181,11 +181,11 @@
                         </button>
 
                         <!-- Search Bar -->
-                        <div class="hidden md:flex items-center relative w-[300px]">
+                        <form action="{{ route('courses.index') }}" method="GET" class="hidden md:flex items-center relative w-[300px]">
                             <i class="bi bi-search absolute left-[12px] text-muted text-[14px]"></i>
-                            <input type="text" placeholder="Quick search for anything.." 
+                            <input type="text" name="search" placeholder="Quick search for anything.." 
                                    class="w-full pl-[36px] pr-[12px] py-[8px] bg-transparent border-none text-[14px] focus:outline-none font-[500]">
-                        </div>
+                        </form>
                     </div>
 
                     <div class="flex items-center gap-[20px]">
