@@ -110,6 +110,7 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     // Trainer exclusive module routes
     Route::resource('courses', TrainerCourseController::class);
     Route::post('/courses/{course}/lessons', [TrainerCourseController::class, 'storeLesson'])->name('courses.lessons.store');
+    Route::delete('/courses/{course}/lessons/{lesson}', [TrainerCourseController::class, 'destroyLesson'])->name('courses.lessons.destroy');
     Route::post('/courses/{course}/materials', [TrainerCourseController::class, 'storeMaterial'])->name('courses.materials.store');
     Route::delete('/courses/{course}/materials/{material}', [TrainerCourseController::class, 'destroyMaterial'])->name('courses.materials.destroy');
     

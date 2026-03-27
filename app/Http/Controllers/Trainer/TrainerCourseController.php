@@ -166,6 +166,17 @@ class TrainerCourseController extends Controller
     }
 
     /**
+     * Remove the specified lesson from storage.
+     */
+    public function destroyLesson($courseId, $lessonId)
+    {
+        $lesson = \App\Models\Lesson::where('course_id', $courseId)->findOrFail($lessonId);
+        $lesson->delete();
+
+        return redirect()->back()->with('success', 'Lesson deleted successfully!');
+    }
+
+    /**
      * Remove the specified study material from storage.
      */
     public function destroyMaterial($courseId, $materialId)

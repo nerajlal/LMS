@@ -166,9 +166,18 @@
                                 <i class="bi bi-play-circle text-primary"></i> Video Lesson &bull; Dynamic Order
                             </div>
                         </div>
-                        <button @click="playVideo('{{ $lesson->video_url }}', '{{ $lesson->title }}')" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-primary transition-colors">
-                            <i class="bi bi-play-fill text-2xl"></i>
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button @click="playVideo('{{ $lesson->video_url }}', '{{ $lesson->title }}')" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 hover:text-primary transition-colors">
+                                <i class="bi bi-play-fill text-2xl"></i>
+                            </button>
+                            <form action="{{ route('trainer.courses.lessons.destroy', [$course->id, $lesson->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this lesson?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                                    <i class="bi bi-trash3 text-lg"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     @empty
                     <div class="bg-white py-20 rounded-[16px] border border-dashed border-slate-200 text-center">
