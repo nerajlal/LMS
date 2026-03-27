@@ -189,10 +189,13 @@
                     </div>
 
                     <div class="flex items-center gap-[20px]">
-                        <i class="bi bi-envelope text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
+                        @php $notificationCount = 0; @endphp
+                        {{-- <i class="bi bi-envelope text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i> --}}
                         <div class="relative">
                             <i class="bi bi-bell text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
-                            <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">2</span>
+                            @if($notificationCount > 0)
+                                <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">{{ $notificationCount }}</span>
+                            @endif
                         </div>
                         <a href="{{ route('profile.edit') }}" class="w-[32px] h-[32px] rounded-full bg-border overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=random" class="w-full h-full object-cover">
