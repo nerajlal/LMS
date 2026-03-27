@@ -9,25 +9,29 @@
         <div class="absolute top-[-30px] right-[-30px] w-[200px] h-[200px] bg-primary/20 rounded-full blur-[80px] animate-pulse"></div>
         <div class="absolute bottom-[-50px] left-[-50px] w-[150px] h-[150px] bg-sky-500/10 rounded-full blur-[60px]"></div>
         
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="flex items-center gap-4 md:gap-5">
                 <div class="w-14 h-14 md:w-16 md:h-16 rounded-[14px] md:rounded-[16px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-xl shadow-2xl group overflow-hidden shrink-0">
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=F37021&color=fff&bold=true" 
                          class="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700">
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight leading-tight">Welcome back, <span class="text-primary">{{ explode(' ', auth()->user()->name)[0] }}!</span></h1>
-                    <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-[0.2em] mt-1 flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                        <span class="hidden sm:inline">Identity Verified</span>
-                        <span class="sm:hidden">Verified Student</span>
+                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight leading-tight uppercase">Welcome back, <span class="text-primary">{{ explode(' ', auth()->user()->name)[0] }}!</span></h1>
+                    <p class="text-slate-400 text-[10px] md:text-[11px] font-[600] uppercase tracking-[0.2em] mt-1.5 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_8px_#4ade80]"></span>
+                        <span class="hidden sm:inline">Identity Verified Virtual Student</span>
+                        <span class="sm:hidden text-primary">Verified Student</span>
                     </p>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 bg-white/5 border border-white/10 p-4 rounded-[16px] backdrop-blur-md">
-                <div class="text-right">
-                    <div class="text-[11px] font-[800] text-primary uppercase tracking-widest mb-1">Learning Streak</div>
-                    <div class="text-xl font-[900] text-white">12 Days <i class="bi bi-fire text-orange-500 ml-1"></i></div>
+            <div class="flex items-center gap-4 bg-white/5 border border-white/10 p-4 md:p-5 rounded-[20px] backdrop-blur-md self-start md:self-auto min-w-[180px]">
+                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary shrink-0">
+                    <i class="bi bi-fire text-xl"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] font-[800] text-slate-400 uppercase tracking-widest leading-none mb-1.5">Learning Streak</div>
+                    <div class="text-lg md:text-xl font-[900] text-white leading-none">12 Days <span class="text-[10px] text-primary ml-1 uppercase">Active</span></div>
                 </div>
             </div>
         </div>
@@ -45,20 +49,20 @@
         @endphp
 
         @foreach($statCards as $index => $card)
-        <div class="relative group bg-gradient-to-br {{ $card['gradient'] }} p-4 rounded-[16px] border border-border shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden {{ $index === 0 ? 'text-white border-navy' : '' }}">
+        <div class="relative group bg-gradient-to-br {{ $card['gradient'] }} p-5 rounded-[20px] border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden {{ $index === 0 ? 'text-white border-navy shadow-navy/10' : 'bg-white' }}">
             @if($index === 0)
-                <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <i class="bi {{ $card['icon'] }} text-[60px]"></i>
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="bi {{ $card['icon'] }} text-[64px]"></i>
                 </div>
             @endif
             
-            <div class="relative z-10 flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-[12px] {{ $index === 0 ? 'bg-white/10' : 'bg-slate-100' }} flex items-center justify-center {{ $card['iconColor'] }} shadow-inner shrink-0">
-                    <i class="bi {{ $card['icon'] }} text-lg"></i>
+            <div class="relative z-10 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-[14px] {{ $index === 0 ? 'bg-white/10' : 'bg-slate-50' }} flex items-center justify-center {{ $card['iconColor'] }} shadow-inner shrink-0 group-hover:scale-110 transition-transform">
+                    <i class="bi {{ $card['icon'] }} text-xl"></i>
                 </div>
                 <div class="min-w-0 pr-2">
-                    <div class="text-xl font-[900] {{ $index === 0 ? 'text-white' : 'text-navy' }} leading-none mb-1">{{ sprintf('%02d', $card['value']) }}</div>
-                    <div class="text-[10px] font-[800] {{ $index === 0 ? 'text-slate-300' : 'text-muted' }} uppercase tracking-widest leading-tight line-clamp-1 truncate">{{ $card['label'] }}</div>
+                    <div class="text-2xl font-[900] {{ $index === 0 ? 'text-white' : 'text-navy' }} leading-none mb-1.5 tracking-tight">{{ sprintf('%02d', $card['value']) }}</div>
+                    <div class="text-[10px] font-[800] {{ $index === 0 ? 'text-slate-300' : 'text-slate-400' }} uppercase tracking-widest leading-tight line-clamp-1 truncate">{{ $card['label'] }}</div>
                 </div>
             </div>
         </div>
@@ -87,21 +91,23 @@
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors"></div>
                         </div>
-Prefix:                         <div class="flex-1 w-full min-w-0">
+                        <div class="flex-1 w-full min-w-0">
                             <div class="flex justify-between items-start mb-1.5">
-                                <h3 class="text-[14px] font-[800] text-navy truncate group-hover:text-primary transition-colors pr-4">{{ $course['title'] }}</h3>
+                                <h3 class="text-[14px] font-[800] text-navy truncate group-hover:text-primary transition-colors pr-4 uppercase leading-tight">{{ $course['title'] }}</h3>
                                 <div class="text-[11px] font-[900] text-primary whitespace-nowrap">{{ $course['progress'] }}%</div>
                             </div>
                             
                             <div class="relative h-1.5 bg-slate-200 rounded-full overflow-hidden mb-3 shadow-inner">
-                                <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-orange-400 rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(243,112,33,0.3)]" style="width: {{ $course['progress'] }}%"></div>
+                                <div class="absolute inset-y-0 left-0 bg-gradient-to-r from-primary to-orange-400 rounded-full transition-all duration-700 ease-out" style="width: {{ $course['progress'] }}%"></div>
                             </div>
-Prefix:                             <div class="flex items-center gap-4 text-[10px] font-[700] text-muted uppercase tracking-widest">
+                            
+                            <div class="flex items-center gap-4 text-[9px] md:text-[10px] font-[700] text-slate-400 uppercase tracking-widest">
                                 <span class="flex items-center gap-1.5"><i class="bi bi-person text-primary"></i> {{ $course['instructor'] }}</span>
                                 <span class="flex items-center gap-1.5"><i class="bi bi-stack text-primary"></i> {{ $course['lessons_count'] }} Lessons</span>
                             </div>
                         </div>
-Prefix:                         <div class="shrink-0 w-full md:w-auto">
+
+                        <div class="shrink-0 w-full md:w-auto mt-4 md:mt-0 pt-3 md:pt-0 border-t md:border-none border-slate-100/50">
                             <a href="{{ route('courses.show', $course['id']) }}" 
                                class="w-full md:w-auto block px-5 py-2.5 bg-navy text-white rounded-[10px] text-[11px] font-[900] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary hover:-translate-y-0.5 transition-all text-center">
                                 Resume <i class="bi bi-arrow-right ml-1"></i>
@@ -136,9 +142,20 @@ Prefix:                         <div class="shrink-0 w-full md:w-auto">
                 @php $nextClass = $upcomingClasses->first(); @endphp
                 @if($nextClass)
                     <div class="space-y-4 relative z-10">
-                        <div class="p-3.5 bg-white/5 border border-white/10 rounded-[14px] backdrop-blur-md">
-                            <p class="text-[11px] text-slate-400 font-[600] mb-1 italic">Starts {{ \Carbon\Carbon::parse($nextClass['time'])->diffForHumans() }}</p>
-                            <h4 class="text-sm font-[800] mb-2.5 leading-tight">{{ $nextClass['title'] }}</h4>
+                        <div class="p-4 bg-white/5 border border-white/10 rounded-[16px] backdrop-blur-md">
+                            @php
+                                try {
+                                    $startTime = \Carbon\Carbon::parse($nextClass['time']);
+                                    $timeStr = $startTime->diffForHumans();
+                                } catch (\Exception $e) {
+                                    $timeStr = 'Upcoming';
+                                }
+                            @endphp
+                            <p class="text-[11px] text-slate-400 font-[700] mb-1.5 flex items-center gap-2 uppercase tracking-widest">
+                                <span class="w-1 w-1 bg-primary rounded-full animate-ping"></span>
+                                Starts {{ $timeStr }}
+                            </p>
+                            <h4 class="text-[15px] font-[800] mb-3 leading-tight tracking-tight text-white/90">{{ $nextClass['title'] }}</h4>
                             <div class="flex items-center gap-2.5">
                                 <div class="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs">
                                     <i class="bi bi-person-fill"></i>
@@ -160,7 +177,7 @@ Prefix:                         <div class="shrink-0 w-full md:w-auto">
                 </div>
                 <div class="p-2 space-y-0.5">
                     @forelse($topInstructors as $index => $instructor)
-                    <a href="{{ route('courses.index', ['instructor' => $instructor['name']]) }}" class="flex items-center gap-3 p-2 rounded-[12px] hover:bg-slate-50 transition-colors group cursor-pointer border border-transparent hover:border-border">
+                    <a href="{{ route('courses.index', ['instructor' => $instructor['name']]) }}" class="flex items-center gap-3 p-2 rounded-[12px] hover:bg-slate-50 transition-colors group cursor-pointer border border-transparent hover:border-slate-100">
                         <div class="relative">
                             <div class="w-9 h-9 rounded-full border-2 border-primary/20 group-hover:border-primary transition-colors p-[2px]">
                                 <img src="{{ $instructor['avatar'] }}" class="w-full h-full rounded-full object-cover">
