@@ -43,13 +43,18 @@
     <div class="flex items-center gap-2 p-1.5 bg-slate-100 rounded-[12px] w-fit mx-auto border border-slate-200/50 shadow-inner">
         <button @click="activeTab = 'active'" 
                 :class="activeTab === 'active' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
-                class="px-8 py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest transition-all">
-            Active Sessions
+                class="px-6 py-2.5 rounded-[12px] text-[12px] font-[800] uppercase tracking-widest transition-all">
+            Live
+        </button>
+        <button @click="activeTab = 'upcoming'" 
+                :class="activeTab === 'upcoming' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
+                class="px-6 py-2.5 rounded-[12px] text-[12px] font-[800] uppercase tracking-widest transition-all">
+            Upcoming
         </button>
         <button @click="activeTab = 'past'" 
                 :class="activeTab === 'past' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
-                class="px-8 py-3 rounded-[12px] text-[13px] font-[800] uppercase tracking-widest transition-all">
-            Past Sessions
+                class="px-6 py-2.5 rounded-[12px] text-[12px] font-[800] uppercase tracking-widest transition-all">
+            Past
         </button>
     </div>
 
@@ -62,7 +67,6 @@
                 $endTime = $startTime->copy()->addMinutes($durationMinutes);
                 $now = \Carbon\Carbon::now();
                 $isLive = $now->between($startTime, $endTime) || strtolower($class->status) === 'live';
-                $isUpcoming = $now->lt($startTime) && strtolower($class->status) !== 'live';
                 $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
             @endphp
             
@@ -72,7 +76,6 @@
                     <img src="{{ $class->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                     
-                    <!-- Status Overlays -->
                     <div class="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors duration-500 p-4">
                         @if($isLive && $isEnrolled)
                         <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-rose-500 text-white rounded-full text-[10px] font-[900] uppercase tracking-widest shadow-lg animate-pulse">
@@ -90,7 +93,6 @@
                     </div>
                 </div>
 
-                <!-- Middle: Details -->
                 <div class="flex-1 p-6 md:p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-border/50">
                     <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">
                         {{ $class->course?->title ?? 'Industry Insights' }}
@@ -113,7 +115,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Schedule & Action -->
                 <div class="w-full md:w-[280px] p-6 md:p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-12 h-12 rounded-[12px] bg-navy text-white flex items-center justify-center text-[14px] font-[900] flex-col leading-none shadow-md">
@@ -131,11 +132,73 @@
                             Enroll to Join
                         </a>
                     @elseif($isLive)
-                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-opacity-90 hover:-translate-y-1 transition-all text-center">
+                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-rose-500 text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-rose-500/20 hover:bg-rose-600 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-2">
                             Join Now <i class="bi bi-camera-video ml-1"></i>
                         </a>
                     @else
-                        <div class="w-full py-3.5 bg-white border border-navy/10 text-navy rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col justify-center leading-none">
+                        <div class="w-full py-3.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col items-center justify-center">
+                            <span class="opacity-40 text-[10px] mb-1">Status</span>
+                            <span>On Air</span>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @empty
+            <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-[12px] p-20 text-center">
+                <i class="bi bi-broadcast text-[64px] text-slate-300 block mb-6 px-1"></i>
+                <h3 class="text-xl font-[800] text-navy mb-3">No sessions live right now</h3>
+                <p class="text-muted font-[500] max-w-sm mx-auto mb-8 px-1">Check the upcoming tab for scheduled sessions or browse our past recordings.</p>
+                <button @click="activeTab = 'upcoming'" class="px-10 py-4 bg-navy text-white rounded-[12px] font-[800] uppercase tracking-widest text-[13px] shadow-xl shadow-navy/20">View Upcoming</button>
+            </div>
+        @endforelse
+    </div>
+
+    <!-- Upcoming Sessions Tab -->
+    <div x-show="activeTab === 'upcoming'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="max-w-6xl mx-auto space-y-6">
+        @forelse($upcomingClasses as $class)
+            @php
+                $startTime = \Carbon\Carbon::parse($class->start_time);
+                $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
+            @endphp
+            
+            <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
+                <div class="relative w-full md:w-[280px] h-[180px] md:h-auto overflow-hidden shrink-0">
+                    <img src="{{ $class->course?->thumbnail ?: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600' }}" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-80">
+                    <div class="absolute inset-0 bg-navy/40 flex flex-col justify-end p-6">
+                        @if($isEnrolled)
+                        <div class="inline-flex px-3 py-1 bg-primary text-white rounded-full text-[9px] font-[900] uppercase tracking-widest shadow-md w-fit">Subscribed</div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="flex-1 p-6 md:p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-border/50">
+                    <div class="text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">Upcoming Session</div>
+                    <h3 class="text-2xl font-[800] text-navy leading-tight mb-4 group-hover:text-primary transition-colors">{{ $class->title }}</h3>
+                    <div class="flex flex-wrap items-center gap-6">
+                        <div class="flex items-center gap-2 text-[14px] font-[600] text-muted">
+                            <i class="bi bi-person-circle text-primary"></i>
+                            <span>{{ $class->instructor_name }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-[280px] p-6 md:p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-[12px] bg-slate-200 text-slate-600 flex items-center justify-center text-[14px] font-[900] flex-col leading-none shadow-sm">
+                            <span>{{ $startTime->format('d') }}</span>
+                            <span class="text-[9px] uppercase opacity-60">{{ $startTime->format('M') }}</span>
+                        </div>
+                        <div>
+                            <div class="text-navy font-[800] text-[15px]">{{ $startTime->format('g:i A') }}</div>
+                            <div class="text-[11px] font-[600] text-muted uppercase tracking-widest leading-none mt-1">{{ $startTime->diffForHumans() }}</div>
+                        </div>
+                    </div>
+
+                    @if(!$isEnrolled)
+                        <a href="{{ route('courses.show', $class->course_id) }}" class="w-full py-3.5 bg-primary text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all text-center">Enroll Now</a>
+                    @else
+                        <div class="w-full py-3.5 bg-white text-navy border border-border rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col items-center justify-center shadow-sm">
                             <span class="opacity-40 text-[10px] mb-1">Starts In</span>
                             <span>{{ $startTime->diffForHumans(null, true) }}</span>
                         </div>
@@ -143,11 +206,7 @@
                 </div>
             </div>
         @empty
-            <div class="bg-slate-50 rounded-[12px] border-2 border-dashed border-slate-200 p-20 text-center">
-                <i class="bi bi-camera-video-off text-4xl text-slate-300 mb-6 block"></i>
-                <h3 class="text-2xl font-[900] text-navy mb-3">No Active Classes</h3>
-                <p class="text-muted font-[500] max-w-sm mx-auto">Check back literal for upcoming interactive sessions.</p>
-            </div>
+            <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-[12px] p-20 text-center italic text-muted">No upcoming sessions.</div>
         @endforelse
     </div>
 
@@ -172,7 +231,7 @@
             </div>
         @empty
             <div class="bg-slate-50 rounded-[12px] p-16 text-center border-2 border-dashed border-slate-200">
-                <h3 class="text-xl font-[800] text-navy">No Past Sessions Yet</h3>
+                <h3 class="text-xl font-[800] text-navy text-muted italic">No Past Sessions Yet</h3>
             </div>
         @endforelse
     </div>
