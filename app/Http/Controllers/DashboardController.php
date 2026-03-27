@@ -60,7 +60,7 @@ class DashboardController extends Controller
                 return [
                     'id' => $class->id,
                     'title' => $class->title,
-                    'time' => \Carbon\Carbon::parse($class->start_time)->format('M d, Y - g:i A'),
+                    'time' => $class->start_time,
                     'host' => $class->instructor_name,
                 ];
             });
