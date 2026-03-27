@@ -67,39 +67,63 @@
     </style>
 </head>
 <body class="antialiased text-slate-900">
-    <div class="min-h-screen flex" x-data="{ sidebarOpen: true }">
+    <div class="min-h-screen flex relative" x-data="{ sidebarOpen: window.innerWidth > 1024 }">
         
+        <!-- Mobile Sidebar Backdrop -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="sidebarOpen = false"
+             class="fixed inset-0 bg-navy/60 backdrop-blur-sm z-[1045] lg:hidden"
+             x-cloak>
+        </div>
+
         <!-- Sidebar -->
         <aside 
-            :style="sidebarOpen ? 'width: 260px' : 'width: 72px'"
-            class="bg-white border-r border-border flex flex-col fixed inset-y-0 left-0 z-[1040] transition-all duration-300 sidebar-shadow"
+            x-show="sidebarOpen"
+            x-transition:enter="transition ease-out duration-300 transform"
+            x-transition:enter-start="-translate-x-full"
+            x-transition:enter-end="translate-x-0"
+            x-transition:leave="transition ease-in duration-200 transform"
+            x-transition:leave-start="translate-x-0"
+            x-transition:leave-end="-translate-x-full"
+            class="bg-white border-r border-border flex flex-col fixed inset-y-0 left-0 z-[1050] transition-all duration-300 sidebar-shadow w-[280px] lg:w-[260px]"
+            x-cloak
+            @resize.window="if (window.innerWidth > 1024) sidebarOpen = true"
         >
             <!-- Sidebar Header -->
-            <div class="h-[72px] flex items-center px-[24px] gap-[12px] shrink-0 overflow-hidden">
-                <div class="w-[36px] h-[36px] bg-primary rounded-[8px] flex items-center justify-center text-white shrink-0">
+            <div class="h-[72px] flex items-center px-[24px] gap-[12px] shrink-0 overflow-hidden border-b border-border/50">
+                <div class="w-[36px] h-[36px] bg-primary rounded-[10px] flex items-center justify-center text-white shrink-0 shadow-lg shadow-orange-500/20">
                     <i class="bi bi-building-fill text-[18px]"></i>
                 </div>
-                <div x-show="sidebarOpen" x-transition class="font-[800] text-[20px] text-navy tracking-tight whitespace-nowrap overflow-hidden">
-                    The Ace India
+                <div class="font-[900] text-[18px] text-navy tracking-tight whitespace-nowrap">
+                    The Ace <span class="text-primary">India</span>
                 </div>
+                <!-- Mobile Close Button -->
+                <button @click="sidebarOpen = false" class="lg:hidden ml-auto text-navy">
+                    <i class="bi bi-x-lg text-xl"></i>
+                </button>
             </div>
 
             <!-- Profile Section -->
-            <div x-show="sidebarOpen" x-transition class="p-[24px_20px] border-b border-border">
-                <div class="flex items-center gap-[14px] cursor-pointer">
-                    <div class="w-[44px] h-[44px] rounded-full bg-border border-border shadow-sm overflow-hidden shrink-0 flex items-center justify-center">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=random" class="w-full h-full object-cover">
+            <div class="p-[20px] border-b border-border/50 bg-slate-50/50">
+                <div class="flex items-center gap-[12px]">
+                    <div class="w-[40px] h-[40px] rounded-[10px] bg-white border border-border shadow-sm overflow-hidden shrink-0 flex items-center justify-center">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=1B365D&color=fff" class="w-full h-full object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="text-[14px] font-[700] text-navy truncate">{{ auth()->user()->name }}</div>
-                        <div class="text-[12px] text-muted truncate">{{ auth()->user()->email }}</div>
+                        <div class="text-[13px] font-[800] text-navy truncate leading-tight">{{ auth()->user()->name }}</div>
+                        <div class="text-[10px] text-slate-400 font-[600] uppercase tracking-wider truncate mt-0.5">{{ auth()->user()->is_admin ? 'Admin' : 'Trainer' }} Profile</div>
                     </div>
-                    <i class="bi bi-chevron-down text-[12px] text-muted"></i>
                 </div>
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto p-[16px_12px] space-y-1">
+            <nav class="flex-1 overflow-y-auto p-[16px_12px] space-y-1 custom-scrollbar">
                 @php
                     $role = auth()->user()->is_admin ? 'admin' : 'trainer';
                     $nav = $role === 'admin' ? [
@@ -122,24 +146,24 @@
                 @foreach($nav as $item)
                 @php $isActive = request()->routeIs($item['route']); @endphp
                 <a href="{{ route($item['route']) }}" 
-                   class="nav-link {{ $isActive ? 'nav-link-active' : 'nav-link-inactive' }}">
-                    <div class="w-[18px] flex justify-center shrink-0">
+                   class="nav-link {{ $isActive ? 'bg-primary/10 text-primary font-[800]' : 'text-slate-500 font-[600] hover:bg-slate-50 hover:text-navy' }} flex items-center gap-[12px] px-[14px] py-[10px] rounded-[10px] text-[13px] transition-all">
+                    <div class="w-[20px] flex justify-center shrink-0">
                         <i class="bi {{ $item['icon'] }} text-[18px]"></i>
                     </div>
-                    <span x-show="sidebarOpen" x-transition class="whitespace-nowrap">{{ $item['label'] }}</span>
+                    <span class="whitespace-nowrap">{{ $item['label'] }}</span>
                 </a>
                 @endforeach
             </nav>
 
             <!-- Sidebar Footer -->
-            <div x-show="sidebarOpen" x-transition class="p-[16px_12px] border-t border-border">
-                <a href="{{ route('profile.edit') }}" class="flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-border transition-all text-[14px] rounded-[8px]">
+            <div class="p-[16px_12px] border-t border-border/50 bg-slate-50/30">
+                <a href="{{ route('profile.edit') }}" class="flex items-center gap-[12px] p-[10px_14px] text-slate-500 font-[600] hover:bg-white hover:text-navy hover:shadow-sm transition-all text-[13px] rounded-[10px] mb-1">
                     <i class="bi bi-person-circle text-[18px]"></i>
                     <span>Manage profile</span>
                 </a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-red-50 hover:text-red-500 transition-all text-[14px] rounded-[8px]">
+                    <button type="submit" class="w-full flex items-center gap-[12px] p-[10px_14px] text-slate-400 font-[600] hover:bg-red-50 hover:text-red-500 transition-all text-[13px] rounded-[10px]">
                         <i class="bi bi-box-arrow-right text-[18px]"></i>
                         <span>Logout</span>
                     </button>
@@ -149,49 +173,47 @@
 
         <!-- Main Content Area -->
         <div 
-            :style="sidebarOpen ? 'margin-left: 260px' : 'margin-left: 72px'"
-            class="flex-1 flex flex-col transition-all duration-300 min-h-screen"
+            class="flex-1 flex flex-col transition-all duration-300 min-h-screen w-full lg:ml-[260px]"
         >
             <!-- Header -->
-            <header class="h-[72px] bg-white border-b border-border flex items-center justify-between px-[32px] sticky top-0 z-[1030]">
-                <div class="flex items-center gap-[20px] flex-1">
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-muted text-[24px] cursor-pointer flex p-1 hover:bg-border rounded-[8px] transition-all">
+            <header class="h-[72px] bg-white border-b border-border flex items-center justify-between px-4 md:px-8 sticky top-0 z-[1030] shadow-sm">
+                <div class="flex items-center gap-[16px] flex-1">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-navy text-[24px] cursor-pointer flex p-2 hover:bg-slate-50 rounded-[10px] transition-all">
                         <i class="bi bi-list"></i>
                     </button>
 
                     <!-- Search Bar -->
                     <form action="{{ auth()->user()->is_admin ? route('admin.courses.index') : route('trainer.courses.index') }}" method="GET" class="hidden md:flex items-center relative w-[300px]">
-                        <i class="bi bi-search absolute left-[12px] text-muted text-[14px]"></i>
+                        <i class="bi bi-search absolute left-[12px] text-slate-400 text-[14px]"></i>
                         <input type="text" name="search" placeholder="Quick search for anything.." 
-                               class="w-full pl-[36px] pr-[12px] py-[8px] bg-transparent border-none text-[14px] focus:outline-none font-[500]">
+                               class="w-full pl-[36px] pr-[12px] py-[8px] bg-transparent border-none text-[14px] focus:outline-none font-[600] text-navy">
                     </form>
                 </div>
 
                 <div class="flex items-center gap-[20px]">
                     @php $notificationCount = 0; @endphp
-                    {{-- <i class="bi bi-envelope text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i> --}}
                     <div class="relative">
-                        <i class="bi bi-bell text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
+                        <i class="bi bi-bell text-[20px] text-slate-400 cursor-pointer hover:text-primary transition-colors"></i>
                         @if($notificationCount > 0)
                             <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">{{ $notificationCount }}</span>
                         @endif
                     </div>
                     <div class="flex items-center gap-3">
                         <div class="text-right hidden sm:block">
-                            <div class="text-[12px] font-black text-navy uppercase tracking-wider">{{ $role }}</div>
+                            <div class="text-[10px] font-black text-primary uppercase tracking-wider leading-none">{{ auth()->user()->is_admin ? 'Administrator' : 'Instructor' }}</div>
                         </div>
-                        <div class="w-[32px] h-[32px] rounded-full bg-border overflow-hidden cursor-pointer">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=random" class="w-full h-full object-cover">
+                        <div class="w-[36px] h-[36px] rounded-[10px] border border-border bg-slate-50 overflow-hidden cursor-pointer shadow-sm">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=1B365D&color=fff" class="w-full h-full object-cover">
                         </div>
                     </div>
                 </div>
             </header>
 
             <!-- Main Content -->
-            <main class="p-[32px] flex-1 bg-[#F4F4F4]">
+            <main class="p-4 md:p-8 flex-1 bg-slate-50">
                 @if(session('success'))
-                    <div class="mb-[32px] p-[16px] bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-[12px] flex items-center gap-[12px] text-[14px] font-[600]">
-                        <i class="bi bi-check-circle-fill"></i>
+                    <div class="mb-8 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-[12px] flex items-center gap-3 text-[14px] font-[700] shadow-sm">
+                        <i class="bi bi-check-circle-fill text-emerald-500"></i>
                         <span>{{ session('success') }}</span>
                     </div>
                 @endif

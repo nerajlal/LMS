@@ -236,7 +236,7 @@
         <!-- Sticky Sidebar Forms -->
         <div class="space-y-8 sticky top-24">
             <!-- Add Lesson Widget -->
-             <div x-show="activeTab === 'lessons'" x-transition class="bg-white p-8 rounded-[16px] border border-slate-200 shadow-xl shadow-slate-200/20 space-y-6">
+             <div x-show="activeTab === 'lessons'" x-transition class="bg-white p-6 md:p-8 rounded-[16px] border border-slate-200 shadow-xl shadow-slate-200/20 space-y-6">
                 <div class="flex items-center gap-3 pb-4 border-b border-slate-50">
                     <div class="w-10 h-10 bg-orange-50 rounded-[10px] flex items-center justify-center text-primary">
                         <i class="bi bi-plus-lg text-lg"></i>
@@ -255,14 +255,14 @@
                         <input type="url" name="video_url" required placeholder="https://youtube.com/..." 
                                class="w-full px-5 py-4 bg-slate-50 border-none rounded-[12px] focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm font-[700] text-navy">
                     </div>
-                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[12px] font-[800] text-[11px] uppercase tracking-widest hover:bg-primary transition-all shadow-xl shadow-navy/10">
-                        Add to Curriculum
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[12px] font-[900] text-[12px] uppercase tracking-widest hover:bg-primary transition-all shadow-xl shadow-navy/10 flex items-center justify-center gap-2">
+                        Add to Curriculum <i class="bi bi-plus-circle"></i>
                     </button>
                 </form>
             </div>
 
             <!-- Add Material Widget -->
-            <div x-show="activeTab === 'materials'" x-transition x-cloak class="bg-white p-8 rounded-[16px] border border-slate-200 shadow-xl shadow-slate-200/20 space-y-6">
+            <div x-show="activeTab === 'materials'" x-transition x-cloak class="bg-white p-6 md:p-8 rounded-[16px] border border-slate-200 shadow-xl shadow-slate-200/20 space-y-6">
                 <div class="flex items-center gap-3 pb-4 border-b border-slate-50">
                     <div class="w-10 h-10 bg-emerald-50 rounded-[10px] flex items-center justify-center text-emerald-600">
                         <i class="bi bi-cloud-arrow-up text-lg"></i>
@@ -286,8 +286,8 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[12px] font-[800] text-[11px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-navy/10">
-                        Secure Upload
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[12px] font-[900] text-[12px] uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-navy/10 flex items-center justify-center gap-2">
+                        Secure Upload <i class="bi bi-shield-check"></i>
                     </button>
                 </form>
             </div>
