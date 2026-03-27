@@ -4,69 +4,73 @@
 
 @section('content')
 <div class="space-y-8">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-            <h1 class="text-[24px] font-[800] text-navy tracking-tight">Student Directory</h1>
-            <p class="text-muted mt-1 font-[500] text-[14px]">Manage and monitor all learners registered on the platform</p>
-        </div>
-        <div class="flex items-center gap-4">
-            <span class="px-[20px] py-[12px] bg-white border border-border rounded-[12px] text-[13px] font-[700] text-navy shadow-sm">
-                Total Students: <span class="text-primary">{{ $students->total() }}</span>
-            </span>
+    <!-- Cinematic Header -->
+    <div class="relative overflow-hidden rounded-[20px] bg-navy p-6 md:p-8 text-white shadow-xl">
+        <div class="absolute top-[-20px] right-[-20px] w-[200px] h-[200px] bg-primary/20 rounded-full blur-[80px]"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <div class="w-14 h-14 rounded-[14px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-lg">
+                    <i class="bi bi-people text-primary text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight text-white uppercase">Learner <span class="text-primary">Directory</span></h1>
+                    <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-0.5">Manage and monitor institutional enrollment</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3 rounded-[16px] backdrop-blur-sm">
+                <span class="text-[10px] font-[800] text-slate-400 uppercase tracking-widest">Active Learners</span>
+                <span class="text-xl font-[900] text-primary">{{ sprintf('%02d', $students->total()) }}</span>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-[12px] border border-border shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+    <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto min-w-full scrollbar-hide focus:outline-none">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-border/30">
-                        <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider">Identity</th>
-                        <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider">Contact Info</th>
-                        <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider text-center">Involvement</th>
-                        <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider">Registration</th>
-                        <th class="px-[24px] py-[16px] text-[12px] font-[700] text-muted uppercase tracking-wider text-right">Actions</th>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Student Profile</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden md:table-cell text-center">Involvement</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Contact Details</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-border">
-                    @forelse($students as $student)
-                    <tr class="hover:bg-border/10 transition-colors group">
-                        <td class="px-[24px] py-[16px]">
-                            <div class="flex items-center gap-[12px]">
-                                <div class="w-[40px] h-[40px] rounded-[10px] bg-accent text-primary flex items-center justify-center font-[800] text-[14px]">
-                                    {{ substr($student->name, 0, 1) }}
+                    <tbody class="divide-y divide-slate-50">
+                        @forelse($students as $student)
+                        <tr class="hover:bg-slate-50/30 transition-colors group">
+                            <td class="px-6 py-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-[12px] bg-navy/5 text-navy flex items-center justify-center font-[900] text-sm border border-slate-200 shadow-sm group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+                                        {{ substr($student->name, 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <div class="text-[14px] font-[800] text-navy leading-tight mb-1 group-hover:text-primary transition-colors uppercase leading-none">{{ $student->name }}</div>
+                                        <div class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest">Joined: {{ $student->created_at->format('M d, Y') }}</div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <div class="text-[14px] font-[700] text-navy leading-tight mb-1">{{ $student->name }}</div>
-                                    <div class="text-[11px] text-muted font-[600] uppercase tracking-wider">UID: {{ $student->id }}</div>
+                            </td>
+                            <td class="px-6 py-5 hidden md:table-cell">
+                                <div class="flex items-center justify-center gap-6">
+                                    <div class="text-center">
+                                        <div class="text-[14px] font-[900] text-navy leading-none mb-1">{{ $student->admissions_count }}</div>
+                                        <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">Applied</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-[14px] font-[900] text-emerald-600 leading-none mb-1">{{ $student->enrollments_count }}</div>
+                                        <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">Active</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="px-[24px] py-[16px]">
-                            <div class="text-[13px] font-[600] text-navy mb-1">{{ $student->email }}</div>
-                            <div class="text-[11px] text-muted">No phone provided</div>
-                        </td>
-                        <td class="px-[24px] py-[16px]">
-                            <div class="flex items-center justify-center gap-[24px]">
-                                <div class="text-center">
-                                    <div class="text-[14px] font-[800] text-navy leading-none mb-1">{{ $student->admissions_count }}</div>
-                                    <div class="text-[10px] text-muted font-[700] uppercase tracking-widest">Applied</div>
-                                </div>
-                                <div class="text-center">
-                                    <div class="text-[14px] font-[800] text-emerald-600 leading-none mb-1">{{ $student->enrollments_count }}</div>
-                                    <div class="text-[10px] text-muted font-[700] uppercase tracking-widest">Active</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-[24px] py-[16px] text-[12px] font-[600] text-muted uppercase tracking-wider">
-                            {{ $student->created_at->format('M d, Y') }}
-                        </td>
-                        <td class="px-[24px] py-[16px] text-right">
-                            <a href="{{ route('admin.admissions.index', ['user_id' => $student->id]) }}" class="text-[12px] font-[800] text-primary uppercase tracking-widest hover:underline">
-                                View History
-                            </a>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="px-6 py-5">
+                                <div class="text-[13px] font-[600] text-navy mb-1">{{ $student->email }}</div>
+                                <div class="text-[10px] text-slate-400 font-[600] uppercase tracking-widest">Verified Learner</div>
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <a href="{{ route('admin.admissions.index', ['user_id' => $student->id]) }}" class="px-4 py-2 bg-slate-50 text-navy text-[10px] font-[900] uppercase tracking-widest rounded-[8px] border border-slate-200 hover:bg-navy hover:text-white hover:border-navy transition-all shadow-sm">
+                                    View History
+                                </a>
+                            </td>
+                        </tr>
                     @empty
                     <tr>
                         <td colspan="5" class="py-[64px] text-center text-muted italic font-[600]">No students registered.</td>
