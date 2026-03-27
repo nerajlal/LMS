@@ -135,7 +135,7 @@
                             ['label' => 'Live Classes', 'icon' => 'bi-camera-video',   'route' => 'live-classes.index'],
                             // ['label' => 'Resources',    'icon' => 'bi-file-earmark',   'route' => 'materials.index'],
                             ['label' => 'Billing',      'icon' => 'bi-credit-card',    'route' => 'fees.index'],
-                            ['label' => 'Profile',      'icon' => 'bi-person',         'route' => 'profile.edit'],
+                            // ['label' => 'Profile',      'icon' => 'bi-person',         'route' => 'profile.edit'],
                             // ['label' => 'Register',     'icon' => 'bi-plus-circle',    'route' => 'admissions.create'],
                         ];
                     @endphp
@@ -154,10 +154,10 @@
 
                 <!-- Sidebar Footer -->
                 <div x-show="sidebarOpen" x-transition class="p-[16px_12px] border-t border-border">
-                    <a href="{{ route('profile.edit') }}" class="flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-border transition-all text-[14px] rounded-[8px]">
+                    <!-- <a href="{{ route('profile.edit') }}" class="flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-border transition-all text-[14px] rounded-[8px]">
                         <i class="bi bi-person-circle text-[18px]"></i>
                         <span>Manage profile</span>
-                    </a>
+                    </a> -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="w-full flex items-center gap-[14px] p-[10px_14px] text-muted hover:bg-red-50 hover:text-red-500 transition-all text-[14px] rounded-[8px]">
@@ -194,9 +194,9 @@
                             <i class="bi bi-bell text-[20px] text-muted cursor-pointer hover:text-primary transition-colors"></i>
                             <span class="absolute -top-[4px] -right-[4px] bg-primary text-white text-[10px] font-[700] rounded-full w-[16px] h-[16px] flex items-center justify-center border-2 border-white">2</span>
                         </div>
-                        <div class="w-[32px] h-[32px] rounded-full bg-border overflow-hidden cursor-pointer">
+                        <a href="{{ route('profile.edit') }}" class="w-[32px] h-[32px] rounded-full bg-border overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=random" class="w-full h-full object-cover">
-                        </div>
+                        </a>
                     </div>
                 </header>
 
