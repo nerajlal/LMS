@@ -99,28 +99,6 @@
         <!-- Main Content Area -->
         <div class="lg:col-span-2 space-y-10">
             
-            <!-- Learning Outcomes Widget (New) -->
-            @if($course->learning_outcomes)
-            <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
-                <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex items-center gap-3 font-[900] text-navy uppercase text-[11px] tracking-widest">
-                    <i class="bi bi-patch-check-fill text-primary"></i>
-                    What students will master
-                </div>
-                <div class="p-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @foreach(explode("\n", $course->learning_outcomes) as $outcome)
-                            @if(trim($outcome))
-                            <div class="flex items-start gap-4 p-4 rounded-[12px] bg-slate-50 border border-transparent hover:border-primary/20 transition-all">
-                                <i class="bi bi-check-circle-fill text-primary mt-0.5"></i>
-                                <span class="text-[14px] font-[600] text-navy/80 leading-snug">{{ trim($outcome) }}</span>
-                            </div>
-                            @endif
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            @endif
-
             <!-- YouTube Intro Banner (New) -->
             @if($course->youtube_link)
             <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
@@ -145,6 +123,28 @@
                             </div>
                         @endif
                     </div>
+            </div>
+            @endif
+
+            <!-- Learning Outcomes Widget (New) -->
+            @if($course->learning_outcomes)
+            <div class="bg-white rounded-[16px] border border-slate-200 shadow-sm overflow-hidden">
+                <div class="bg-slate-50/50 px-8 py-5 border-b border-slate-100 flex items-center gap-3 font-[900] text-navy uppercase text-[11px] tracking-widest">
+                    <i class="bi bi-patch-check-fill text-primary"></i>
+                    What students will master
+                </div>
+                <div class="p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach(explode("\n", $course->learning_outcomes) as $outcome)
+                            @if(trim($outcome))
+                            <div class="flex items-start gap-4 p-4 rounded-[12px] bg-slate-50 border border-transparent hover:border-primary/20 transition-all">
+                                <i class="bi bi-check-circle-fill text-primary mt-0.5"></i>
+                                <span class="text-[14px] font-[600] text-navy/80 leading-snug">{{ trim($outcome) }}</span>
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
             </div>
             @endif
 
@@ -199,9 +199,18 @@
                                 {{ strtoupper($mat->file_type) }} &bull; {{ is_numeric($mat->file_size) ? number_format($mat->file_size / (1024 * 1024), 2) . ' MB' : $mat->file_size }}
                             </div>
                         </div>
-                        <a href="{{ $mat->file_path }}" target="_blank" class="p-3 rounded-[12px] bg-slate-50 text-slate-400 hover:bg-navy hover:text-white transition-all">
-                            <i class="bi bi-download text-lg"></i>
-                        </a>
+                        <div class="flex items-center gap-2">
+                            <a href="{{ $mat->file_path }}" target="_blank" class="p-3 rounded-[12px] bg-slate-50 text-slate-400 hover:bg-navy hover:text-white transition-all">
+                                <i class="bi bi-download text-lg"></i>
+                            </a>
+                            <form action="{{ route('trainer.courses.materials.destroy', [$course->id, $mat->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this resource?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="p-3 rounded-[12px] bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-all">
+                                    <i class="bi bi-trash3 text-lg"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     @empty
                     <div class="bg-white py-20 rounded-[16px] border border-dashed border-slate-200 text-center">

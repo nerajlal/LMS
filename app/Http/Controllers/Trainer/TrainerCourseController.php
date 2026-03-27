@@ -166,6 +166,24 @@ class TrainerCourseController extends Controller
     }
 
     /**
+     * Remove the specified study material from storage.
+     */
+    public function destroyMaterial($courseId, $materialId)
+    {
+        $material = \App\Models\StudyMaterial::where('course_id', $courseId)->findOrFail($materialId);
+
+        // Delete file from storage
+        if ($material->file_path && str_starts_with($material->file_path, '/storage/')) {
+            $path = str_replace('/storage/', '', $material->file_path);
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($path);
+        }
+
+        $material->delete();
+
+        return redirect()->back()->with('success', 'Study material deleted successfully!');
+    }
+
+    /**
      * Remove the specified course from storage.
      */
     public function destroy($id)
