@@ -9,9 +9,9 @@
             <h1 class="text-[24px] font-[800] text-navy tracking-tight">System Courses</h1>
             <p class="text-muted mt-1 font-[500] text-[14px]">Manage the complete catalog of educational programs</p>
         </div>
-        <a href="{{ route('admin.courses.create') }}" class="inline-flex items-center gap-[10px] px-[24px] py-[12px] bg-primary text-white font-[700] rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/10 text-[14px]">
+        {{-- <a href="{{ route('admin.courses.create') }}" class="inline-flex items-center gap-[10px] px-[24px] py-[12px] bg-primary text-white font-[700] rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/10 text-[14px]">
             <i class="bi bi-plus-lg"></i> Launch New Course
-        </a>
+        </a> --}}
     </div>
 
     <!-- Stats Preview -->

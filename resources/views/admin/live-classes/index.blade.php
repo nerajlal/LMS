@@ -10,9 +10,9 @@
             <h1 class="text-3xl font-[800] text-navy tracking-tight">Live Class Scheduling</h1>
             <p class="text-muted mt-1 font-[500]">Manage and monitor all live interactive sessions across the platform</p>
         </div>
-        <a href="{{ route('admin.live-classes.create') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-[800] rounded-[12px] hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/20 text-[13px] uppercase tracking-widest">
+        {{-- <a href="{{ route('admin.live-classes.create') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-[800] rounded-[12px] hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/20 text-[13px] uppercase tracking-widest">
             <i class="bi bi-plus-lg text-lg"></i> Schedule Live Class
-        </a>
+        </a> --}}
     </div>
 
     <!-- Table Container -->
