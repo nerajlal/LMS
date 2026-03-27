@@ -161,10 +161,10 @@
 
             <!-- Sidebar Footer -->
             <div class="p-[16px_12px] border-t border-border/50 bg-slate-50/30">
-                <a href="{{ route('profile.edit') }}" class="flex items-center gap-[12px] p-[10px_14px] text-slate-500 font-[600] hover:bg-white hover:text-navy hover:shadow-sm transition-all text-[13px] rounded-[10px] mb-1">
+{{-- <a href="{{ route('profile.edit') }}" class="flex items-center gap-[12px] p-[10px_14px] text-slate-500 font-[600] hover:bg-white hover:text-navy hover:shadow-sm transition-all text-[13px] rounded-[10px] mb-1">
                     <i class="bi bi-person-circle text-[18px]"></i>
                     <span>Manage profile</span>
-                </a>
+                </a> --}}
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="w-full flex items-center gap-[12px] p-[10px_14px] text-slate-400 font-[600] hover:bg-red-50 hover:text-red-500 transition-all text-[13px] rounded-[10px]">
@@ -206,9 +206,9 @@
                         <div class="text-right hidden sm:block">
                             <div class="text-[10px] font-black text-primary uppercase tracking-wider leading-none">{{ auth()->user()->is_admin ? 'Administrator' : 'Instructor' }}</div>
                         </div>
-                        <div class="w-[36px] h-[36px] rounded-[10px] border border-border bg-slate-50 overflow-hidden cursor-pointer shadow-sm">
+                        <a href="{{ route('profile.edit') }}" class="w-[36px] h-[36px] rounded-[10px] border border-border bg-slate-50 overflow-hidden cursor-pointer shadow-sm hover:ring-2 hover:ring-primary/20 transition-all block">
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=1B365D&color=fff" class="w-full h-full object-cover">
-                        </div>
+                        </a>
                     </div>
                 </div>
             </header>
