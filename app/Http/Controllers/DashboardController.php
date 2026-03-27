@@ -40,7 +40,8 @@ class DashboardController extends Controller
                 'instructor' => $admission->course->instructor_name,
                 'progress' => $admission->progress ?? 0,
                 'lessons_count' => $admission->course->lessons_count,
-                'thumbnail' => $admission->course->thumbnail
+                'thumbnail' => $admission->course->thumbnail,
+                'certificate_path' => $admission->certificate_path
             ];
         });
 

@@ -108,10 +108,24 @@
                         </div>
 
                         <div class="shrink-0 w-full md:w-auto mt-4 md:mt-0 pt-3 md:pt-0 border-t md:border-none border-slate-100/50">
-                            <a href="{{ route('courses.show', $course['id']) }}" 
-                               class="w-full md:w-auto block px-5 py-2.5 bg-navy text-white rounded-[10px] text-[11px] font-[900] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary hover:-translate-y-0.5 transition-all text-center">
-                                Resume <i class="bi bi-arrow-right ml-1"></i>
-                            </a>
+                            @if($course['progress'] >= 100)
+                                @if($course['certificate_path'] ?? null)
+                                    <a href="{{ asset('storage/' . $course['certificate_path']) }}" target="_blank"
+                                       class="w-full md:w-auto block px-5 py-2.5 bg-emerald-600 text-white rounded-[10px] text-[11px] font-[900] uppercase tracking-widest shadow-xl shadow-emerald-600/20 hover:bg-emerald-700 hover:-translate-y-0.5 transition-all text-center">
+                                        <i class="bi bi-award-fill mr-1.5"></i> Download Certificate
+                                    </a>
+                                @else
+                                    <a href="{{ route('courses.show', $course['id']) }}" 
+                                       class="w-full md:w-auto block px-5 py-2.5 bg-slate-100 text-slate-500 rounded-[10px] text-[11px] font-[900] uppercase tracking-widest shadow-inner hover:bg-slate-200 transition-all text-center">
+                                        Completed <i class="bi bi-check2-circle ml-1"></i>
+                                    </a>
+                                @endif
+                            @else
+                                <a href="{{ route('courses.show', $course['id']) }}" 
+                                   class="w-full md:w-auto block px-5 py-2.5 bg-navy text-white rounded-[10px] text-[11px] font-[900] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary hover:-translate-y-0.5 transition-all text-center">
+                                    Resume <i class="bi bi-arrow-right ml-1"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                     @empty
