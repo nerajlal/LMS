@@ -9,10 +9,10 @@
             <h1 class="text-3xl font-[800] text-navy tracking-tight uppercase">Study Materials</h1>
             <p class="text-muted text-[14px] font-[500] mt-1">Upload and manage educational resources for your students.</p>
         </div>
-        <a href="{{ route('trainer.study-materials.create') }}" class="px-8 py-3.5 bg-primary text-white font-[800] text-[13px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
+        {{-- <a href="{{ route('trainer.study-materials.create') }}" class="px-8 py-3.5 bg-primary text-white font-[800] text-[13px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
             <i class="bi bi-plus-lg text-lg"></i>
             <span>Add New Material</span>
-        </a>
+        </a> --}}
     </div>
 
     <div class="bg-white rounded-[12px] border border-border shadow-sm overflow-hidden">
@@ -54,7 +54,7 @@
                         <div class="flex flex-col items-center gap-4">
                             <i class="bi bi-folder2-open text-[64px] text-border"></i>
                             <p class="text-muted font-[600]">You haven't uploaded any materials yet.</p>
-                            <a href="{{ route('trainer.study-materials.create') }}" class="text-primary font-[700] hover:underline">Upload your first resource</a>
+                            {{-- <a href="{{ route('trainer.study-materials.create') }}" class="text-primary font-[700] hover:underline">Upload your first resource</a> --}}
                         </div>
                     </td>
                 </tr>
