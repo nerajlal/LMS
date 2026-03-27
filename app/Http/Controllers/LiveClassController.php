@@ -27,7 +27,8 @@ class LiveClassController extends Controller
         // Split into active/upcoming and past
         $activeClasses = $allClasses->filter(function($class) use ($now) {
             $startTime = \Carbon\Carbon::parse($class->start_time);
-            $endTime = $startTime->copy()->addMinutes($class->duration);
+            $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
+            $endTime = $startTime->copy()->addMinutes($durationMinutes);
             return $now->lt($endTime) || strtolower($class->status) === 'live';
         })->sort(function($a, $b) use ($enrolledCourseIds) {
             // Priority 1: Enrolled vs Not Enrolled
@@ -43,7 +44,8 @@ class LiveClassController extends Controller
 
         $pastClasses = $allClasses->filter(function($class) use ($now) {
             $startTime = \Carbon\Carbon::parse($class->start_time);
-            $endTime = $startTime->copy()->addMinutes($class->duration);
+            $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
+            $endTime = $startTime->copy()->addMinutes($durationMinutes);
             return $now->gt($endTime) && strtolower($class->status) !== 'live';
         });
 

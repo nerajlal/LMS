@@ -42,7 +42,8 @@
         @forelse($activeClasses as $class)
             @php
                 $startTime = \Carbon\Carbon::parse($class->start_time);
-                $endTime = $startTime->copy()->addMinutes($class->duration);
+                $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
+                $endTime = $startTime->copy()->addMinutes($durationMinutes);
                 $now = \Carbon\Carbon::now();
                 $isLive = $now->between($startTime, $endTime) || strtolower($class->status) === 'live';
                 $isUpcoming = $now->lt($startTime) && strtolower($class->status) !== 'live';
@@ -91,7 +92,7 @@
                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-primary group-hover:bg-primary/10 transition-colors">
                                 <i class="bi bi-clock"></i>
                             </div>
-                            <span>{{ $class->duration }} Mins</span>
+                            <span>{{ (int) preg_replace('/[^0-9]/', '', $class->duration) }} Mins</span>
                         </div>
                     </div>
                 </div>
