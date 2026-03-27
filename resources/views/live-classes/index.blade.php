@@ -47,7 +47,7 @@
                 $now = \Carbon\Carbon::now();
                 $isLive = $now->between($startTime, $endTime) || strtolower($class->status) === 'live';
                 $isUpcoming = $now->lt($startTime) && strtolower($class->status) !== 'live';
-                $isEnrolled = in_array($class->course_id, $enrolledCourseIds) || auth()->user()->is_admin || auth()->user()->is_trainer;
+                $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
             @endphp
             
             <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">

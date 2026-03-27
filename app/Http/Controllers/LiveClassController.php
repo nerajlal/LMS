@@ -12,8 +12,9 @@ class LiveClassController extends Controller
     {
         $userId = auth()->id();
         
-        // Get all course IDs where the user has an admission
+        // Get all course IDs where the user has a confirmed enrollment
         $enrolledCourseIds = \App\Models\Admission::where('user_id', $userId)
+            ->where('status', 'approved')
             ->pluck('course_id')
             ->toArray();
 
