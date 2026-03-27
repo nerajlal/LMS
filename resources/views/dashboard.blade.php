@@ -78,7 +78,7 @@
                             <div class="text-navy font-[700] text-[14px]">{{ $instructor['name'] }}</div>
                             <div class="text-muted text-[12px]">{{ $instructor['courses'] }} Courses</div>
                         </div>
-                        <button class="bg-white border border-border px-[12px] py-[4px] rounded-[6px] text-[12px] font-[700] text-navy hover:bg-border transition-all">Follow</button>
+                        <a href="{{ route('courses.index', ['instructor' => $instructor['name']]) }}" class="bg-white border border-border px-[12px] py-[4px] rounded-[6px] text-[12px] font-[700] text-navy hover:bg-navy hover:text-white transition-all whitespace-nowrap">Courses</a>
                     </div>
                     @empty
                     <div class="py-[24px] text-center text-slate-400 text-[13px]">No instructors available.</div>

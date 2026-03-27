@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = Course::withCount(['lessons', 'enrollments'])->get();
+        $query = Course::withCount(['lessons', 'enrollments']);
+
+        if ($request->has('instructor')) {
+            $query->where('instructor_name', $request->instructor);
+        }
+
+        $courses = $query->get();
         return view('courses.index', compact('courses'));
     }
 
