@@ -134,6 +134,7 @@
                         ['label' => 'Trainers', 'icon' => 'bi-person-badge', 'route' => 'admin.trainers.index'],
                         ['label' => 'Students', 'icon' => 'bi-people', 'route' => 'admin.students.index'],
                         ['label' => 'Admissions', 'icon' => 'bi-clipboard-check', 'route' => 'admin.admissions.index'],
+                        ['label' => 'Issue Certificate', 'icon' => 'bi-award', 'route' => 'admin.admissions.index', 'params' => ['tab' => 'completed']],
                         ['label' => 'Fees', 'icon' => 'bi-credit-card', 'route' => 'admin.fees.index'],
                     ] : [
                         ['label' => 'Dashboard', 'icon' => 'bi-speedometer2', 'route' => 'trainer.dashboard'],
@@ -144,8 +145,11 @@
                 @endphp
 
                 @foreach($nav as $item)
-                @php $isActive = request()->routeIs($item['route']); @endphp
-                <a href="{{ route($item['route']) }}" 
+                @php 
+                    $isActive = request()->routeIs($item['route']);
+                    $params = $item['params'] ?? [];
+                @endphp
+                <a href="{{ route($item['route'], $params) }}" 
                    class="nav-link {{ $isActive ? 'bg-primary/10 text-primary font-[800]' : 'text-slate-500 font-[600] hover:bg-slate-50 hover:text-navy' }} flex items-center gap-[12px] px-[14px] py-[10px] rounded-[10px] text-[13px] transition-all">
                     <div class="w-[20px] flex justify-center shrink-0">
                         <i class="bi {{ $item['icon'] }} text-[18px]"></i>

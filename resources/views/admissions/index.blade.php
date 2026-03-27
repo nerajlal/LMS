@@ -118,7 +118,13 @@
                         <div class="text-[10px] font-[900] text-emerald-500 uppercase tracking-widest mb-1">Course Completed</div>
                         <h4 class="text-lg font-[800] text-navy truncate group-hover:text-emerald-600 mb-2">{{ $admission->course?->title }}</h4>
                         <div class="flex items-center gap-4 text-[12px] font-[600] text-muted">
-                            <span class="flex items-center gap-1.5"><i class="bi bi-award text-emerald-500"></i> Certificate Issued</span>
+                            @if($admission->certificate_path)
+                                <a href="{{ asset('storage/' . $admission->certificate_path) }}" target="_blank" class="flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 hover:underline">
+                                    <i class="bi bi-award-fill"></i> Download Certificate
+                                </a>
+                            @else
+                                <span class="flex items-center gap-1.5 opacity-50"><i class="bi bi-award"></i> Processing Certificate</span>
+                            @endif
                         </div>
                     </div>
                 </div>

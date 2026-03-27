@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminAdmissionController extends Controller
 {
@@ -31,5 +32,24 @@ class AdminAdmissionController extends Controller
     {
         $admission->update(['status' => 'rejected']);
         return back()->with('success', 'Admission rejected.');
+    }
+
+    public function uploadCertificate(Request $request, Admission $admission)
+    {
+        $request->validate([
+            'certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120', // 5MB limit
+        ]);
+
+        if ($request->hasFile('certificate')) {
+            // Cleanup old certificate if exists
+            if ($admission->certificate_path && Storage::disk('public')->exists($admission->certificate_path)) {
+                Storage::disk('public')->delete($admission->certificate_path);
+            }
+
+            $path = $request->file('certificate')->store('certificates', 'public');
+            $admission->update(['certificate_path' => $path]);
+        }
+
+        return back()->with('success', 'Certificate uploaded and issued successfully.');
     }
 }

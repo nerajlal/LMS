@@ -88,6 +88,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     Route::get('admissions', [AdminAdmissionController::class, 'index'])->name('admissions.index');
     Route::post('admissions/{admission}/approve', [AdminAdmissionController::class, 'approve'])->name('admissions.approve');
     Route::post('admissions/{admission}/reject',  [AdminAdmissionController::class, 'reject'])->name('admissions.reject');
+    Route::post('admissions/{admission}/certificate', [AdminAdmissionController::class, 'uploadCertificate'])->name('admissions.certificate');
 
     // Fees
     Route::get('fees', [AdminFeeController::class, 'index'])->name('fees.index');
