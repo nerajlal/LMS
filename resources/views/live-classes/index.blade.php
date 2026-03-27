@@ -3,21 +3,37 @@
 @section('title', 'Live Interactive Classes - EduLMS')
 
 @section('content')
-<div class="space-y-12" x-data="{ activeTab: 'active' }">
-    <!-- Header with Dynamic Aura -->
-    <div class="relative overflow-hidden rounded-[12px] bg-navy p-10 md:p-14 text-white shadow-2xl">
-        <div class="absolute top-[-50px] right-[-50px] w-[300px] h-[300px] bg-primary/20 rounded-full blur-[100px]"></div>
-        <div class="absolute bottom-[-50px] left-[-50px] w-[200px] h-[200px] bg-orange-500/10 rounded-full blur-[80px]"></div>
-        
-        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-            <div class="max-w-2xl">
-                <span class="inline-block px-4 py-1 bg-white/10 backdrop-blur-md rounded-full text-[11px] font-[800] uppercase tracking-[0.2em] mb-4 border border-white/10">Interactive Learning</span>
-                <h1 class="text-4xl md:text-5xl font-[900] tracking-tight mb-4">Live Interactive <span class="text-primary">Classes</span></h1>
-                <p class="text-slate-300 text-lg font-[500] leading-relaxed">Join real-time, high-impact sessions with industry experts and your peers. Direct feedback, real-world insights, and collaborative learning.</p>
+<div class="space-y-8" x-data="{ activeTab: 'active' }">
+    <!-- Compact Cinematic Header -->
+    <div class="relative overflow-hidden rounded-[16px] bg-navy p-6 md:p-8 text-white shadow-xl">
+        <div class="absolute top-[-20px] right-[-20px] w-[150px] h-[150px] bg-primary/20 rounded-full blur-[60px]"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5">
+                <div class="w-14 h-14 rounded-[12px] bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-lg">
+                    <i class="bi bi-broadcast text-primary text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-[900] tracking-tight">Live <span class="text-primary">Sessions</span></h1>
+                    <p class="text-slate-400 text-[12px] font-[600] uppercase tracking-widest mt-0.5">Interactive Expert-Led Learning</p>
+                </div>
             </div>
-            <div class="flex items-center gap-4 group cursor-default">
-                <div class="w-[70px] h-[70px] rounded-[12px] bg-primary flex items-center justify-center shadow-lg shadow-orange-500/40 group-hover:scale-105 transition-transform">
-                    <i class="bi bi-broadcast text-3xl"></i>
+
+            <!-- Inline Stats -->
+            <div class="flex items-center gap-8 md:border-l border-white/10 md:pl-8">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-[800] text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                        Active
+                    </span>
+                    <span class="text-xl font-[900] text-white">{{ count($activeClasses) }}</span>
+                </div>
+                <div class="flex flex-col border-l border-white/10 pl-8">
+                    <span class="text-[10px] font-[800] text-white/40 uppercase tracking-widest">Upcoming</span>
+                    <span class="text-xl font-[900] text-white">{{ count($upcomingClasses) }}</span>
+                </div>
+                <div class="flex flex-col border-l border-white/10 pl-8">
+                    <span class="text-[10px] font-[800] text-white/40 uppercase tracking-widest">Completed</span>
+                    <span class="text-xl font-[900] text-white/60">{{ count($pastClasses) }}</span>
                 </div>
             </div>
         </div>

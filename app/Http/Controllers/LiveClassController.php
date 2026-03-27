@@ -25,21 +25,29 @@ class LiveClassController extends Controller
 
         $now = \Carbon\Carbon::now();
 
-        // Split into active/upcoming and past
+        // Split into 3 categories: Active (During time OR status=live), Upcoming, Past
         $activeClasses = $allClasses->filter(function($class) use ($now) {
             $startTime = \Carbon\Carbon::parse($class->start_time);
             $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
             $endTime = $startTime->copy()->addMinutes($durationMinutes);
-            return $now->lt($endTime) || strtolower($class->status) === 'live';
+            return ($now->between($startTime, $endTime)) || strtolower($class->status) === 'live';
         })->sort(function($a, $b) use ($enrolledCourseIds) {
             // Priority 1: Enrolled vs Not Enrolled
             $aEnrolled = in_array($a->course_id, $enrolledCourseIds);
             $bEnrolled = in_array($b->course_id, $enrolledCourseIds);
-            
             if ($aEnrolled && !$bEnrolled) return -1;
             if (!$aEnrolled && $bEnrolled) return 1;
-            
-            // Priority 2: Start Time (earlier first)
+            return \Carbon\Carbon::parse($a->start_time)->timestamp <=> \Carbon\Carbon::parse($b->start_time)->timestamp;
+        });
+
+        $upcomingClasses = $allClasses->filter(function($class) use ($now) {
+            $startTime = \Carbon\Carbon::parse($class->start_time);
+            return $now->lt($startTime) && strtolower($class->status) !== 'live';
+        })->sort(function($a, $b) use ($enrolledCourseIds) {
+            $aEnrolled = in_array($a->course_id, $enrolledCourseIds);
+            $bEnrolled = in_array($b->course_id, $enrolledCourseIds);
+            if ($aEnrolled && !$bEnrolled) return -1;
+            if (!$aEnrolled && $bEnrolled) return 1;
             return \Carbon\Carbon::parse($a->start_time)->timestamp <=> \Carbon\Carbon::parse($b->start_time)->timestamp;
         });
 
@@ -50,6 +58,6 @@ class LiveClassController extends Controller
             return $now->gt($endTime) && strtolower($class->status) !== 'live';
         });
 
-        return view('live-classes.index', compact('activeClasses', 'pastClasses', 'enrolledCourseIds'));
+        return view('live-classes.index', compact('activeClasses', 'upcomingClasses', 'pastClasses', 'enrolledCourseIds'));
     }
 }
