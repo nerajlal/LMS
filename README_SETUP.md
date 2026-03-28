@@ -9,11 +9,7 @@ composer install
 npm install
 ```
 
-### 2. Environment Configuration
-Copy the `.env.example` to `.env` and set your `APP_URL`:
-```bash
-cp .env.example .env
-php artisan key:generate
+
 ```
 *Note: Ensure `APP_URL` matches your local server address (e.g., `http://127.0.0.1:8000`).*
 

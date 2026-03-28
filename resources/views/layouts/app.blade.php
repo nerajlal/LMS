@@ -145,7 +145,7 @@
                     @php
                         $studentNav = [
                             ['label' => 'Dashboard',   'icon' => 'bi-house-door',     'route' => 'dashboard'],
-                            ['label' => 'Courses',      'icon' => 'bi-play-circle',    'route' => 'enrollments.index'],
+                            ['label' => 'My Courses',      'icon' => 'bi-play-circle',    'route' => 'enrollments.index'],
                             ['label' => 'Browse',       'icon' => 'bi-grid',           'route' => 'courses.index'],
                             ['label' => 'Live Classes', 'icon' => 'bi-camera-video',   'route' => 'live-classes.index'],
                             // ['label' => 'Resources',    'icon' => 'bi-file-earmark',   'route' => 'materials.index'],
