@@ -46,18 +46,29 @@
                             </div>
                         </div>
                     @endif
-                    <div>
-                        <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-3 px-1">Live Class Branch (Group)</label>
-                        <div class="relative">
-                            <select name="live_class_branch_id" required class="w-full px-6 py-4 bg-emerald-50/30 border-2 border-emerald-100 rounded-[14px] focus:border-emerald-200 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
-                                <option value="" disabled {{ !isset($selectedBranchId) ? 'selected' : '' }}>-- Select a Batch --</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{ $branch->id }}" {{ (isset($selectedBranchId) && $selectedBranchId == $branch->id) ? 'selected' : '' }}>{{ $branch->name }}</option>
-                                @endforeach
-                            </select>
-                            <i class="bi bi-folder-fill absolute right-6 top-1/2 -translate-y-1/2 text-emerald-500/30 pointer-events-none"></i>
+                    @if(isset($selectedBranchId))
+                        <input type="hidden" name="live_class_branch_id" value="{{ $selectedBranchId }}">
+                        <div>
+                            <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-3 px-1">Selected Batch</label>
+                            <div class="px-6 py-4 bg-emerald-50 border-2 border-emerald-100 rounded-[14px] text-[15px] font-[700] text-navy/60 flex items-center gap-3">
+                                <i class="bi bi-folder-fill text-emerald-500"></i>
+                                {{ $branches->find($selectedBranchId)->name ?? 'Selected Batch' }}
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div>
+                            <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-3 px-1">Live Class Branch (Group)</label>
+                            <div class="relative">
+                                <select name="live_class_branch_id" required class="w-full px-6 py-4 bg-emerald-50/30 border-2 border-emerald-100 rounded-[14px] focus:border-emerald-200 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
+                                    <option value="" disabled selected>-- Select a Batch --</option>
+                                    @foreach($branches as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
+                                <i class="bi bi-folder-fill absolute right-6 top-1/2 -translate-y-1/2 text-emerald-500/30 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <div>
@@ -108,9 +119,6 @@
                     <p class="text-[11px] text-slate-500 font-[700] uppercase tracking-wider leading-none">Session becomes visible to students instantly</p>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
         </form>
     </div>
 </div>
