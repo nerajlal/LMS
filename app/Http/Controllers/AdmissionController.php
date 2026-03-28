@@ -79,10 +79,11 @@ class AdmissionController extends Controller
 
         // Synchronize Financial Ledger (Create Pending Fee)
         \App\Models\Fee::create([
-            'user_id'      => auth()->id(),
-            'course_id'    => $data['course_id'],
-            'total_amount' => $course->price,
-            'paid_amount'  => ($course->price > 0) ? 0 : $course->price,
+            'user_id'         => auth()->id(),
+            'course_id'       => $data['course_id'],
+            'original_amount' => $course->price,
+            'total_amount'    => $course->price,
+            'paid_amount'     => ($course->price > 0) ? 0 : $course->price,
             'status'       => ($course->price > 0) ? 'pending' : 'paid',
             'due_date'     => now()->addDays(7),
         ]);
@@ -146,9 +147,10 @@ class AdmissionController extends Controller
             
         if ($fee) {
             $fee->update([
-                'total_amount' => $finalPrice,
-                'paid_amount' => $finalPrice,
-                'status'      => 'paid',
+                'original_amount' => $fee->original_amount ?? $course->price,
+                'total_amount'    => $finalPrice,
+                'paid_amount'     => $finalPrice,
+                'status'          => 'paid',
             ]);
         }
 
