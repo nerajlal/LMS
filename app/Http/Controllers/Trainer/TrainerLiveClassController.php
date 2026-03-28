@@ -65,10 +65,21 @@ class TrainerLiveClassController extends Controller
         $courses = \App\Models\Course::where('instructor_name', auth()->user()->name)->select('id', 'title')->get();
         $branches = \App\Models\LiveClassBranch::where('trainer_id', auth()->id())->get();
         
+        $selectedBranchId = $request->query('branch_id');
+        $selectedCourseId = null;
+
+        if ($selectedBranchId) {
+            $branch = \App\Models\LiveClassBranch::find($selectedBranchId);
+            if ($branch) {
+                $selectedCourseId = $branch->course_id;
+            }
+        }
+
         return view('trainer.live-classes.create', [
             'courses' => $courses,
             'branches' => $branches,
-            'selectedBranchId' => $request->query('branch_id')
+            'selectedBranchId' => $selectedBranchId,
+            'selectedCourseId' => $selectedCourseId
         ]);
     }
 
