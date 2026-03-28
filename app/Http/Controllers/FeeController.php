@@ -11,8 +11,9 @@ class FeeController extends Controller
      */
     public function index()
     {
-        $allFees = \App\Models\Fee::with('course')
+        $allFees = \App\Models\Fee::with(['course', 'user.admissions.batch'])
             ->where('user_id', auth()->id())
+            ->latest()
             ->get();
             
         return view('fees.index', compact('allFees'));
