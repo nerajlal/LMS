@@ -73,32 +73,45 @@
                 appliedCode: '',
                 isVerifying: false, 
                 errorMessage: '',
-                basePrice: {{ $admission->course->price }},
+                basePrice: {{ (float)$admission->course->price }},
+                init() {
+                    console.log('Alpine Checkout Initialized. Australia.');
+                },
                 async applyCoupon() {
-                    if (!this.couponCode) return;
+                    let code = this.couponCode.trim();
+                    if (!code) return;
+                    
                     this.isVerifying = true;
                     this.errorMessage = '';
+                    
                     try {
                         const response = await fetch('{{ route('admissions.validate-coupon') }}', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                'Accept': 'application/json',
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
                             body: JSON.stringify({
-                                code: this.couponCode,
+                                code: code,
                                 admission_id: {{ $admission->id }}
                             })
                         });
+                        
                         const data = await response.json();
-                        if (data.success) {
-                            this.discount = data.discount;
+                        
+                        if (response.ok && data.success) {
+                            this.discount = parseFloat(data.discount);
                             this.appliedCode = data.code;
+                            this.errorMessage = '';
                         } else {
-                            this.errorMessage = data.message;
+                            this.discount = 0;
+                            this.appliedCode = '';
+                            this.errorMessage = data.message || 'Invalid coupon code.';
                         }
                     } catch (e) {
-                        this.errorMessage = 'Verification failed. Try again.';
+                        console.error('Coupon Error:', e);
+                        this.errorMessage = 'Network error. Please try again. Australia.';
                     } finally {
                         this.isVerifying = false;
                     }
@@ -112,12 +125,13 @@
                     <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] px-1">Have a Coupon?</label>
                     <div class="flex gap-2">
                         <input type="text" x-model="couponCode" :disabled="appliedCode" 
+                               @keydown.enter.prevent="applyCoupon"
                                placeholder="Enter code" 
-                               class="flex-1 px-4 py-2.5 bg-slate-50 border border-border rounded-[10px] text-[13px] font-[700] text-navy focus:border-primary/30 focus:ring-0 transition-all uppercase placeholder:text-slate-300 outline-none">
+                               class="flex-1 px-4 py-2.5 bg-slate-50 border border-border rounded-[10px] text-[13px] font-[700] text-navy focus:border-primary/30 focus:ring-1 focus:ring-primary/20 transition-all uppercase placeholder:text-slate-300 outline-none">
                         <button type="button" @click="applyCoupon" :disabled="isVerifying || !couponCode || appliedCode" 
                                 class="px-4 py-2.5 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[10px] hover:bg-primary transition-all disabled:opacity-50">
                             <span x-show="!isVerifying">Apply</span>
-                            <span x-show="isVerifying" style="display: none;"><i class="bi bi-arrow-repeat animate-spin"></i></span>
+                            <span x-show="isVerifying" x-cloak><i class="bi bi-arrow-repeat animate-spin"></i></span>
                         </button>
                     </div>
                     <p x-show="errorMessage" x-text="errorMessage" class="text-[10px] font-[800] text-red-500 uppercase px-1" style="display: none;"></p>
