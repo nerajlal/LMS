@@ -9,7 +9,7 @@ class AdminFeeController extends Controller
 {
     public function index()
     {
-        $fees = Fee::with('user')
+        $fees = Fee::with(['user.admissions.batch', 'course'])
             ->latest()
             ->paginate(20);
 

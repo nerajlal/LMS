@@ -59,11 +59,12 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-slate-50/50 border-b border-slate-100">
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Learner Profile</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Assessment Value</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden md:table-cell">Paid Credit</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Settlement</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Verification</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider whitespace-nowrap">Learner Profile</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider whitespace-nowrap">Product Path</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider whitespace-nowrap">Assessment Value</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden md:table-cell whitespace-nowrap">Paid Credit</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider whitespace-nowrap">Settlement</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right whitespace-nowrap">Verification</th>
                     </tr>
                 </thead>
                     <tbody class="divide-y divide-slate-50">
@@ -74,7 +75,14 @@
                                 <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">UID: #{{ sprintf('%03d', $fee->id) }}</div>
                             </td>
                             <td class="px-6 py-5">
+                                <div class="text-[13px] font-[800] text-navy truncate max-w-[150px]">{{ $fee->course->title ?? 'General Program' }}</div>
+                                <div class="text-[9px] text-slate-400 font-[700] uppercase tracking-widest mt-1">
+                                    Batch: {{ $fee->user->admissions->where('course_id', $fee->course_id)->first()?->batch?->name ?? 'Unassigned' }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-5">
                                 <div class="text-[14px] font-[900] text-navy">₹{{ number_format($fee->total_amount) }}</div>
+                                <div class="text-[9px] text-slate-400 font-[700] uppercase tracking-widest mt-0.5">Base Invoice</div>
                             </td>
                             <td class="px-6 py-5 hidden md:table-cell">
                                 <div class="text-[14px] font-[800] text-emerald-600">₹{{ number_format($fee->paid_amount) }}</div>

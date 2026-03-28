@@ -77,6 +77,8 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
         'update'  => 'courses.update',
         'destroy' => 'courses.destroy',
     ]);
+    Route::get('api/courses/{course}', [AdminCourseController::class, 'apiShow'])->name('api.courses.show');
+    Route::get('api/trainers/courses', [AdminCourseController::class, 'apiTrainerCourses'])->name('api.trainers.courses');
 
     // Students
     Route::get('students', [AdminStudentController::class, 'index'])->name('students.index');

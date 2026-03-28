@@ -60,4 +60,34 @@ class AdminCourseController extends Controller
         $course->delete();
         return redirect()->route('admin.courses.index')->with('success', 'Course deleted.');
     }
+
+    public function apiShow(Course $course)
+    {
+        return response()->json([
+            'title' => $course->title,
+            'description' => $course->description ?? 'No description provided.',
+            'instructor' => $course->instructor_name,
+            'price' => number_format($course->price, 2),
+            'lessons' => $course->lessons()->count(),
+            'students' => $course->admissions()->count(),
+            'thumbnail' => $course->thumbnail ?? asset('images/course-placeholder.jpg'),
+            'outcomes' => $course->learning_outcomes ?? 'General educational outcomes.',
+        ]);
+    }
+
+    public function apiTrainerCourses(Request $request)
+    {
+        $name = $request->query('name');
+        $courses = Course::where('instructor_name', $name)->get();
+        
+        return response()->json([
+            'trainer' => $name,
+            'courses' => $courses->map(fn(\App\Models\Course $c) => [
+                'id' => $c->id,
+                'title' => $c->title,
+                'price' => number_format($c->price, 2),
+                'lessons' => $c->lessons()->count(),
+            ])
+        ]);
+    }
 }

@@ -40,8 +40,8 @@
             $adminStats = [
                 ['label' => 'Total Students', 'value' => $stats['total_students'], 'icon' => 'bi-people-fill', 'gradient' => 'from-navy to-[#254d85]', 'iconColor' => 'text-primary'],
                 ['label' => 'Total Revenue', 'value' => '₹' . number_format($stats['total_revenue']), 'icon' => 'bi-cash-stack', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-navy'],
-                ['label' => 'Pending Admissions', 'value' => $stats['pending_admissions'], 'icon' => 'bi-hourglass-split', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-orange-500'],
                 ['label' => 'Active Courses', 'value' => $stats['total_courses'], 'icon' => 'bi-journal-check', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-emerald-500'],
+                ['label' => 'Total Admissions', 'value' => $stats['total_admissions'], 'icon' => 'bi-clipboard-check', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-blue-500'],
             ];
         @endphp
 

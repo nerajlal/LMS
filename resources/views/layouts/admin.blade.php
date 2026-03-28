@@ -133,7 +133,7 @@
                         // ['label' => 'Resources', 'icon' => 'bi-folder2-open', 'route' => 'admin.study-materials.index'],
                         ['label' => 'Trainers', 'icon' => 'bi-person-badge', 'route' => 'admin.trainers.index'],
                         ['label' => 'Students', 'icon' => 'bi-people', 'route' => 'admin.students.index'],
-                        ['label' => 'Admissions', 'icon' => 'bi-clipboard-check', 'route' => 'admin.admissions.index'],
+                        // ['label' => 'Admissions', 'icon' => 'bi-clipboard-check', 'route' => 'admin.admissions.index'],
                         ['label' => 'Issue Certificate', 'icon' => 'bi-award', 'route' => 'admin.admissions.index', 'params' => ['tab' => 'completed']],
                         ['label' => 'Fees', 'icon' => 'bi-credit-card', 'route' => 'admin.fees.index'],
                     ] : [
