@@ -18,7 +18,20 @@
                     <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-0.5">Organize and schedule your sessions by batch</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
+            
+            <div class="flex items-center gap-6">
+                <!-- Status Toggle -->
+                <div class="flex items-center gap-1 bg-white/5 border border-white/10 p-1.5 rounded-[12px] backdrop-blur-md">
+                    <a href="{{ route('trainer.live-classes.index', ['status' => 'active']) }}" 
+                       class="px-4 py-2 rounded-[8px] text-[10px] font-[900] uppercase tracking-widest transition-all {{ ($currentStatus ?? 'active') === 'active' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white' }}">
+                        Ongoing
+                    </a>
+                    <a href="{{ route('trainer.live-classes.index', ['status' => 'completed']) }}" 
+                       class="px-4 py-2 rounded-[8px] text-[10px] font-[900] uppercase tracking-widest transition-all {{ ($currentStatus ?? 'active') === 'completed' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white' }}">
+                        Completed
+                    </a>
+                </div>
+
                 <button onclick="document.getElementById('branchModal').showModal()" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
                     <i class="bi bi-plus-lg text-lg"></i>
                     <span>New Batch</span>
@@ -51,21 +64,23 @@
                     <div class="text-[10px] font-[800] text-slate-400 uppercase tracking-widest bg-white border border-border px-3 py-1.5 rounded-full">
                         {{ $branch->liveClasses->count() }} Sessions
                     </div>
-                    <a href="{{ route('trainer.live-classes.create', ['branch_id' => $branch->id]) }}" class="px-4 py-2 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-sm">
-                        <i class="bi bi-plus-lg"></i> Add Live Class
-                    </a>
                     
-                    {{-- 3-Dot Options Menu deactivated: relocated to Admin --}}
-                    {{-- 
-                    <div class="relative">
-                        <button @click="open = !open" @click.away="open = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 transition-colors text-slate-400 focus:outline-none">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <div x-show="open" 
-                             ...
+                    @if(($currentStatus ?? 'active') === 'active')
+                        <a href="{{ route('trainer.live-classes.create', ['branch_id' => $branch->id]) }}" class="px-4 py-2 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-sm">
+                            <i class="bi bi-plus-lg"></i> Add Session
+                        </a>
+                        
+                        <form action="{{ route('trainer.live-classes.branches.complete', $branch->id) }}" method="POST" onsubmit="return confirm('Archive this batch? No further sessions can be added once completed. Australia.')">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] hover:bg-slate-800 transition-all shadow-sm">
+                                <i class="bi bi-check-all text-[14px]"></i> Complete
+                            </button>
+                        </form>
+                    @else
+                        <div class="px-4 py-2 bg-slate-100 text-slate-400 text-[10px] font-[900] uppercase tracking-widest rounded-[8px] flex items-center gap-2">
+                            <i class="bi bi-archive-fill"></i> Archived
                         </div>
-                    </div>
-                    --}}
+                    @endif
                 </div>
             </div>
             

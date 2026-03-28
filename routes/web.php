@@ -125,6 +125,7 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     
     Route::resource('live-classes', TrainerLiveClassController::class)->except(['destroy']);
     Route::post('live-classes/branches', [TrainerLiveClassController::class, 'storeBranch'])->name('live-classes.branches.store');
+    Route::post('live-classes/branches/{branch}/complete', [TrainerLiveClassController::class, 'completeBranch'])->name('live-classes.branches.complete');
     Route::post('live-classes/coupons', [TrainerLiveClassController::class, 'storeCoupon'])->name('live-classes.coupons.store');
 
     // Study Materials Management (Trainer)

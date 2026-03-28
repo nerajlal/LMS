@@ -31,12 +31,14 @@ class TrainerLiveClassController extends Controller
     /**
      * Display a listing of live classes grouped by branches.
      */
-    public function index()
+    public function index(Request $request)
     {
         $trainerName = auth()->user()->name;
+        $status = $request->query('status', 'active');
         
         // Get all branches where this trainer is either the creator or a collaborator
-        $branches = \App\Models\LiveClassBranch::where(function($query) {
+        $branches = \App\Models\LiveClassBranch::where('status', $status)
+            ->where(function($query) {
                 $query->where('trainer_id', auth()->id())
                       ->orWhereHas('trainers', function($q) {
                           $q->where('users.id', auth()->id());
@@ -60,7 +62,8 @@ class TrainerLiveClassController extends Controller
         return view('trainer.live-classes.index', [
             'branches' => $branches,
             'unbranchedClasses' => $unbranchedClasses,
-            'courses' => $courses
+            'courses' => $courses,
+            'currentStatus' => $status
         ]);
     }
 
@@ -83,12 +86,29 @@ class TrainerLiveClassController extends Controller
     }
 
     /**
+     * Mark a branch as complete.
+     */
+    public function completeBranch(\App\Models\LiveClassBranch $branch)
+    {
+        // Authorization
+        if ($branch->trainer_id !== auth()->id() && !$branch->trainers()->where('users.id', auth()->id())->exists()) {
+            abort(403);
+        }
+
+        $branch->update(['status' => 'completed']);
+
+        return redirect()->route('trainer.live-classes.index', ['status' => 'completed'])
+            ->with('success', 'Batch marked as completed and archived.');
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
     {
         $courses = \App\Models\Course::where('instructor_name', auth()->user()->name)->select('id', 'title')->get();
-        $branches = \App\Models\LiveClassBranch::where(function($query) {
+        $branches = \App\Models\LiveClassBranch::where('status', 'active')
+            ->where(function($query) {
                 $query->where('trainer_id', auth()->id())
                       ->orWhereHas('trainers', function($q) {
                           $q->where('users.id', auth()->id());
