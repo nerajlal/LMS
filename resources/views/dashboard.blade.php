@@ -169,7 +169,10 @@
                                 <span class="w-1 w-1 bg-primary rounded-full animate-ping"></span>
                                 Starts {{ $timeStr }}
                             </p>
-                            <h4 class="text-[15px] font-[800] mb-3 leading-tight tracking-tight text-white/90">{{ $nextClass['title'] }}</h4>
+                            <h4 class="text-[15px] font-[800] mb-1 leading-tight tracking-tight text-white/90">{{ $nextClass['title'] }}</h4>
+                            <div class="inline-flex px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-emerald-400 text-[9px] font-[900] uppercase tracking-widest mb-3">
+                                {{ $nextClass['batch_name'] }}
+                            </div>
                             <div class="flex items-center gap-2.5">
                                 <div class="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs">
                                     <i class="bi bi-person-fill"></i>

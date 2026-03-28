@@ -9,7 +9,6 @@ composer install
 npm install
 ```
 
-
 ```
 *Note: Ensure `APP_URL` matches your local server address (e.g., `http://127.0.0.1:8000`).*
 

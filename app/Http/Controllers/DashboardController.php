@@ -63,6 +63,7 @@ class DashboardController extends Controller
                     'title' => $class->title,
                     'time' => $class->start_time,
                     'host' => $class->instructor_name,
+                    'batch_name' => $class->liveClassBranch->name ?? 'General Session',
                 ];
             });
 
