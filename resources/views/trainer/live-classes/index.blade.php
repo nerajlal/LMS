@@ -97,8 +97,13 @@
                             </td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-3">
-                                    <div class="flex items-center gap-2 text-[10px] font-[900] uppercase tracking-widest {{ $class->status === 'live' ? 'text-emerald-600' : 'text-amber-500' }} mr-4">
-                                        {{ $class->status }}
+                                    <div @class([
+                                        'flex items-center gap-2 text-[10px] font-[900] uppercase tracking-widest mr-4',
+                                        'text-emerald-600' => $class->isLive(),
+                                        'text-slate-400' => $class->isEnded(),
+                                        'text-amber-500' => !$class->isLive() && !$class->isEnded(),
+                                    ])>
+                                        {{ $class->isLive() ? 'Live Now' : ($class->isEnded() ? 'Ended' : 'Upcoming') }}
                                     </div>
                                     @if($class->isEnded())
                                         <div class="px-4 py-2 bg-slate-100 text-slate-400 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest border border-slate-200 cursor-not-allowed">

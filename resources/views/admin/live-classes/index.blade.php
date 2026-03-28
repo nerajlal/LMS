@@ -98,15 +98,15 @@
                                     <div class="flex items-center gap-4">
                                         <div @class([
                                             'w-8 h-8 rounded-[8px] flex items-center justify-center text-sm shrink-0 border shadow-sm',
-                                            'bg-emerald-50 text-emerald-600 border-emerald-100' => $class->status === 'live',
-                                            'bg-amber-50 text-amber-600 border-amber-100' => $class->status === 'upcoming',
-                                            'bg-slate-50 text-slate-400 border-slate-100' => $class->status === 'completed',
+                                            'bg-emerald-50 text-emerald-600 border-emerald-100' => $class->isLive(),
+                                            'bg-amber-50 text-amber-600 border-amber-100' => !$class->isLive() && !$class->isEnded(),
+                                            'bg-slate-50 text-slate-400 border-slate-100' => $class->isEnded(),
                                         ])>
                                             <i @class([
                                                 'bi',
-                                                'bi-broadcast animate-pulse' => $class->status === 'live',
-                                                'bi-calendar-event' => $class->status === 'upcoming',
-                                                'bi-check-circle' => $class->status === 'completed',
+                                                'bi-broadcast animate-pulse' => $class->isLive(),
+                                                'bi-calendar-event' => !$class->isLive() && !$class->isEnded(),
+                                                'bi-check-circle' => $class->isEnded(),
                                             ])></i>
                                         </div>
                                         <div class="min-w-0">
@@ -120,18 +120,24 @@
                                 <td class="px-6 py-5">
                                     <span @class([
                                         'px-2 py-0.5 rounded-full text-[8px] font-[900] uppercase tracking-widest shadow-sm border',
-                                        'bg-emerald-500 text-white border-emerald-400' => $class->status === 'live',
-                                        'bg-amber-100 text-amber-600 border-amber-200' => $class->status === 'upcoming',
-                                        'bg-slate-100 text-slate-500 border-slate-200' => $class->status === 'completed',
+                                        'bg-emerald-500 text-white border-emerald-400' => $class->isLive(),
+                                        'bg-amber-100 text-amber-600 border-amber-200' => !$class->isLive() && !$class->isEnded(),
+                                        'bg-slate-100 text-slate-500 border-slate-200' => $class->isEnded(),
                                     ])>
-                                        {{ $class->status }}
+                                        {{ $class->isLive() ? 'Live Now' : ($class->isEnded() ? 'Ended' : 'Upcoming') }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-5 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-8 h-8 bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Session Node">
-                                            <i class="bi bi-link-45deg text-lg"></i>
-                                        </a>
+                                        @if(!$class->isEnded())
+                                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-8 h-8 bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Join Session">
+                                                <i @class(['bi text-lg', 'bi-broadcast text-primary animate-pulse' => $class->isLive(), 'bi-link-45deg' => !$class->isLive()])></i>
+                                            </a>
+                                        @else
+                                            <span class="w-8 h-8 bg-slate-50 text-slate-300 rounded-[8px] flex items-center justify-center border border-slate-100 cursor-not-allowed" title="Meeting Ended">
+                                                <i class="bi bi-slash-circle text-lg"></i>
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
