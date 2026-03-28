@@ -47,4 +47,20 @@ class LiveClass extends Model
         
         return now()->greaterThan($endTime);
     }
+
+    /**
+     * Check if the class is currently active for joining (15 mins early buffer)
+     */
+    public function isLive()
+    {
+        if ($this->isEnded()) return false;
+        
+        // If status is forced to 'live', it's live
+        if (strtolower($this->status) === 'live') return true;
+        
+        // Allow joining 15 minutes before official start time
+        if (!$this->start_time) return false;
+        
+        return now()->greaterThanOrEqualTo($this->start_time->copy()->subMinutes(15));
+    }
 }

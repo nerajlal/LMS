@@ -26,11 +26,11 @@ class LiveClassController extends Controller
 
         // Split into 3 categories: Active, Upcoming, Past
         $activeClasses = $allClasses->filter(function(LiveClass $class) {
-            return !$class->isEnded() && (strtolower($class->status) === 'live' || $class->start_time->isPast());
+            return $class->isLive();
         })->values();
 
         $upcomingClasses = $allClasses->filter(function(LiveClass $class) {
-            return $class->start_time->isFuture() && strtolower($class->status) !== 'live';
+            return $class->start_time->isFuture() && !$class->isLive();
         })->values();
 
         $pastClasses = $allClasses->filter(function(LiveClass $class) {

@@ -62,7 +62,7 @@
     <div x-show="activeTab === 'active'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="max-w-6xl mx-auto space-y-6">
         @forelse($activeClasses as $class)
             @php
-                $isLive = !$class->isEnded() && (strtolower($class->status) === 'live' || $class->start_time->isPast());
+                $isLive = $class->isLive();
                 $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
                 $startTime = $class->start_time;
             @endphp
@@ -215,6 +215,14 @@
                         </div>
                     </div>
 
+                    @if($class->liveClassBranch)
+                    <div class="mb-4">
+                        <div class="inline-flex px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-emerald-600 text-[9px] font-[900] uppercase tracking-widest">
+                            <i class="bi bi-people-fill mr-1"></i> {{ $class->liveClassBranch->name }}
+                        </div>
+                    </div>
+                    @endif
+
                     @if(!$isEnrolled)
                         <a href="{{ route('courses.show', $class->course_id) }}" class="w-full py-3.5 bg-primary text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all text-center">Enroll Now</a>
                     @else
@@ -240,10 +248,15 @@
                 <div class="flex-1">
                     <div class="text-[10px] font-[900] text-primary uppercase tracking-[0.2em] mb-1">Session Concluded</div>
                     <h4 class="text-xl font-[800] text-navy mb-2">{{ $class->title }}</h4>
-                    <div class="flex flex-wrap gap-4 text-[13px] font-[600] text-muted">
+                    <div class="flex flex-wrap gap-4 text-[12px] font-[600] text-muted mb-2">
                         <span class="flex items-center gap-1.5"><i class="bi bi-person-badge"></i> {{ $class->instructor_name }}</span>
                         <span class="flex items-center gap-1.5"><i class="bi bi-calendar-check"></i> {{ \Carbon\Carbon::parse($class->start_time)->format('M d, Y') }}</span>
                     </div>
+                    @if($class->liveClassBranch)
+                    <div class="inline-flex px-2 py-0.5 bg-slate-100 border border-slate-200 rounded-md text-slate-500 text-[9px] font-[900] uppercase tracking-widest">
+                        <i class="bi bi-people-fill mr-1"></i> {{ $class->liveClassBranch->name }}
+                    </div>
+                    @endif
                 </div>
                 <div class="shrink-0 pt-4 md:pt-0">
                     <span class="px-5 py-2.5 bg-slate-50 text-slate-400 rounded-full text-[12px] font-[800] uppercase tracking-widest border border-slate-100">Ended</span>
