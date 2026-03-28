@@ -124,14 +124,25 @@
                         </div>
                     </div>
 
+                    @php
+                        $hasBatchAccess = $class->live_class_branch_id === null || in_array($class->live_class_branch_id, $enrolledBatchIds);
+                    @endphp
+
                     @if(!$isEnrolled)
                         <a href="{{ route('courses.show', $class->course_id) }}" class="w-full py-3.5 bg-primary text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:bg-orange-600 hover:-translate-y-1 transition-all text-center">
                             Enroll to Join
                         </a>
                     @elseif($isLive)
-                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-rose-500 text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-rose-500/20 hover:bg-rose-600 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-2">
-                            Join Now <i class="bi bi-camera-video ml-1"></i>
-                        </a>
+                        @if($hasBatchAccess)
+                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-rose-500 text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-rose-500/20 hover:bg-rose-600 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-2">
+                                Join Now <i class="bi bi-camera-video ml-1"></i>
+                            </a>
+                        @else
+                            <div class="w-full py-3.5 bg-slate-100 text-slate-400 border border-slate-200 rounded-[12px] font-[800] text-[10px] uppercase tracking-widest text-center flex flex-col items-center justify-center cursor-not-allowed">
+                                <span class="opacity-60">Reserved for</span>
+                                <span class="text-navy">Specific Batch</span>
+                            </div>
+                        @endif
                     @elseif($class->isEnded())
                         <div class="w-full py-3.5 bg-slate-100 text-slate-400 border border-slate-200 rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex items-center justify-center gap-2 cursor-not-allowed">
                             Session Ended <i class="bi bi-clock-history"></i>

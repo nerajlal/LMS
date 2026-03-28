@@ -12,7 +12,6 @@ class LiveClassController extends Controller
     {
         $userId = auth()->id();
         
-        // Get all approved admissions for the student
         $admissions = \App\Models\Admission::where('user_id', $userId)
             ->where('status', 'approved')
             ->get();
@@ -20,9 +19,8 @@ class LiveClassController extends Controller
         $enrolledCourseIds = $admissions->pluck('course_id')->toArray();
         $enrolledBatchIds = $admissions->pluck('batch_id')->filter()->toArray();
 
-        // Fetch live classes ONLY for the batches the student is enrolled in
-        $allClasses = LiveClass::whereIn('live_class_branch_id', $enrolledBatchIds)
-            ->with('course')
+        // Fetch ALL live classes so users can discover them
+        $allClasses = LiveClass::with('course')
             ->latest()
             ->get();
 
@@ -39,6 +37,6 @@ class LiveClassController extends Controller
             return $class->isEnded() && strtolower($class->status) !== 'live';
         })->values();
 
-        return view('live-classes.index', compact('activeClasses', 'upcomingClasses', 'pastClasses', 'enrolledCourseIds'));
+        return view('live-classes.index', compact('activeClasses', 'upcomingClasses', 'pastClasses', 'enrolledCourseIds', 'enrolledBatchIds'));
     }
 }
