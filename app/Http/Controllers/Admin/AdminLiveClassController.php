@@ -31,13 +31,16 @@ class AdminLiveClassController extends Controller
         return redirect()->route('admin.live-classes.index')->with('success', 'Coupon code generated successfully.');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $branches = \App\Models\LiveClassBranch::with(['liveClasses' => function($query) {
-            $query->orderBy('start_time', 'asc');
-        }, 'course', 'trainers'])
-        ->latest()
-        ->get();
+        $status = $request->query('status', 'active');
+
+        $branches = \App\Models\LiveClassBranch::where('status', $status)
+            ->with(['liveClasses' => function($query) {
+                $query->orderBy('start_time', 'asc');
+            }, 'course', 'trainers'])
+            ->latest()
+            ->get();
 
         $unbranchedClasses = LiveClass::whereNull('live_class_branch_id')
             ->with(['course'])
@@ -46,7 +49,7 @@ class AdminLiveClassController extends Controller
 
         $trainers = User::where('is_trainer', true)->latest()->get();
 
-        return view('admin.live-classes.index', compact('branches', 'unbranchedClasses', 'trainers'));
+        return view('admin.live-classes.index', compact('branches', 'unbranchedClasses', 'trainers', 'status'));
     }
 
     /**

@@ -129,7 +129,7 @@
                     $nav = $role === 'admin' ? [
                         ['label' => 'Dashboard', 'icon' => 'bi-speedometer2', 'route' => 'admin.dashboard'],
                         ['label' => 'Courses', 'icon' => 'bi-play-circle', 'route' => 'admin.courses.index'],
-                        ['label' => 'Live Classes', 'icon' => 'bi-camera-video', 'route' => 'admin.live-classes.index'],
+                        ['label' => 'Batches', 'icon' => 'bi-camera-video', 'route' => 'admin.live-classes.index'],
                         // ['label' => 'Resources', 'icon' => 'bi-folder2-open', 'route' => 'admin.study-materials.index'],
                         ['label' => 'Trainers', 'icon' => 'bi-person-badge', 'route' => 'admin.trainers.index'],
                         ['label' => 'Students', 'icon' => 'bi-people', 'route' => 'admin.students.index'],
@@ -139,7 +139,7 @@
                     ] : [
                         ['label' => 'Dashboard', 'icon' => 'bi-speedometer2', 'route' => 'trainer.dashboard'],
                         ['label' => 'My Courses', 'icon' => 'bi-play-circle', 'route' => 'trainer.courses.index'],
-                        ['label' => 'Live Classes', 'icon' => 'bi-camera-video', 'route' => 'trainer.live-classes.index'],
+                        ['label' => 'Batches', 'icon' => 'bi-camera-video', 'route' => 'trainer.live-classes.index'],
                         ['label' => 'Resources', 'icon' => 'bi-folder2-open', 'route' => 'trainer.study-materials.index'],
                     ];
                 @endphp

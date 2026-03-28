@@ -17,9 +17,24 @@
                     <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-2">Monitor and manage all interactive sessions</p>
                 </div>
             </div>
-            <div class="flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3 rounded-[16px] backdrop-blur-sm">
-                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]"></div>
-                <span class="text-[10px] font-[800] text-slate-300 uppercase tracking-widest">Streaming Node Sync Active</span>
+
+            <!-- Status Toggle -->
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-1 bg-white/5 border border-white/10 p-1.5 rounded-[12px] backdrop-blur-md">
+                    <a href="{{ route('admin.live-classes.index', ['status' => 'active']) }}" 
+                       class="px-4 py-2 rounded-[8px] text-[10px] font-[900] uppercase tracking-widest transition-all {{ ($status ?? 'active') === 'active' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white' }}">
+                        Ongoing
+                    </a>
+                    <a href="{{ route('admin.live-classes.index', ['status' => 'completed']) }}" 
+                       class="px-4 py-2 rounded-[8px] text-[10px] font-[900] uppercase tracking-widest transition-all {{ ($status ?? 'active') === 'completed' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-400 hover:text-white' }}">
+                        Completed
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center gap-4 bg-white/5 border border-white/10 px-5 py-3 rounded-[16px] backdrop-blur-sm">
+                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_#4ade80]"></div>
+                    <span class="text-[10px] font-[800] text-slate-300 uppercase tracking-widest">Streaming Node Sync Active</span>
+                </div>
             </div>
         </div>
     </div>
