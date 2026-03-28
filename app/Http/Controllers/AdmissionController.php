@@ -185,7 +185,14 @@ class AdmissionController extends Controller
             ->first();
 
         if (!$coupon) {
-            return response()->json(['success' => false, 'message' => 'Invalid or expired coupon.'], 422);
+            $exists = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->code)])->first();
+            if (!$exists) {
+                return response()->json(['success' => false, 'message' => 'Coupon code does not exist.'], 422);
+            }
+            if ($exists->is_used) {
+                return response()->json(['success' => false, 'message' => 'This coupon has already been used.'], 422);
+            }
+            return response()->json(['success' => false, 'message' => 'This coupon is not valid for this batch or course.'], 422);
         }
 
         return response()->json([

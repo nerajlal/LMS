@@ -124,11 +124,12 @@
                 <div class="space-y-3 pt-2">
                     <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] px-1">Have a Coupon?</label>
                     <div class="flex gap-2">
-                        <input type="text" x-model="couponCode" :disabled="appliedCode" 
+                        <input type="text" x-model="couponCode" :readonly="appliedCode.length > 0" 
                                @keydown.enter.prevent="applyCoupon"
                                placeholder="Enter code" 
-                               class="flex-1 px-4 py-2.5 bg-slate-50 border border-border rounded-[10px] text-[13px] font-[700] text-navy focus:border-primary/30 focus:ring-1 focus:ring-primary/20 transition-all uppercase placeholder:text-slate-300 outline-none">
-                        <button type="button" @click="applyCoupon" :disabled="isVerifying || !couponCode || appliedCode" 
+                               class="flex-1 px-4 py-2.5 bg-slate-50 border border-border rounded-[10px] text-[13px] font-[700] text-navy focus:ring-1 focus:ring-primary/20 transition-all uppercase placeholder:text-slate-300 outline-none"
+                               :class="{ 'opacity-50 cursor-not-allowed': appliedCode.length > 0 }">
+                        <button type="button" @click="applyCoupon" :disabled="isVerifying || !couponCode || appliedCode.length > 0" 
                                 class="px-4 py-2.5 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[10px] hover:bg-primary transition-all disabled:opacity-50">
                             <span x-show="!isVerifying">Apply</span>
                             <span x-show="isVerifying" x-cloak><i class="bi bi-arrow-repeat animate-spin"></i></span>
