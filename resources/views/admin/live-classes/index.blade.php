@@ -28,8 +28,9 @@
     <div class="space-y-8">
         @foreach($branches as $branch)
         <div class="bg-white rounded-[20px] border border-slate-200 shadow-sm overflow-hidden border-l-4 border-l-navy transition-all hover:shadow-md" x-data="{ expanded: false }">
-            <div @click="expanded = !expanded" class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center cursor-pointer hover:bg-slate-100/50 transition-all select-none group/header">
-                <div class="flex items-center gap-4">
+            <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center select-none group/header">
+                <!-- Expansion Click Target (Left Side) -->
+                <div @click="expanded = !expanded" class="flex items-center gap-4 cursor-pointer flex-1 py-1">
                     <div class="w-10 h-10 rounded-[12px] bg-navy text-white flex items-center justify-center shadow-lg shadow-navy/10 transform transition-transform group-hover/header:rotate-6">
                         <i class="bi bi-folder-symlink-fill"></i>
                     </div>
@@ -45,30 +46,34 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Tools & Interactive Elements (Right Side) -->
                 <div class="flex items-center gap-4">
                     <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">
                         {{ $branch->liveClasses->count() }} Sessions
                     </div>
                     
-                    <!-- 3-Dot Options Menu -->
+                    <!-- 3-Dot Options Menu (Isolated x-data) -->
                     <div class="relative" x-data="{ menuOpen: false }">
-                        <button @click.stop="menuOpen = !menuOpen" @click.away="menuOpen = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-navy/10 transition-colors text-slate-400 focus:outline-none">
+                        <button @click="menuOpen = !menuOpen" @click.away="menuOpen = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-navy/10 transition-colors text-slate-400 focus:outline-none relative z-[60]">
                             <i class="bi bi-three-dots-vertical"></i>
                         </button>
                         <div x-show="menuOpen" 
                              x-transition:enter="transition ease-out duration-100"
                              x-transition:enter-start="transform opacity-0 scale-95"
                              x-transition:enter-end="transform opacity-100 scale-100"
-                             class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-[12px] shadow-xl z-50 overflow-hidden"
-                             style="display: none;">
-                            <button @click.stop="$dispatch('open-coupon-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}' })" 
+                             class="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-[12px] shadow-xl z-[70] overflow-hidden"
+                             style="display: none;"
+                             x-cloak>
+                            <button @click="menuOpen = false; $dispatch('open-coupon-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}' })" 
                                     class="w-full px-4 py-3 text-left text-[10px] font-[900] text-navy uppercase tracking-[0.1em] hover:bg-slate-50 flex items-center gap-3 transition-colors">
                                 <i class="bi bi-ticket-perforated-fill text-primary text-[14px]"></i> Add Coupon
                             </button>
                         </div>
                     </div>
 
-                    <div class="w-8 h-8 rounded-full bg-navy/5 flex items-center justify-center text-navy/40 transition-transform duration-300 pointer-events-none" :class="{ 'rotate-180 bg-navy text-white': expanded }">
+                    <!-- Chevron Toggle (Expansion Target) -->
+                    <div @click="expanded = !expanded" class="w-8 h-8 rounded-full bg-navy/5 flex items-center justify-center text-navy/40 transition-transform duration-300 cursor-pointer hover:bg-navy hover:text-white" :class="{ 'rotate-180 bg-navy text-white': expanded }">
                         <i class="bi bi-chevron-down"></i>
                     </div>
                 </div>

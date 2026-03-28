@@ -49,27 +49,17 @@
                         <i class="bi bi-plus-lg"></i> Add Live Class
                     </a>
                     
-                    <!-- 3-Dot Options Menu -->
+                    {{-- 3-Dot Options Menu deactivated: relocated to Admin --}}
+                    {{-- 
                     <div class="relative">
                         <button @click="open = !open" @click.away="open = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 transition-colors text-slate-400 focus:outline-none">
                             <i class="bi bi-three-dots-vertical"></i>
                         </button>
                         <div x-show="open" 
-                             x-transition:enter="transition ease-out duration-100"
-                             x-transition:enter-start="transform opacity-0 scale-95"
-                             x-transition:enter-end="transform opacity-100 scale-100"
-                             class="absolute right-0 mt-2 w-48 bg-white border border-border rounded-[12px] shadow-xl z-50 overflow-hidden"
-                             style="display: none;">
-                            {{-- Commented out: moved to Admin --}}
-                            {{-- 
-                            <button @click="$dispatch('open-coupon-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}' })" 
-                                    class="w-full px-4 py-3 text-left text-[11px] font-[800] text-navy uppercase tracking-widest hover:bg-slate-50 flex items-center gap-3 transition-colors">
-                                <i class="bi bi-ticket-perforated-fill text-primary"></i> Add Coupon
-                            </button>
-                             --}}
-                             <div class="px-4 py-3 text-[10px] text-slate-400 italic">No actions available</div>
+                             ...
                         </div>
                     </div>
+                    --}}
                 </div>
             </div>
             
