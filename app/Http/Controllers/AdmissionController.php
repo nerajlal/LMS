@@ -113,6 +113,11 @@ class AdmissionController extends Controller
             abort(403);
         }
 
+        // Guard: Prevent double-payment for already approved sessions
+        if ($admission->status === 'approved') {
+            return redirect()->route('admissions.index')->with('info', 'This cohort is already active and settled.');
+        }
+
         $course = $admission->course;
 
         $discount = 0;
@@ -168,6 +173,12 @@ class AdmissionController extends Controller
         ]);
 
         $admission = Admission::findOrFail($request->admission_id);
+
+        // Authorization: Ensure student owns this admission
+        if ($admission->user_id !== auth()->id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized access.'], 403);
+        }
+
         $coupon = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->code)])
             ->where('is_used', false)
             ->where('batch_id', $admission->batch_id)

@@ -150,6 +150,14 @@ class TrainerLiveClassController extends Controller
         $validated['instructor_name'] = auth()->user()->name;
         $validated['status'] = 'scheduled';
 
+        // Authorization: Ensure trainer is assigned to the branch
+        if ($request->filled('live_class_branch_id')) {
+            $branch = \App\Models\LiveClassBranch::findOrFail($request->live_class_branch_id);
+            if ($branch->trainer_id !== auth()->id() && !$branch->trainers()->where('users.id', auth()->id())->exists()) {
+                abort(403, 'Unauthorized access to this batch.');
+            }
+        }
+
         \App\Models\LiveClass::create($validated);
 
         return redirect()->route('trainer.live-classes.index')->with('success', 'Live class scheduled successfully.');
