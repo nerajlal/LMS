@@ -116,11 +116,15 @@ class AdmissionController extends Controller
 
         $discount = 0;
         if ($request->filled('coupon_code')) {
-            $coupon = \App\Models\Coupon::where('code', $request->coupon_code)
+            $coupon = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->coupon_code)])
                 ->where('is_used', false)
                 ->where(function($query) use ($admission) {
                     $query->where('batch_id', $admission->batch_id)
-                          ->orWhereNull('batch_id');
+                          ->orWhereNull('batch_id')
+                          // Fallback: coupon belongs to any batch of the same course
+                          ->orWhereHas('batch', function($q) use ($admission) {
+                              $q->where('course_id', $admission->course_id);
+                          });
                 })
                 ->first();
 
@@ -168,11 +172,15 @@ class AdmissionController extends Controller
         ]);
 
         $admission = Admission::findOrFail($request->admission_id);
-        $coupon = \App\Models\Coupon::where('code', $request->code)
+        $coupon = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->code)])
             ->where('is_used', false)
             ->where(function($query) use ($admission) {
                 $query->where('batch_id', $admission->batch_id)
-                      ->orWhereNull('batch_id');
+                      ->orWhereNull('batch_id')
+                      // Fallback: coupon belongs to any batch of the same course
+                      ->orWhereHas('batch', function($q) use ($admission) {
+                          $q->where('course_id', $admission->course_id);
+                      });
             })
             ->first();
 
