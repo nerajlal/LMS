@@ -27,7 +27,9 @@
     <!-- Batch Sections -->
     <div class="space-y-8">
         @foreach($branches as $branch)
-        <div class="bg-white rounded-[20px] border border-slate-200 shadow-sm overflow-hidden border-l-4 border-l-navy transition-all hover:shadow-md" x-data="{ expanded: false }">
+        <div class="bg-white rounded-[20px] border border-slate-200 shadow-sm border-l-4 border-l-navy transition-all hover:shadow-md" 
+             x-data="{ expanded: false, menuOpen: false }"
+             :class="{ 'overflow-visible z-[100] relative': menuOpen, 'overflow-hidden': !menuOpen }">
             <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center select-none group/header">
                 <!-- Expansion Click Target (Left Side) -->
                 <div @click="expanded = !expanded" class="flex items-center gap-4 cursor-pointer flex-1 py-1">
@@ -53,8 +55,8 @@
                         {{ $branch->liveClasses->count() }} Sessions
                     </div>
                     
-                    <!-- 3-Dot Options Menu (Isolated x-data) -->
-                    <div class="relative" x-data="{ menuOpen: false }">
+                    <!-- 3-Dot Options Menu (Unified x-data) -->
+                    <div class="relative">
                         <button @click="menuOpen = !menuOpen" @click.away="menuOpen = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-navy/10 transition-colors text-slate-400 focus:outline-none relative z-[60]">
                             <i class="bi bi-three-dots-vertical"></i>
                         </button>
@@ -120,12 +122,9 @@
                                 </td>
                                 <td class="px-6 py-5 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <form action="{{ route('admin.live-classes.destroy', $class->id) }}" method="POST" onsubmit="return confirm('Expunge broadcast?')">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="w-8 h-8 bg-pink-50 text-pink-600 rounded-[8px] flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all border border-pink-100">
-                                                <i class="bi bi-trash-fill text-[12px]"></i>
-                                            </button>
-                                        </form>
+                                        <a href="{{ $class->zoom_link }}" target="_blank" class="w-8 h-8 bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Session Node">
+                                            <i class="bi bi-link-45deg text-lg"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -170,12 +169,9 @@
                                 </div>
                             </td>
                             <td class="px-6 py-5 text-right">
-                                <form action="{{ route('admin.live-classes.destroy', $class->id) }}" method="POST" onsubmit="return confirm('Expunge broadcast?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="w-8 h-8 bg-slate-100 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all border border-slate-200">
-                                        <i class="bi bi-trash-fill text-[12px]"></i>
-                                    </button>
-                                </form>
+                                <a href="{{ $class->zoom_link }}" target="_blank" class="w-8 h-8 bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Session Node">
+                                    <i class="bi bi-link-45deg text-lg"></i>
+                                </a>
                             </td>
                         </tr>
                         @endforeach
