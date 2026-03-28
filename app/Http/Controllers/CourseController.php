@@ -24,30 +24,35 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with(['lessons', 'batches', 'studyMaterials'])->findOrFail($id);
-        $isEnrolled = false;
-        
+        $completedLessons = [];
         if (auth()->check()) {
-            if (auth()->user()->is_admin || auth()->user()->is_trainer) {
-                $isEnrolled = true;
+            $admission = Admission::where('user_id', auth()->id())
+                ->where('course_id', $id)
+                ->first();
+            
+            if ($admission) {
+                $completedLessons = is_array($admission->completed_lessons) 
+                    ? $admission->completed_lessons 
+                    : json_decode($admission->completed_lessons ?? '[]', true);
+
+                if (auth()->user()->is_admin || auth()->user()->is_trainer) {
+                    $isEnrolled = true;
+                } else {
+                    $isEnrolled = $admission->status === 'approved';
+                }
             } else {
+                // Check old Enrollment model as fallback
                 $isEnrolled = Enrollment::where('user_id', auth()->id())
                     ->where('course_id', $id)
                     ->where('status', 'active')
                     ->exists();
-                    
-                // Also check approved admissions as a fallback for demo
-                if (!$isEnrolled) {
-                    $isEnrolled = Admission::where('user_id', auth()->id())
-                        ->where('course_id', $id)
-                        ->where('status', 'approved')
-                        ->exists();
-                }
             }
         }
 
         return view('courses.show', [
             'course' => $course,
-            'isEnrolled' => $isEnrolled
+            'isEnrolled' => $isEnrolled,
+            'completedLessons' => $completedLessons
         ]);
     }
 
@@ -57,15 +62,30 @@ class CourseController extends Controller
             ->where('course_id', $id)
             ->firstOrFail();
 
+        $lessonId = (int)$request->input('lesson_id');
+        $completedLessons = is_array($admission->completed_lessons) 
+            ? $admission->completed_lessons 
+            : json_decode($admission->completed_lessons ?? '[]', true);
+
+        if (!in_array($lessonId, $completedLessons)) {
+            $completedLessons[] = $lessonId;
+        }
+
         $course = Course::withCount('lessons')->find($id);
-        $increment = $course->lessons_count > 0 ? floor(100 / $course->lessons_count) : 10;
+        $totalLessons = $course->lessons_count ?: 1;
         
-        $newProgress = min(100, ($admission->progress ?? 0) + $increment);
-        $admission->update(['progress' => $newProgress]);
+        // Calculate progress based on unique completed lessons
+        $newProgress = min(100, round((count($completedLessons) / $totalLessons) * 100));
+        
+        $admission->update([
+            'completed_lessons' => $completedLessons,
+            'progress' => $newProgress
+        ]);
 
         return response()->json([
             'success' => true,
-            'new_progress' => $newProgress
+            'new_progress' => $newProgress,
+            'completed_lessons' => $completedLessons
         ]);
     }
 }

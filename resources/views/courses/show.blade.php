@@ -7,6 +7,8 @@
     isEnrolled: {{ $isEnrolled ? 'true' : 'false' }},
     activeVideo: '',
     activeTitle: '{{ count($course->lessons) > 0 ? $course->lessons[0]->title : "Select a lesson" }}',
+    activeLessonId: '{{ count($course->lessons) > 0 ? $course->lessons[0]->id : "" }}',
+    completedLessons: @js($completedLessons),
     getEmbedUrl(url) {
         if (!url) return '';
         let videoId = '';
@@ -16,6 +18,24 @@
             return 'https://www.youtube.com/embed/' + match[1] + '?rel=0&modestbranding=1&iv_load_policy=3&showinfo=0&autoplay=1';
         }
         return url;
+    },
+    markAsCompleted() {
+        if(!this.activeLessonId) return;
+        
+        fetch('{{ route('courses.progress.update', $course->id) }}', { 
+            method: 'POST', 
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ lesson_id: this.activeLessonId })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if(data.success) {
+                this.completedLessons = data.completed_lessons;
+            }
+        });
+    },
+    isLessonCompleted(id) {
+        return this.completedLessons.includes(parseInt(id));
     },
     init() {
         @if(count($course->lessons) > 0)
@@ -48,17 +68,12 @@
                         <h1 class="text-[20px] md:text-[24px] font-[800] text-navy tracking-tight" x-text="activeTitle"></h1>
                         <p class="text-[13px] md:text-[14px] text-muted font-[500] mt-1.5 md:mt-2 italic">Part of: {{ $course->title }}</p>
                     </div>
-                    <button @click="fetch('{{ route('courses.progress.update', $course->id) }}', { 
-                                        method: 'POST', 
-                                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' }
-                                    }).then(r => r.json()).then(data => {
-                                        if(data.success) {
-                                            alert('Progress updated to ' + data.new_progress + '%!');
-                                        }
-                                    })" 
-                            class="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 bg-primary text-white text-[11px] md:text-[12px] font-[800] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2">
-                        <i class="bi bi-check-circle-fill"></i>
-                        Mark as Completed
+                    <button @click="markAsCompleted()" 
+                            :disabled="isLessonCompleted(activeLessonId)"
+                            :class="isLessonCompleted(activeLessonId) ? 'bg-emerald-600 cursor-default' : 'bg-primary hover:bg-orange-600'"
+                            class="w-full sm:w-auto px-4 md:px-6 py-2 md:py-2.5 text-white text-[11px] md:text-[12px] font-[800] uppercase tracking-widest rounded-[8px] transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i :class="isLessonCompleted(activeLessonId) ? 'bi bi-check-all text-lg' : 'bi bi-check-circle-fill'"></i>
+                        <span x-text="isLessonCompleted(activeLessonId) ? 'Completed' : 'Mark as Completed'"></span>
                     </button>
                 </div>
 
@@ -114,24 +129,31 @@
             <!-- Curriculum Sidebar -->
             <div class="w-full lg:w-[360px] shrink-0">
                 <div class="bg-white rounded-[12px] border border-border shadow-sm overflow-hidden flex flex-col h-full max-h-[600px]">
-                    <div class="p-[24px] border-b border-border">
-                        <h3 class="text-[18px] font-[800] text-navy tracking-tight">Course Curriculum</h3>
-                        <div class="text-[11px] font-[700] text-primary uppercase tracking-widest mt-1">{{ count($course->lessons) }} Total Lessons</div>
+                    <div class="p-[24px] border-b border-border flex items-center justify-between">
+                        <div>
+                            <h3 class="text-[18px] font-[800] text-navy tracking-tight">Curriculum</h3>
+                            <div class="text-[11px] font-[700] text-primary uppercase tracking-widest mt-1">{{ count($course->lessons) }} Total Lessons</div>
+                        </div>
+                        <div class="text-right">
+                             <div class="text-[20px] font-[900] text-navy tracking-tighter" x-text="Math.round((completedLessons.length / {{ count($course->lessons) ?: 1 }}) * 100) + '%'"></div>
+                             <div class="text-[9px] font-[800] text-muted uppercase tracking-[0.15em]">Mastery</div>
+                        </div>
                     </div>
                     <div class="flex-1 overflow-y-auto p-[12px] space-y-[8px]">
                         @foreach($course->lessons as $index => $lesson)
-                        <button @click="activeVideo = getEmbedUrl('{{ $lesson->video_url }}'); activeTitle = '{{ $lesson->title }}'" 
-                                :class="activeVideo === '{{ $lesson->video_url }}' ? 'bg-accent border-primary/20' : 'hover:bg-border/10 border-transparent'"
+                        <button @click="activeVideo = getEmbedUrl('{{ $lesson->video_url }}'); activeTitle = '{{ $lesson->title }}'; activeLessonId = '{{ $lesson->id }}'" 
+                                :class="activeLessonId == '{{ $lesson->id }}' ? 'bg-accent border-primary/20' : 'hover:bg-border/10 border-transparent'"
                                 class="w-full flex items-center gap-[12px] p-[12px] rounded-[8px] border transition-all text-left group">
-                            <div class="w-[36px] h-[36px] rounded-[6px] flex items-center justify-center font-[800] text-[12px] shrink-0 transition-colors"
-                                 :class="activeVideo === '{{ $lesson->video_url }}' ? 'bg-primary text-white' : 'bg-border/30 text-muted group-hover:bg-border/50'">
-                                {{ $index + 1 }}
+                            <div class="w-[36px] h-[36px] rounded-[6px] flex items-center justify-center font-[800] text-[12px] shrink-0 transition-all relative"
+                                 :class="activeLessonId == '{{ $lesson->id }}' ? 'bg-primary text-white shadow-lg shadow-orange-500/10' : (isLessonCompleted('{{ $lesson->id }}') ? 'bg-emerald-50 text-emerald-600' : 'bg-border/30 text-muted group-hover:bg-border/50')">
+                                <span x-show="!isLessonCompleted('{{ $lesson->id }}')">{{ $index + 1 }}</span>
+                                <i x-show="isLessonCompleted('{{ $lesson->id }}')" class="bi bi-check-lg text-lg"></i>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <div class="text-[13px] font-[700] text-navy truncate leading-tight mb-1" :class="activeVideo === '{{ $lesson->video_url }}' ? 'text-primary' : ''">{{ $lesson->title }}</div>
+                                <div class="text-[13px] font-[700] text-navy truncate leading-tight mb-1" :class="activeLessonId == '{{ $lesson->id }}' ? 'text-primary' : (isLessonCompleted('{{ $lesson->id }}') ? 'text-emerald-700' : '')">{{ $lesson->title }}</div>
                                 <div class="text-[10px] text-muted font-[600] uppercase tracking-wider">Video Lesson</div>
                             </div>
-                            <i class="bi bi-play-circle-fill text-[18px] text-border group-hover:text-primary transition-all" :class="activeVideo === '{{ $lesson->video_url }}' ? 'text-primary' : ''"></i>
+                            <i class="bi bi-play-circle-fill text-[18px] text-border group-hover:text-primary transition-all" :class="activeLessonId == '{{ $lesson->id }}' ? 'text-primary' : (isLessonCompleted('{{ $lesson->id }}') ? 'text-emerald-500 opacity-50' : '')"></i>
                         </button>
                         @endforeach
                     </div>
