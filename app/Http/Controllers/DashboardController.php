@@ -52,7 +52,10 @@ class DashboardController extends Controller
             'certifications' => $admissions->where('progress', 100)->count(), // Assuming cert on 100%
         ];
 
-        $upcomingClasses = \App\Models\LiveClass::where('status', 'scheduled')
+        $enrolledBatchIds = $admissions->pluck('batch_id')->filter()->toArray();
+
+        $upcomingClasses = \App\Models\LiveClass::whereIn('live_class_branch_id', $enrolledBatchIds)
+            ->where('status', 'scheduled')
             ->where('start_time', '>=', now())
             ->orderBy('start_time', 'asc')
             ->take(3)

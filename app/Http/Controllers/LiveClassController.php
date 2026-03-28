@@ -12,51 +12,32 @@ class LiveClassController extends Controller
     {
         $userId = auth()->id();
         
-        // Get all course IDs where the user has a confirmed enrollment
-        $enrolledCourseIds = \App\Models\Admission::where('user_id', $userId)
+        // Get all approved admissions for the student
+        $admissions = \App\Models\Admission::where('user_id', $userId)
             ->where('status', 'approved')
-            ->pluck('course_id')
-            ->toArray();
+            ->get();
 
-        // Fetch ALL live classes with course info
-        $allClasses = LiveClass::with('course')
+        $enrolledCourseIds = $admissions->pluck('course_id')->toArray();
+        $enrolledBatchIds = $admissions->pluck('batch_id')->filter()->toArray();
+
+        // Fetch live classes ONLY for the batches the student is enrolled in
+        $allClasses = LiveClass::whereIn('live_class_branch_id', $enrolledBatchIds)
+            ->with('course')
             ->latest()
             ->get();
 
-        $now = \Carbon\Carbon::now();
+        // Split into 3 categories: Active, Upcoming, Past
+        $activeClasses = $allClasses->filter(function(LiveClass $class) {
+            return !$class->isEnded() && (strtolower($class->status) === 'live' || $class->start_time->isPast());
+        })->values();
 
-        // Split into 3 categories: Active (During time OR status=live), Upcoming, Past
-        $activeClasses = $allClasses->filter(function($class) use ($now) {
-            $startTime = \Carbon\Carbon::parse($class->start_time);
-            $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
-            $endTime = $startTime->copy()->addMinutes($durationMinutes);
-            return ($now->between($startTime, $endTime)) || strtolower($class->status) === 'live';
-        })->sort(function($a, $b) use ($enrolledCourseIds) {
-            // Priority 1: Enrolled vs Not Enrolled
-            $aEnrolled = in_array($a->course_id, $enrolledCourseIds);
-            $bEnrolled = in_array($b->course_id, $enrolledCourseIds);
-            if ($aEnrolled && !$bEnrolled) return -1;
-            if (!$aEnrolled && $bEnrolled) return 1;
-            return \Carbon\Carbon::parse($a->start_time)->timestamp <=> \Carbon\Carbon::parse($b->start_time)->timestamp;
-        });
+        $upcomingClasses = $allClasses->filter(function(LiveClass $class) {
+            return $class->start_time->isFuture() && strtolower($class->status) !== 'live';
+        })->values();
 
-        $upcomingClasses = $allClasses->filter(function($class) use ($now) {
-            $startTime = \Carbon\Carbon::parse($class->start_time);
-            return $now->lt($startTime) && strtolower($class->status) !== 'live';
-        })->sort(function($a, $b) use ($enrolledCourseIds) {
-            $aEnrolled = in_array($a->course_id, $enrolledCourseIds);
-            $bEnrolled = in_array($b->course_id, $enrolledCourseIds);
-            if ($aEnrolled && !$bEnrolled) return -1;
-            if (!$aEnrolled && $bEnrolled) return 1;
-            return \Carbon\Carbon::parse($a->start_time)->timestamp <=> \Carbon\Carbon::parse($b->start_time)->timestamp;
-        });
-
-        $pastClasses = $allClasses->filter(function($class) use ($now) {
-            $startTime = \Carbon\Carbon::parse($class->start_time);
-            $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
-            $endTime = $startTime->copy()->addMinutes($durationMinutes);
-            return $now->gt($endTime) && strtolower($class->status) !== 'live';
-        });
+        $pastClasses = $allClasses->filter(function(LiveClass $class) {
+            return $class->isEnded() && strtolower($class->status) !== 'live';
+        })->values();
 
         return view('live-classes.index', compact('activeClasses', 'upcomingClasses', 'pastClasses', 'enrolledCourseIds'));
     }
