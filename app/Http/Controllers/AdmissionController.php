@@ -146,6 +146,7 @@ class AdmissionController extends Controller
             
         if ($fee) {
             $fee->update([
+                'total_amount' => $finalPrice,
                 'paid_amount' => $finalPrice,
                 'status'      => 'paid',
             ]);
