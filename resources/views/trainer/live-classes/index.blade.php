@@ -67,9 +67,15 @@
                                     <div class="flex items-center gap-2 text-[10px] font-[900] uppercase tracking-widest {{ $class->status === 'live' ? 'text-emerald-600' : 'text-amber-500' }} mr-4">
                                         {{ $class->status }}
                                     </div>
-                                    <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-navy rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
-                                        Join <i class="bi bi-box-arrow-up-right"></i>
-                                    </a>
+                                    @if($class->isEnded())
+                                        <div class="px-4 py-2 bg-slate-100 text-slate-400 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest border border-slate-200 cursor-not-allowed">
+                                            Ended <i class="bi bi-clock-history"></i>
+                                        </div>
+                                    @else
+                                        <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-navy rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
+                                            Join <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -116,9 +122,15 @@
                                 </div>
                             </td>
                             <td class="px-6 py-5 text-right">
-                                <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-400 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
-                                    Join <i class="bi bi-box-arrow-up-right"></i>
-                                </a>
+                                @if($class->isEnded())
+                                    <div class="px-4 py-2 bg-slate-50 text-slate-300 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest border border-slate-100 italic">
+                                        Ended
+                                    </div>
+                                @else
+                                    <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-400 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
+                                        Join <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

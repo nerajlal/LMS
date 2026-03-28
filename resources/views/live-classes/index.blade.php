@@ -62,12 +62,9 @@
     <div x-show="activeTab === 'active'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="max-w-6xl mx-auto space-y-6">
         @forelse($activeClasses as $class)
             @php
-                $startTime = \Carbon\Carbon::parse($class->start_time);
-                $durationMinutes = (int) preg_replace('/[^0-9]/', '', $class->duration) ?: 60;
-                $endTime = $startTime->copy()->addMinutes($durationMinutes);
-                $now = \Carbon\Carbon::now();
-                $isLive = $now->between($startTime, $endTime) || strtolower($class->status) === 'live';
+                $isLive = !$class->isEnded() && (strtolower($class->status) === 'live' || $class->start_time->isPast());
                 $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
+                $startTime = $class->start_time;
             @endphp
             
             <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
@@ -135,6 +132,10 @@
                         <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-rose-500 text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-rose-500/20 hover:bg-rose-600 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-2">
                             Join Now <i class="bi bi-camera-video ml-1"></i>
                         </a>
+                    @elseif($class->isEnded())
+                        <div class="w-full py-3.5 bg-slate-100 text-slate-400 border border-slate-200 rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex items-center justify-center gap-2 cursor-not-allowed">
+                            Session Ended <i class="bi bi-clock-history"></i>
+                        </div>
                     @else
                         <div class="w-full py-3.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-[12px] font-[800] text-[13px] uppercase tracking-widest text-center flex flex-col items-center justify-center">
                             <span class="opacity-40 text-[10px] mb-1">Status</span>

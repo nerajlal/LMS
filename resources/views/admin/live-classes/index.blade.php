@@ -80,9 +80,15 @@
                         </td>
                         <td class="p-5 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="{{ $class->zoom_link }}" target="_blank" class="w-9 h-9 bg-slate-50 text-slate-500 rounded-[10px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Session Node">
-                                    <i class="bi bi-link-45deg text-xl"></i>
-                                </a>
+                                @if($class->isEnded())
+                                    <div class="w-9 h-9 bg-slate-100 text-slate-300 rounded-[10px] flex items-center justify-center border border-slate-200 cursor-not-allowed" title="Broadcast Ended">
+                                        <i class="bi bi-clock-history"></i>
+                                    </div>
+                                @else
+                                    <a href="{{ $class->zoom_link }}" target="_blank" class="w-9 h-9 bg-slate-50 text-slate-500 rounded-[10px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Session Node">
+                                        <i class="bi bi-link-45deg text-xl"></i>
+                                    </a>
+                                @endif
                                 <form action="{{ route('admin.live-classes.destroy', $class->id) }}" method="POST" onsubmit="return confirm('Expunge this broadcast node?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="w-9 h-9 bg-pink-50 text-pink-600 rounded-[10px] flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all border border-pink-100 shadow-sm">
