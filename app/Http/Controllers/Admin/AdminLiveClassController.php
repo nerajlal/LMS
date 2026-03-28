@@ -11,8 +11,18 @@ class AdminLiveClassController extends Controller
 {
     public function index()
     {
-        $liveClasses = LiveClass::with('course')->latest()->paginate(10);
-        return view('admin.live-classes.index', compact('liveClasses'));
+        $branches = \App\Models\LiveClassBranch::with(['liveClasses' => function($query) {
+            $query->orderBy('start_time', 'asc');
+        }, 'course', 'trainer'])
+        ->latest()
+        ->get();
+
+        $unbranchedClasses = LiveClass::whereNull('live_class_branch_id')
+            ->with(['course'])
+            ->latest()
+            ->get();
+
+        return view('admin.live-classes.index', compact('branches', 'unbranchedClasses'));
     }
 
     public function create()
