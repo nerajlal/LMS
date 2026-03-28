@@ -133,7 +133,19 @@
                     @endif
 
                     @php
-                        $hasBatchAccess = $class->live_class_branch_id === null || in_array($class->live_class_branch_id, $enrolledBatchIds);
+                        $user = auth()->user();
+                        $isPrivileged = $user->is_admin || $user->is_trainer;
+                        $studentBatchId = $courseBatchMap[$class->course_id] ?? null;
+                        
+                        // Access is allowed if:
+                        // 1. User is Admin/Trainer
+                        // 2. Class has no specific batch (General)
+                        // 3. User is in the EXACT batch assigned to this class
+                        // 4. User is enrolled in the course but has NO batch assigned yet (Default/All-Access)
+                        $hasBatchAccess = $isPrivileged 
+                            || $class->live_class_branch_id === null 
+                            || (int)$class->live_class_branch_id === (int)$studentBatchId
+                            || ($studentBatchId === null && in_array($class->course_id, $enrolledCourseIds));
                     @endphp
 
                     @if(!$isEnrolled)

@@ -18,6 +18,9 @@ class LiveClassController extends Controller
 
         $enrolledCourseIds = $admissions->pluck('course_id')->toArray();
         $enrolledBatchIds = $admissions->pluck('batch_id')->filter()->toArray();
+        
+        // Map course_id to batch_id for fine-grained checks
+        $courseBatchMap = $admissions->pluck('batch_id', 'course_id')->toArray();
 
         // Fetch ALL live classes so users can discover them
         $allClasses = LiveClass::with(['course', 'liveClassBranch'])
@@ -37,6 +40,6 @@ class LiveClassController extends Controller
             return $class->isEnded() && strtolower($class->status) !== 'live';
         })->values();
 
-        return view('live-classes.index', compact('activeClasses', 'upcomingClasses', 'pastClasses', 'enrolledCourseIds', 'enrolledBatchIds'));
+        return view('live-classes.index', compact('activeClasses', 'upcomingClasses', 'pastClasses', 'enrolledCourseIds', 'enrolledBatchIds', 'courseBatchMap'));
     }
 }

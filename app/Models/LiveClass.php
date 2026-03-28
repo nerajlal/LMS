@@ -53,14 +53,16 @@ class LiveClass extends Model
      */
     public function isLive()
     {
+        // Admins and Trainers skip most time checks once it's close or status is live
         if ($this->isEnded()) return false;
         
-        // If status is forced to 'live', it's live
+        // Force live if status is set
         if (strtolower($this->status) === 'live') return true;
         
-        // Allow joining 15 minutes before official start time
+        // Safety check for start time
         if (!$this->start_time) return false;
-        
-        return now()->greaterThanOrEqualTo($this->start_time->copy()->subMinutes(15));
+
+        // Active if now is after (start - 15 mins)
+        return now()->isAfter($this->start_time->copy()->subMinutes(15));
     }
 }
