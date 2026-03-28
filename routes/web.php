@@ -101,6 +101,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
     // Live Classes
     Route::resource('live-classes', AdminLiveClassController::class);
     Route::post('live-classes/coupons', [AdminLiveClassController::class, 'storeCoupon'])->name('live-classes.coupons.store');
+    Route::patch('live-classes/batches/{branch}/trainer', [AdminLiveClassController::class, 'updateTrainer'])->name('live-classes.batches.update-trainer');
 
     // Study Materials
     Route::resource('study-materials', AdminStudyMaterialController::class);

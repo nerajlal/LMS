@@ -71,6 +71,10 @@
                                     class="w-full px-4 py-3 text-left text-[10px] font-[900] text-navy uppercase tracking-[0.1em] hover:bg-slate-50 flex items-center gap-3 transition-colors">
                                 <i class="bi bi-ticket-perforated-fill text-primary text-[14px]"></i> Add Coupon
                             </button>
+                            <button @click="menuOpen = false; $dispatch('open-tutor-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}', currentTrainerId: '{{ $branch->trainer_id }}' })" 
+                                    class="w-full px-4 py-3 text-left text-[10px] font-[900] text-navy uppercase tracking-[0.1em] hover:bg-slate-50 flex items-center gap-3 transition-colors border-t border-slate-50">
+                                <i class="bi bi-person-badge-fill text-primary text-[14px]"></i> Add Tutor
+                            </button>
                         </div>
                     </div>
 
@@ -235,6 +239,50 @@
                 <div class="pt-4">
                     <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
                         Activate Coupon
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Assign Tutor Modal -->
+    <dialog id="tutorModal" class="p-0 rounded-[24px] shadow-2xl border-none backdrop:backdrop-blur-sm"
+            x-data="{ batchId: '', batchName: '', trainerId: '' }"
+            @open-tutor-modal.window="batchId = $event.detail.batchId; batchName = $event.detail.batchName; trainerId = $event.detail.currentTrainerId; $el.showModal()">
+        <div class="w-[450px] bg-white">
+            <div class="p-8 border-b border-border bg-slate-50/50">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Assign <span class="text-primary">Tutor</span></h3>
+                    <button @click="$el.closest('dialog').close()" class="text-slate-400 hover:text-navy transition-colors">
+                        <i class="bi bi-x-lg text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Delegating authority for <span class="text-navy" x-text="batchName"></span></p>
+            </div>
+            
+            <form :action="'{{ url('/admin/live-classes/batches') }}/' + batchId + '/trainer'" method="POST" class="p-8 space-y-6">
+                @csrf
+                @method('PATCH')
+                
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Select Specialized Trainer</label>
+                    <div class="relative">
+                        <select name="trainer_id" x-model="trainerId" required
+                                class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[13px] font-[800] text-navy appearance-none outline-none">
+                            <option value="">Select a Trainer</option>
+                            @foreach($trainers as $trainer)
+                                <option value="{{ $trainer->id }}">{{ $trainer->name }} ({{ $trainer->email }})</option>
+                            @endforeach
+                        </select>
+                        <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
+                        Confirm Delegation
                     </button>
                 </div>
             </form>

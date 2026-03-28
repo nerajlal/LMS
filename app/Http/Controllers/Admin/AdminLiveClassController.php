@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\LiveClass;
 use App\Models\Course;
 use App\Models\Coupon;
+use App\Models\User;
+use App\Models\LiveClassBranch;
 use Illuminate\Http\Request;
 
 class AdminLiveClassController extends Controller
@@ -42,7 +44,25 @@ class AdminLiveClassController extends Controller
             ->latest()
             ->get();
 
-        return view('admin.live-classes.index', compact('branches', 'unbranchedClasses'));
+        $trainers = User::where('is_trainer', true)->latest()->get();
+
+        return view('admin.live-classes.index', compact('branches', 'unbranchedClasses', 'trainers'));
+    }
+
+    /**
+     * Assign a trainer to a batch.
+     */
+    public function updateTrainer(Request $request, LiveClassBranch $branch)
+    {
+        $validated = $request->validate([
+            'trainer_id' => 'required|exists:users,id',
+        ]);
+
+        $branch->update([
+            'trainer_id' => $validated['trainer_id']
+        ]);
+
+        return redirect()->route('admin.live-classes.index')->with('success', 'Batch tutor updated successfully.');
     }
 
     public function create()
