@@ -22,16 +22,30 @@
             @csrf
             
             <div class="space-y-6">
-                <div>
-                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-3 px-1">Target Course</label>
-                    <div class="relative">
-                        <select name="course_id" class="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
-                            <option value="">-- General / Non-Course Specific --</option>
-                            @foreach($courses as $course)
-                                <option value="{{ $course->id }}">{{ $course->title }}</option>
-                            @endforeach
-                        </select>
-                        <i class="bi bi-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-navy/30 pointer-events-none"></i>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-3 px-1">Target Course</label>
+                        <div class="relative">
+                            <select name="course_id" class="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer italic">
+                                <option value="">General Course</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}">{{ $course->title }}</option>
+                                @endforeach
+                            </select>
+                            <i class="bi bi-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-navy/30 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-3 px-1">Live Class Branch (Group)</label>
+                        <div class="relative">
+                            <select name="live_class_branch_id" required class="w-full px-6 py-4 bg-emerald-50/30 border-2 border-emerald-100 rounded-[14px] focus:border-emerald-200 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
+                                <option value="" disabled {{ !isset($selectedBranchId) ? 'selected' : '' }}>-- Select a Batch --</option>
+                                @foreach($branches as $branch)
+                                    <option value="{{ $branch->id }}" {{ (isset($selectedBranchId) && $selectedBranchId == $branch->id) ? 'selected' : '' }}>{{ $branch->name }}</option>
+                                @endforeach
+                            </select>
+                            <i class="bi bi-folder-fill absolute right-6 top-1/2 -translate-y-1/2 text-emerald-500/30 pointer-events-none"></i>
+                        </div>
                     </div>
                 </div>
 

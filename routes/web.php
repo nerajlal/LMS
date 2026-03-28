@@ -118,6 +118,7 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     Route::delete('/courses/{course}/materials/{material}', [TrainerCourseController::class, 'destroyMaterial'])->name('courses.materials.destroy');
     
     Route::resource('live-classes', TrainerLiveClassController::class)->except(['destroy']);
+    Route::post('live-classes/branches', [TrainerLiveClassController::class, 'storeBranch'])->name('live-classes.branches.store');
 
     // Study Materials Management (Trainer)
     Route::resource('study-materials', TrainerStudyMaterialController::class)->names([

@@ -28,4 +28,9 @@ class Course extends Model
     public function batches()   { return $this->hasMany(Batch::class); }
     public function admissions(){ return $this->hasMany(Admission::class); }
     public function enrollments(){ return $this->hasMany(Enrollment::class); }
+
+    public function liveClassBranches()
+    {
+        return $this->hasMany(LiveClassBranch::class);
+    }
 }

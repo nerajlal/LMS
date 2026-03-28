@@ -14,10 +14,16 @@ class LiveClass extends Model
         'duration',
         'zoom_link',
         'status',
+        'live_class_branch_id',
     ];
 
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function liveClassBranch()
+    {
+        return $this->belongsTo(LiveClassBranch::class, 'live_class_branch_id');
     }
 }

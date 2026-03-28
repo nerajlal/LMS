@@ -9,25 +9,66 @@ use Illuminate\Http\Request;
 class TrainerLiveClassController extends Controller
 {
     /**
-     * Display a listing of live classes.
+     * Display a listing of live classes grouped by branches.
      */
     public function index()
     {
-        $classes = LiveClass::with('course')->latest()->get();
+        $trainerName = auth()->user()->name;
+        
+        // Get all branches created by this trainer, with their classes
+        $branches = \App\Models\LiveClassBranch::where('trainer_id', auth()->id())
+            ->with(['liveClasses' => function($query) {
+                $query->orderBy('start_time', 'asc');
+            }, 'course'])
+            ->latest()
+            ->get();
+
+        // Also get classes that might not be in a branch (legacy or general)
+        $unbranchedClasses = LiveClass::where('instructor_name', $trainerName)
+            ->whereNull('live_class_branch_id')
+            ->with('course')
+            ->latest()
+            ->get();
+
+        $courses = \App\Models\Course::where('instructor_name', $trainerName)->get();
 
         return view('trainer.live-classes.index', [
-            'classes' => $classes
+            'branches' => $branches,
+            'unbranchedClasses' => $unbranchedClasses,
+            'courses' => $courses
         ]);
+    }
+
+    /**
+     * Store a new branch.
+     */
+    public function storeBranch(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'course_id' => 'nullable|exists:courses,id',
+        ]);
+
+        $validated['trainer_id'] = auth()->id();
+        $validated['status'] = 'active';
+
+        \App\Models\LiveClassBranch::create($validated);
+
+        return redirect()->route('trainer.live-classes.index')->with('success', 'Branch created successfully.');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $courses = \App\Models\Course::select('id', 'title')->get();
+        $courses = \App\Models\Course::where('instructor_name', auth()->user()->name)->select('id', 'title')->get();
+        $branches = \App\Models\LiveClassBranch::where('trainer_id', auth()->id())->get();
+        
         return view('trainer.live-classes.create', [
-            'courses' => $courses
+            'courses' => $courses,
+            'branches' => $branches,
+            'selectedBranchId' => $request->query('branch_id')
         ]);
     }
 
@@ -38,6 +79,7 @@ class TrainerLiveClassController extends Controller
     {
         $validated = $request->validate([
             'course_id' => 'nullable|exists:courses,id',
+            'live_class_branch_id' => 'nullable|exists:live_class_branches,id',
             'title' => 'required|string|max:255',
             'start_time' => 'required|date',
             'duration' => 'required|string|max:50',

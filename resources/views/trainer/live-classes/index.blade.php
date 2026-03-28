@@ -14,73 +14,175 @@
                     <i class="bi bi-camera-video text-primary text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight text-white uppercase">Live Class <span class="text-primary">Schedule</span></h1>
-                    <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-0.5">Manage your interactive sessions</p>
+                    <h1 class="text-xl md:text-2xl font-[900] tracking-tight text-white uppercase">Live Class <span class="text-primary">Batches</span></h1>
+                    <p class="text-slate-400 text-[10px] md:text-[12px] font-[600] uppercase tracking-widest mt-0.5">Organize and schedule your sessions by batch</p>
                 </div>
             </div>
-            <a href="{{ route('trainer.live-classes.create') }}" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
-                <i class="bi bi-plus-lg text-lg"></i>
-                <span>Schedule Session</span>
-            </a>
+            <div class="flex items-center gap-4">
+                <button onclick="document.getElementById('branchModal').showModal()" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
+                    <i class="bi bi-plus-lg text-lg"></i>
+                    <span>New Batch</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-[12px] border border-border shadow-sm overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
-                <thead>
-                    <tr class="bg-slate-50/50 border-b border-border">
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Session Info</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Target Course</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Schedule</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Access</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-border">
-                    @forelse($classes as $class)
-                    <tr class="hover:bg-slate-50/30 transition-colors group">
-                        <td class="px-6 py-5">
-                            <div class="text-[14px] font-[800] text-navy group-hover:text-primary transition-colors leading-tight truncate max-w-[200px]">{{ $class->title }}</div>
-                            <div class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest mt-1.5 flex items-center gap-2">
-                                <i class="bi bi-person-badge text-primary"></i> {{ $class->instructor_name }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-5">
-                            <span class="inline-flex px-2.5 py-1 bg-slate-100 text-navy rounded-[6px] text-[10px] font-[900] uppercase tracking-widest border border-slate-200">
-                                {{ $class->course->title ?? 'General' }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-5">
-                            <div class="text-[13px] font-[800] text-navy">{{ \Carbon\Carbon::parse($class->start_time)->format('M d, Y') }}</div>
-                            <div class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest mt-1">{{ \Carbon\Carbon::parse($class->start_time)->format('g:i A') }} ({{ $class->duration }})</div>
-                        </td>
-                        <td class="px-6 py-5">
-                            <div class="flex items-center gap-2 text-[10px] font-[900] uppercase tracking-widest {{ $class->status === 'live' ? 'text-emerald-600' : 'text-amber-500' }}">
-                                <span class="relative flex h-2 w-2">
-                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $class->status === 'live' ? 'bg-emerald-400' : 'bg-amber-400' }} opacity-75"></span>
-                                    <span class="relative inline-flex rounded-full h-2 w-2 {{ $class->status === 'live' ? 'bg-emerald-600' : 'bg-amber-500' }}"></span>
-                                </span>
-                                {{ $class->status }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-5 text-right">
-                            <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-navy rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all shadow-sm border border-slate-200">
-                                Join <i class="bi bi-box-arrow-up-right"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="py-[64px] text-center">
-                            <i class="bi bi-camera-video-off text-[32px] text-border mb-4 block"></i>
-                            <p class="text-muted font-[600] italic">No live classes scheduled.</p>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+    <!-- Branch Sections -->
+    <div class="space-y-8">
+        @foreach($branches as $branch)
+        <div class="bg-white rounded-[20px] border border-border shadow-sm overflow-hidden">
+            <div class="px-6 py-4 bg-slate-50/50 border-b border-border flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-[10px] bg-navy text-white flex items-center justify-center">
+                        <i class="bi bi-folder2-open"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-[15px] font-[900] text-navy uppercase tracking-tight">{{ $branch->name }}</h3>
+                        <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">{{ $branch->course->title ?? 'General Batch' }}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-[10px] font-[800] text-slate-400 uppercase tracking-widest bg-white border border-border px-3 py-1.5 rounded-full">
+                        {{ $branch->liveClasses->count() }} Sessions
+                    </div>
+                    <a href="{{ route('trainer.live-classes.create', ['branch_id' => $branch->id]) }}" class="px-4 py-2 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-sm">
+                        <i class="bi bi-plus-lg"></i> Add Live Class
+                    </a>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <tbody class="divide-y divide-border">
+                        @forelse($branch->liveClasses as $class)
+                        <tr class="hover:bg-slate-50/30 transition-colors group">
+                            <td class="px-6 py-5">
+                                <div class="text-[14px] font-[800] text-navy group-hover:text-primary transition-colors leading-tight truncate max-w-[200px]">{{ $class->title }}</div>
+                                <div class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest mt-1.5 flex items-center gap-2">
+                                    <i class="bi bi-clock text-primary"></i> {{ \Carbon\Carbon::parse($class->start_time)->format('M d, g:i A') }} ({{ $class->duration }})
+                                </div>
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <div class="flex items-center justify-end gap-3">
+                                    <div class="flex items-center gap-2 text-[10px] font-[900] uppercase tracking-widest {{ $class->status === 'live' ? 'text-emerald-600' : 'text-amber-500' }} mr-4">
+                                        {{ $class->status }}
+                                    </div>
+                                    <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-navy rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
+                                        Join <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="2" class="px-6 py-8 text-center bg-slate-50/20">
+                                <p class="text-[12px] text-slate-400 italic font-[600]">No sessions yet in this batch.</p>
+                                <a href="{{ route('trainer.live-classes.create', ['branch_id' => $branch->id]) }}" class="mt-3 inline-flex items-center gap-2 text-primary font-[800] text-[11px] uppercase tracking-widest hover:underline">
+                                    <i class="bi bi-plus-circle"></i> Create first session
+                                </a>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
+        @endforeach
+
+        <!-- Unbranched Classes (Legacy/General) -->
+        @if($unbranchedClasses->count() > 0)
+        <div class="bg-white rounded-[20px] border border-border shadow-sm overflow-hidden border-dashed border-2">
+            <div class="px-6 py-4 bg-slate-50/30 border-b border-border flex justify-between items-center">
+                <div class="flex items-center gap-3 opacity-60">
+                    <div class="w-10 h-10 rounded-[10px] bg-slate-200 text-slate-500 flex items-center justify-center border border-slate-300">
+                        <i class="bi bi-archive"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-[15px] font-[900] text-slate-500 uppercase tracking-tight">Unorganized Sessions</h3>
+                        <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">Legacy or general live classes</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <tbody class="divide-y divide-border">
+                        @foreach($unbranchedClasses as $class)
+                        <tr class="hover:bg-slate-50/30 transition-colors group">
+                            <td class="px-6 py-5">
+                                <div class="text-[14px] font-[800] text-slate-500 group-hover:text-primary transition-colors leading-tight truncate max-w-[200px]">{{ $class->title }}</div>
+                                <div class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest mt-1.5 flex items-center gap-2">
+                                    <i class="bi bi-clock text-slate-300"></i> {{ \Carbon\Carbon::parse($class->start_time)->format('M d, g:i A') }}
+                                </div>
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 text-slate-400 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
+                                    Join <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @endif
+
+        @if($branches->isEmpty() && $unbranchedClasses->isEmpty())
+        <div class="bg-white rounded-[20px] border-2 border-dashed border-border p-20 text-center">
+            <div class="w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 mx-auto mb-6">
+                <i class="bi bi-collection-play text-4xl"></i>
+            </div>
+            <h3 class="text-xl font-[900] text-navy uppercase tracking-tight mb-2">Build your first batch</h3>
+            <p class="text-slate-500 text-[14px] max-w-sm mx-auto mb-10">Create a batch to group your live sessions. It helps you and your students stay organized.</p>
+            <button onclick="document.getElementById('branchModal').showModal()" class="px-8 py-4 bg-navy text-white font-[900] text-[13px] rounded-[16px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20">
+                Create Your First Batch
+            </button>
+        </div>
+        @endif
     </div>
+
+    <!-- Create Branch Modal -->
+    <dialog id="branchModal" class="p-0 rounded-[24px] shadow-2xl border-none backdrop:backdrop-blur-sm">
+        <div class="w-[450px] bg-white">
+            <div class="p-8 border-b border-border bg-slate-50/50">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Create New <span class="text-primary">Batch</span></h3>
+                    <button onclick="document.getElementById('branchModal').close()" class="text-slate-400 hover:text-navy transition-colors">
+                        <i class="bi bi-x-lg text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Group your live classes for a specific cohort</p>
+            </div>
+            
+            <form action="{{ route('trainer.live-classes.branches.store') }}" method="POST" class="p-8 space-y-6">
+                @csrf
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Batch Name</label>
+                    <input type="text" name="name" required placeholder="e.g. Batch A - Morning" 
+                           class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy placeholder:text-slate-300 italic">
+                </div>
+                
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Related Course (Optional)</label>
+                    <div class="relative">
+                        <select name="course_id" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
+                            <option value="">General Branch</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course->id }}">{{ $course->title }}</option>
+                            @endforeach
+                        </select>
+                        <i class="bi bi-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-navy/30 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
+                        Create Batch
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
 </div>
 @endsection
