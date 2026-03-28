@@ -60,7 +60,19 @@
                         </td>
                         <td class="p-5 hidden lg:table-cell">
                             <div class="text-[13px] font-[800] text-navy leading-tight line-clamp-1 italic text-slate-600 border-l-2 border-primary/20 pl-3 leading-none truncate max-w-[200px]">{{ $admission->course->title ?? 'General Program' }}</div>
-                            <div class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest mt-1 ml-3">{{ $admission->batch->name ?? 'Primary Batch' }}</div>
+                            <div class="mt-2 ml-3">
+                                <form action="{{ route('admin.admissions.assign-batch', $admission->id) }}" method="POST" class="flex items-center gap-2">
+                                    @csrf
+                                    <select name="batch_id" onchange="this.form.submit()" class="text-[10px] text-navy font-[800] uppercase tracking-widest bg-slate-50 border border-slate-200 px-2 py-1 rounded-[6px] focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer max-w-[150px]">
+                                        <option value="">No Batch Assignment</option>
+                                        @foreach($batches->where('course_id', $admission->course_id) as $batch)
+                                            <option value="{{ $batch->id }}" {{ $admission->batch_id == $batch->id ? 'selected' : '' }}>
+                                                {{ $batch->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            </div>
                         </td>
                         <td class="p-5 text-center whitespace-nowrap">
                             @php

@@ -18,8 +18,9 @@ class AdminAdmissionController extends Controller
         }
 
         $admissions = $query->paginate(20);
+        $batches = \App\Models\LiveClassBranch::with('course')->get();
 
-        return view('admin.admissions.index', compact('admissions'));
+        return view('admin.admissions.index', compact('admissions', 'batches'));
     }
 
     public function approve(Admission $admission)
@@ -32,6 +33,17 @@ class AdminAdmissionController extends Controller
     {
         $admission->update(['status' => 'rejected']);
         return back()->with('success', 'Admission rejected.');
+    }
+
+    public function assignBatch(Request $request, Admission $admission)
+    {
+        $request->validate([
+            'batch_id' => 'required|exists:live_class_branches,id',
+        ]);
+
+        $admission->update(['batch_id' => $request->batch_id]);
+
+        return back()->with('success', 'Batch assigned successfully.');
     }
 
     public function uploadCertificate(Request $request, Admission $admission)
