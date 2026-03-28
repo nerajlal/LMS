@@ -3,6 +3,22 @@
 @section('title', 'System Courses')
 
 @section('content')
+<style>
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 20px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+</style>
+
 <div class="space-y-8" x-data="{ 
     courseDetail: null, 
     trainerDetail: null,
@@ -138,119 +154,123 @@
         <div class="fixed inset-0 z-[1100] flex items-center justify-center p-4">
             <div class="fixed inset-0 bg-navy/80 backdrop-blur-md" @click="courseDetail = null; trainerDetail = null; loading = false"></div>
             
-            <div class="relative bg-white w-full max-w-2xl rounded-[24px] overflow-hidden shadow-2xl border border-white/20 animate-in fade-in zoom-in duration-300">
-                <!-- Loading State -->
-                <div x-show="loading" class="p-20 text-center">
-                    <div class="inline-block w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-                    <p class="mt-4 text-[11px] font-[900] text-navy uppercase tracking-widest animate-pulse">Synchronizing Intelligence...</p>
-                </div>
-
-                <!-- Course Details -->
-                <div x-show="courseDetail" class="focus:outline-none">
-                    <div class="relative h-48 bg-navy">
-                        <img :src="courseDetail?.thumbnail" class="w-full h-full object-cover opacity-40">
-                        <div class="absolute inset-0 bg-gradient-to-t from-navy to-transparent"></div>
-                        <button @click="courseDetail = null" class="absolute top-6 right-6 w-10 h-10 bg-white/10 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
-                    </div>
-                    <div class="p-8 -mt-12 relative z-10">
-                        <div class="inline-flex px-4 py-1.5 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-full shadow-lg shadow-orange-500/20 mb-6">Course Intelligence</div>
-                        <h2 class="text-2xl font-[900] text-navy uppercase leading-tight" x-text="courseDetail?.title"></h2>
-                        <div class="flex items-center gap-4 mt-4">
-                            <div class="flex items-center gap-2">
-                                <i class="bi bi-person-badge text-primary"></i>
-                                <span class="text-[12px] font-[800] text-slate-500 uppercase tracking-widest" x-text="courseDetail?.instructor"></span>
-                            </div>
-                            <div class="w-1.5 h-1.5 bg-slate-200 rounded-full"></div>
-                            <div class="flex items-center gap-2">
-                                <i class="bi bi-tag text-emerald-500"></i>
-                                <span class="text-[14px] font-[900] text-navy uppercase" x-text="'₹'+courseDetail?.price"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-4 mt-8">
-                            <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100">
-                                <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest mb-1">Total Assets</div>
-                                <div class="text-xl font-[900] text-navy" x-text="courseDetail?.lessons + ' Video Modules'"></div>
-                            </div>
-                            <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100">
-                                <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest mb-1">Institutional Reach</div>
-                                <div class="text-xl font-[900] text-navy" x-text="courseDetail?.students + ' Verified Students'"></div>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 space-y-6">
-                            <div>
-                                <h4 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
-                                    <i class="bi bi-body-text text-primary"></i> Description
-                                </h4>
-                                <p class="text-[13px] text-slate-600 font-[500] leading-relaxed line-clamp-4" x-text="courseDetail?.description"></p>
-                            </div>
-                            <div>
-                                <h4 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
-                                    <i class="bi bi-check2-circle text-emerald-500"></i> Learning Outcomes
-                                </h4>
-                                <div class="text-[13px] text-slate-600 font-[500] leading-relaxed" x-text="courseDetail?.outcomes"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Trainer Catalog -->
-                <div x-show="trainerDetail" class="p-8">
-                    <div class="flex items-center justify-between mb-8">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl bg-navy text-white flex items-center justify-center text-xl font-[900] shadow-xl">
-                                <span x-text="trainerDetail?.trainer?.substring(0,1)"></span>
-                            </div>
-                            <div>
-                                <h2 class="text-xl font-[900] text-navy uppercase leading-none" x-text="trainerDetail?.trainer"></h2>
-                                <p class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest mt-2 flex items-center gap-2">
-                                    <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
-                                    Senior Education Trainer
-                                </p>
-                            </div>
-                        </div>
-                        <button @click="trainerDetail = null" class="w-10 h-10 bg-slate-50 text-navy rounded-full flex items-center justify-center hover:bg-slate-100 transition-all border border-slate-100">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
+            <div class="relative bg-white w-full max-w-2xl rounded-[24px] overflow-hidden shadow-2xl border border-white/10 animate-in fade-in zoom-in duration-300 max-h-[90vh] flex flex-col">
+                <!-- Inner scrollable container -->
+                <div class="overflow-y-auto custom-scrollbar flex-1">
+                    <!-- Loading State -->
+                    <div x-show="loading" class="p-20 text-center">
+                        <div class="inline-block w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                        <p class="mt-4 text-[11px] font-[900] text-navy uppercase tracking-widest animate-pulse">Synchronizing Intelligence...</p>
                     </div>
 
-                    <div class="space-y-4">
-                        <h4 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mb-4 flex items-center justify-between">
-                            Assigned Product Catalog 
-                            <span class="text-primary" x-text="trainerDetail?.courses?.length + ' Courses'"></span>
-                        </h4>
-                        
-                        <div class="max-h-[300px] overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                            <template x-for="course in trainerDetail?.courses" :key="course.id">
-                                <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100 flex items-center justify-between group hover:bg-white hover:border-primary/20 transition-all cursor-default">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-navy font-[900] text-xs shadow-sm border border-slate-100 group-hover:bg-navy group-hover:text-white transition-all" x-text="course.lessons"></div>
-                                        <div>
-                                            <div class="text-sm font-[800] text-navy truncate max-w-[200px]" x-text="course.title"></div>
-                                            <div class="text-[9px] text-slate-400 font-[700] uppercase tracking-widest mt-0.5" x-text="'PHY-'+course.id.toString().padStart(4, '0')"></div>
+                    <!-- Course Details -->
+                    <div x-show="courseDetail && !loading" class="focus:outline-none">
+                        <div class="relative h-48 bg-navy">
+                            <img :src="courseDetail?.thumbnail" class="w-full h-full object-cover opacity-40">
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy to-transparent"></div>
+                            <button @click="courseDetail = null" class="absolute top-6 right-6 w-10 h-10 bg-white/10 backdrop-blur-md text-white rounded-full flex items-center justify-center hover:bg-white/20 transition-all">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                        <div class="p-8 -mt-12 relative z-10">
+                            <div class="inline-flex px-4 py-1.5 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-full shadow-lg shadow-orange-500/20 mb-6">Course Intelligence</div>
+                            <h2 class="text-2xl font-[900] text-navy uppercase leading-tight" x-text="courseDetail?.title"></h2>
+                            
+                            <div class="flex items-center gap-4 mt-4">
+                                <div class="flex items-center gap-2">
+                                    <i class="bi bi-person-badge text-primary"></i>
+                                    <span class="text-[12px] font-[800] text-slate-500 uppercase tracking-widest" x-text="courseDetail?.instructor"></span>
+                                </div>
+                                <div class="w-1.5 h-1.5 bg-slate-200 rounded-full"></div>
+                                <div class="flex items-center gap-2">
+                                    <i class="bi bi-tag text-emerald-500"></i>
+                                    <span class="text-[14px] font-[900] text-navy uppercase" x-text="'₹'+courseDetail?.price"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 mt-8">
+                                <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100">
+                                    <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest mb-1">Total Assets</div>
+                                    <div class="text-xl font-[900] text-navy" x-text="courseDetail?.lessons + ' Video Modules'"></div>
+                                </div>
+                                <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100">
+                                    <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest mb-1">Institutional Reach</div>
+                                    <div class="text-xl font-[900] text-navy" x-text="courseDetail?.students + ' Verified Students'"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 space-y-6">
+                                <div>
+                                    <h4 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                                        <i class="bi bi-body-text text-primary"></i> Description
+                                    </h4>
+                                    <p class="text-[13px] text-slate-600 font-[500] leading-relaxed" x-text="courseDetail?.description"></p>
+                                </div>
+                                <div>
+                                    <h4 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                                        <i class="bi bi-check2-circle text-emerald-500"></i> Learning Outcomes
+                                    </h4>
+                                    <div class="text-[13px] text-slate-600 font-[500] leading-relaxed" x-text="courseDetail?.outcomes"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trainer Catalog -->
+                    <div x-show="trainerDetail && !loading" class="p-8">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-2xl bg-navy text-white flex items-center justify-center text-xl font-[900] shadow-xl">
+                                    <span x-text="trainerDetail?.trainer?.substring(0,1)"></span>
+                                </div>
+                                <div>
+                                    <h2 class="text-xl font-[900] text-navy uppercase leading-none" x-text="trainerDetail?.trainer"></h2>
+                                    <p class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest mt-2 flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                                        Senior Education Trainer
+                                    </p>
+                                </div>
+                            </div>
+                            <button @click="trainerDetail = null" class="w-10 h-10 bg-slate-50 text-navy rounded-full flex items-center justify-center hover:bg-slate-100 transition-all border border-slate-100">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h4 class="text-[11px] font-[900] text-navy uppercase tracking-[0.2em] mb-4 flex items-center justify-between">
+                                Assigned Product Catalog 
+                                <span class="text-primary" x-text="trainerDetail?.courses?.length + ' Courses'"></span>
+                            </h4>
+                            
+                            <div class="space-y-3">
+                                <template x-for="course in trainerDetail?.courses" :key="course.id">
+                                    <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100 flex items-center justify-between group hover:bg-white hover:border-primary/20 transition-all cursor-default">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-navy font-[900] text-xs shadow-sm border border-slate-100 group-hover:bg-navy group-hover:text-white transition-all" x-text="course.lessons"></div>
+                                            <div>
+                                                <div class="text-sm font-[800] text-navy truncate max-w-[200px]" x-text="course.title"></div>
+                                                <div class="text-[9px] text-slate-400 font-[700] uppercase tracking-widest mt-0.5" x-text="'PHY-'+course.id.toString().padStart(4, '0')"></div>
+                                            </div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-[13px] font-[900] text-navy" x-text="'₹'+course.price"></div>
+                                            <div class="text-[8px] text-emerald-500 font-[900] uppercase tracking-widest">Active</div>
                                         </div>
                                     </div>
-                                    <div class="text-right">
-                                        <div class="text-[13px] font-[900] text-navy" x-text="'₹'+course.price"></div>
-                                        <div class="text-[8px] text-emerald-500 font-[900] uppercase tracking-widest">Active</div>
-                                    </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="mt-8 pt-8 border-t border-slate-50">
-                        <div class="flex items-center justify-between text-[11px] font-[800] text-slate-400 uppercase tracking-widest">
-                            <span>Total Portfolio Valuation</span>
-                            <span class="text-navy" x-text="'₹'+trainerDetail?.courses?.reduce((acc, c) => acc + parseFloat(c.price.replace(/,/g, '')), 0).toLocaleString()"></span>
+                        <div class="mt-8 pt-8 border-t border-slate-50">
+                            <div class="flex items-center justify-between text-[11px] font-[800] text-slate-400 uppercase tracking-widest">
+                                <span>Total Portfolio Valuation</span>
+                                <span class="text-navy" x-text="'₹'+trainerDetail?.courses?.reduce((acc, c) => acc + parseFloat(c.price.replace(/,/g, '')), 0).toLocaleString()"></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div> <!-- End of overflow-y-auto -->
+            </div> <!-- End of relative bg-white -->
+        </div> <!-- End of fixed overlay -->
     </template>
 </div>
 @endsection
