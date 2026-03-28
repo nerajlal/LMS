@@ -74,10 +74,10 @@ class TrainerLiveClassController extends Controller
             'course_id' => 'nullable|exists:courses,id',
         ]);
 
-        $validated['trainer_id'] = auth()->id();
-        $validated['status'] = 'active';
-
-        \App\Models\LiveClassBranch::create($validated);
+        $branch = \App\Models\LiveClassBranch::create($validated);
+        
+        // Auto-attach the creator as the first collaborator
+        $branch->trainers()->attach(auth()->id());
 
         return redirect()->route('trainer.live-classes.index')->with('success', 'Branch created successfully.');
     }
