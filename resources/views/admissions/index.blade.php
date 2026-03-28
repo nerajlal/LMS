@@ -3,7 +3,7 @@
 @section('title', 'My Learning - The Ace India')
 
 @section('content')
-<div class="space-y-8" x-data="{ activeTab: 'ongoing' }">
+<div class="space-y-8" x-data="{ activeTab: '{{ count($inProgress) > 0 ? 'ongoing' : 'done' }}' }">
     <!-- Compact Cinematic Header -->
     <div class="relative overflow-hidden rounded-[16px] bg-navy p-6 md:p-8 text-white shadow-xl">
         <div class="absolute top-[-20px] right-[-20px] w-[150px] h-[150px] bg-primary/20 rounded-full blur-[60px]"></div>
@@ -25,10 +25,6 @@
                     <span class="text-lg md:text-xl font-[900] text-primary">{{ $stats['in_progress'] }}</span>
                 </div>
                 <div class="flex flex-col border-l border-white/10 pl-4 sm:pl-8">
-                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Pending</span>
-                    <span class="text-lg md:text-xl font-[900] text-white">{{ $stats['pending'] }}</span>
-                </div>
-                <div class="flex flex-col border-l border-white/10 pl-4 sm:pl-8">
                     <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Done</span>
                     <span class="text-lg md:text-xl font-[900] text-emerald-400">{{ $stats['completed'] }}</span>
                 </div>
@@ -48,11 +44,6 @@
                     :class="activeTab === 'done' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
                     class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-2.5 rounded-[10px] text-[11px] md:text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
                 Completed
-            </button>
-            <button @click="activeTab = 'waiting'" 
-                    :class="activeTab === 'waiting' ? 'bg-white text-navy shadow-md ring-1 ring-black/5' : 'text-slate-500 hover:text-navy'"
-                    class="flex-1 md:flex-none px-4 md:px-6 py-2 md:py-2.5 rounded-[10px] text-[11px] md:text-[12px] font-[800] uppercase tracking-widest transition-all focus:outline-none">
-                Pending
             </button>
         </div>
 
@@ -135,44 +126,6 @@
             @endforelse
         </div>
 
-        <!-- Pending Tab -->
-        <div x-show="activeTab === 'waiting'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="max-w-4xl mx-auto space-y-4">
-            @forelse($pending as $admission)
-                <div class="bg-white p-6 rounded-[16px] border border-border flex items-center justify-between group hover:border-primary/20 transition-all shadow-sm">
-                    <div class="flex items-center gap-6">
-                        <div class="w-14 h-14 rounded-[12px] bg-navy/5 text-navy flex items-center justify-center text-2xl shrink-0 group-hover:bg-navy group-hover:text-white transition-all">
-                            <i class="bi bi-shield-lock"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-[16px] font-[800] text-navy">{{ $admission->course?->title }}</h4>
-                            <div class="text-[12px] font-[600] text-muted italic mt-1">
-                                @if($admission->status === 'pending' && $admission->course->price > 0)
-                                    Payment required to activate this course
-                                @else
-                                    Awaiting instructor verification
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                        <span class="px-4 py-1.5 bg-slate-100 text-navy text-[10px] font-[900] uppercase tracking-widest rounded-full border border-slate-200">
-                            {{ ucfirst($admission->status) }}
-                        </span>
-
-                        @if($admission->status === 'pending' && $admission->course->price > 0)
-                            <a href="{{ route('admissions.checkout', $admission->id) }}" class="px-6 py-2 bg-primary text-white text-[12px] font-[800] uppercase tracking-widest rounded-[10px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20">
-                                Pay Now
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            @empty
-                <div class="bg-slate-50 rounded-[12px] p-16 text-center border-2 border-dashed border-slate-200 italic">
-                    All application requests are processed.
-                </div>
-            @endforelse
-        </div>
     </div>
 </div>
 </div>

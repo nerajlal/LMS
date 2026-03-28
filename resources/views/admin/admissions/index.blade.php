@@ -3,7 +3,7 @@
 @section('title', 'Enrollment & Graduation - Admin')
 
 @section('content')
-<div class="space-y-8" x-data="{ activeTab: '{{ request('tab', 'pending') }}' }">
+<div class="space-y-8" x-data="{ activeTab: '{{ request('tab', 'approved') }}' }">
     <!-- Cinematic Header -->
     <div class="relative overflow-hidden rounded-[20px] bg-navy p-6 md:p-8 text-white shadow-xl">
         <div class="absolute top-[-20px] right-[-20px] w-[200px] h-[200px] bg-primary/20 rounded-full blur-[80px]"></div>
@@ -19,7 +19,6 @@
             </div>
             
             <div class="flex items-center gap-2 p-1 bg-white/5 border border-white/10 rounded-[14px] backdrop-blur-sm">
-                <button @click="activeTab = 'pending'" :class="activeTab === 'pending' ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-[10px] text-[10px] font-[900] uppercase tracking-widest transition-all">Pending</button>
                 <button @click="activeTab = 'approved'" :class="activeTab === 'approved' ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-[10px] text-[10px] font-[900] uppercase tracking-widest transition-all">Active</button>
                 <button @click="activeTab = 'completed'" :class="activeTab === 'completed' ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-[10px] text-[10px] font-[900] uppercase tracking-widest transition-all uppercase">Completed</button>
             </div>
@@ -61,17 +60,23 @@
                         <td class="p-5 hidden lg:table-cell">
                             <div class="text-[13px] font-[800] text-navy leading-tight line-clamp-1 italic text-slate-600 border-l-2 border-primary/20 pl-3 leading-none truncate max-w-[200px]">{{ $admission->course->title ?? 'General Program' }}</div>
                             <div class="mt-2 ml-3">
-                                <form action="{{ route('admin.admissions.assign-batch', $admission->id) }}" method="POST" class="flex items-center gap-2">
-                                    @csrf
-                                    <select name="batch_id" onchange="this.form.submit()" class="text-[10px] text-navy font-[800] uppercase tracking-widest bg-slate-50 border border-slate-200 px-2 py-1 rounded-[6px] focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer max-w-[150px]">
-                                        <option value="">No Batch Assignment</option>
-                                        @foreach($batches->where('course_id', $admission->course_id) as $batch)
-                                            <option value="{{ $batch->id }}" {{ $admission->batch_id == $batch->id ? 'selected' : '' }}>
-                                                {{ $batch->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </form>
+                                @if($tabCategory === 'completed')
+                                    <span class="text-[10px] text-slate-500 font-[800] uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-[6px] border border-slate-200 inline-flex items-center gap-1.5 shadow-inner">
+                                        <i class="bi bi-person-check text-primary"></i> {{ $admission->batch?->name ?? 'No Batch Assignment' }}
+                                    </span>
+                                @else
+                                    <form action="{{ route('admin.admissions.assign-batch', $admission->id) }}" method="POST" class="flex items-center gap-2">
+                                        @csrf
+                                        <select name="batch_id" onchange="this.form.submit()" class="text-[10px] text-navy font-[800] uppercase tracking-widest bg-slate-50 border border-slate-200 px-2 py-1 rounded-[6px] focus:ring-1 focus:ring-primary focus:border-primary transition-all cursor-pointer max-w-[150px]">
+                                            <option value="">No Batch Assignment</option>
+                                            @foreach($batches->where('course_id', $admission->course_id) as $batch)
+                                                <option value="{{ $batch->id }}" {{ $admission->batch_id == $batch->id ? 'selected' : '' }}>
+                                                    {{ $batch->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                         <td class="p-5 text-center whitespace-nowrap">
