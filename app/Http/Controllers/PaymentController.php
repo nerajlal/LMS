@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Admission;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -51,6 +52,14 @@ class PaymentController extends Controller
             $fee->status = 'partially_paid';
         }
         $fee->save();
+
+        // Sync Admission Status if paid
+        if ($fee->status === 'paid') {
+            Admission::where('user_id', $fee->user_id)
+                ->where('course_id', $fee->course_id)
+                ->where('status', 'pending')
+                ->update(['status' => 'approved']);
+        }
 
         return redirect()->route('fees.index')->with('success', 'Payment successful! Your course access is updated.');
     }
