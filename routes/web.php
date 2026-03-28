@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('admissions', AdmissionController::class)->only(['index', 'create', 'store']);
     Route::get('/admissions/{admission}/checkout', [AdmissionController::class, 'checkout'])->name('admissions.checkout');
     Route::post('/admissions/{admission}/pay', [AdmissionController::class, 'pay'])->name('admissions.pay');
+    Route::post('/admissions/validate-coupon', [AdmissionController::class, 'validateCoupon'])->name('admissions.validate-coupon');
 
     // Enrollments (Aliases for Admissions)
     Route::get('/enrollments', [AdmissionController::class, 'index'])->name('enrollments.index');
@@ -122,6 +123,7 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     
     Route::resource('live-classes', TrainerLiveClassController::class)->except(['destroy']);
     Route::post('live-classes/branches', [TrainerLiveClassController::class, 'storeBranch'])->name('live-classes.branches.store');
+    Route::post('live-classes/coupons', [TrainerLiveClassController::class, 'storeCoupon'])->name('live-classes.coupons.store');
 
     // Study Materials Management (Trainer)
     Route::resource('study-materials', TrainerStudyMaterialController::class)->names([

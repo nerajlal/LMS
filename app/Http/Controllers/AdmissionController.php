@@ -105,7 +105,7 @@ class AdmissionController extends Controller
         return view('admissions.checkout', compact('admission'));
     }
 
-    public function pay(Admission $admission)
+    public function pay(Admission $admission, Request $request)
     {
         // Ensure student owns this admission
         if ($admission->user_id !== auth()->id()) {
@@ -114,10 +114,28 @@ class AdmissionController extends Controller
 
         $course = $admission->course;
 
+        $discount = 0;
+        if ($request->filled('coupon_code')) {
+            $coupon = \App\Models\Coupon::where('code', $request->coupon_code)
+                ->where('is_used', false)
+                ->where(function($query) use ($admission) {
+                    $query->where('batch_id', $admission->batch_id)
+                          ->orWhereNull('batch_id');
+                })
+                ->first();
+
+            if ($coupon) {
+                $discount = $coupon->discount_amount;
+                $coupon->update(['is_used' => true]);
+            }
+        }
+
+        $finalPrice = max(0, $course->price - $discount);
+
         // Create a simulated payment record
         \App\Models\Payment::create([
             'user_id'    => auth()->id(),
-            'amount'     => $course->price,
+            'amount'     => $finalPrice,
             'payment_id' => 'DUMMY_' . strtoupper(uniqid()),
             'status'     => 'success',
             'type'       => 'course_enrollment',
@@ -131,7 +149,7 @@ class AdmissionController extends Controller
             
         if ($fee) {
             $fee->update([
-                'paid_amount' => $course->price,
+                'paid_amount' => $finalPrice,
                 'status'      => 'paid',
             ]);
         }
@@ -140,5 +158,32 @@ class AdmissionController extends Controller
         $admission->update(['status' => 'approved']);
 
         return redirect()->route('admissions.index')->with('success', 'Payment successful! Welcome to the course.');
+    }
+
+    public function validateCoupon(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string',
+            'admission_id' => 'required|exists:admissions,id',
+        ]);
+
+        $admission = Admission::findOrFail($request->admission_id);
+        $coupon = \App\Models\Coupon::where('code', $request->code)
+            ->where('is_used', false)
+            ->where(function($query) use ($admission) {
+                $query->where('batch_id', $admission->batch_id)
+                      ->orWhereNull('batch_id');
+            })
+            ->first();
+
+        if (!$coupon) {
+            return response()->json(['success' => false, 'message' => 'Invalid or expired coupon.'], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'discount' => (float)$coupon->discount_amount,
+            'code' => $coupon->code
+        ]);
     }
 }

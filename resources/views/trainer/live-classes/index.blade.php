@@ -31,7 +31,7 @@
     <div class="space-y-8">
         @foreach($branches as $branch)
         <div class="bg-white rounded-[20px] border border-border shadow-sm overflow-hidden">
-            <div class="px-6 py-4 bg-slate-50/50 border-b border-border flex justify-between items-center">
+            <div class="px-6 py-4 bg-slate-50/50 border-b border-border flex justify-between items-center" x-data="{ open: false }">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-[10px] bg-navy text-white flex items-center justify-center">
                         <i class="bi bi-folder2-open"></i>
@@ -48,6 +48,24 @@
                     <a href="{{ route('trainer.live-classes.create', ['branch_id' => $branch->id]) }}" class="px-4 py-2 bg-primary text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] hover:bg-orange-600 transition-all shadow-sm">
                         <i class="bi bi-plus-lg"></i> Add Live Class
                     </a>
+                    
+                    <!-- 3-Dot Options Menu -->
+                    <div class="relative">
+                        <button @click="open = !open" @click.away="open = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200 transition-colors text-slate-400 focus:outline-none">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <div x-show="open" 
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="transform opacity-0 scale-95"
+                             x-transition:enter-end="transform opacity-100 scale-100"
+                             class="absolute right-0 mt-2 w-48 bg-white border border-border rounded-[12px] shadow-xl z-50 overflow-hidden"
+                             style="display: none;">
+                            <button @click="$dispatch('open-coupon-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}' })" 
+                                    class="w-full px-4 py-3 text-left text-[11px] font-[800] text-navy uppercase tracking-widest hover:bg-slate-50 flex items-center gap-3 transition-colors">
+                                <i class="bi bi-ticket-perforated-fill text-primary"></i> Add Coupon
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -191,6 +209,55 @@
                 <div class="pt-4">
                     <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
                         Create Batch
+                    </button>
+                </div>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Coupon Modal -->
+    <dialog id="couponModal" class="p-0 rounded-[24px] shadow-2xl border-none backdrop:backdrop-blur-sm"
+            x-data="{ batchId: '', batchName: '' }"
+            @open-coupon-modal.window="batchId = $event.detail.batchId; batchName = $event.detail.batchName; $el.showModal()">
+        <div class="w-[450px] bg-white">
+            <div class="p-8 border-b border-border bg-slate-50/50">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Generate <span class="text-primary">Coupon</span></h3>
+                    <button @click="$el.closest('dialog').close()" class="text-slate-400 hover:text-navy transition-colors">
+                        <i class="bi bi-x-lg text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Single-use discount for <span class="text-navy" x-text="batchName"></span></p>
+            </div>
+            
+            <form action="{{ route('trainer.live-classes.coupons.store') }}" method="POST" class="p-8 space-y-6">
+                @csrf
+                <input type="hidden" name="batch_id" :value="batchId">
+                
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Coupon Code</label>
+                    <div class="relative group">
+                        <input type="text" name="code" id="coupon_code" required placeholder="e.g. SAVE500" 
+                               class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[900] text-navy placeholder:text-slate-300 tracking-widest uppercase">
+                        <button type="button" @click="document.getElementById('coupon_code').value = 'CPN' + Math.random().toString(36).substring(2, 8).toUpperCase()"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-primary font-[900] text-[10px] uppercase tracking-widest hover:scale-105 transition-transform">
+                            Generate
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Discount Amount (Fixed ₹)</label>
+                    <div class="relative">
+                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-navy/30 font-[900]">₹</span>
+                        <input type="number" name="discount_amount" required placeholder="500" 
+                               class="w-full pl-10 pr-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[900] text-navy placeholder:text-slate-300">
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
+                        Activate Coupon
                     </button>
                 </div>
             </form>

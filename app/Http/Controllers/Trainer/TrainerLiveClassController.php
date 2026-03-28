@@ -4,10 +4,30 @@ namespace App\Http\Controllers\Trainer;
 
 use App\Http\Controllers\Controller;
 use App\Models\LiveClass;
+use App\Models\Coupon;
 use Illuminate\Http\Request;
 
 class TrainerLiveClassController extends Controller
 {
+    /**
+     * Store a new coupon for a batch.
+     */
+    public function storeCoupon(Request $request)
+    {
+        $validated = $request->validate([
+            'code' => 'required|string|unique:coupons,code',
+            'discount_amount' => 'required|numeric|min:1',
+            'batch_id' => 'required|exists:live_class_branches,id',
+        ]);
+
+        $validated['user_id'] = auth()->id();
+        $validated['is_used'] = false;
+
+        Coupon::create($validated);
+
+        return redirect()->route('trainer.live-classes.index')->with('success', 'Coupon code generated successfully.');
+    }
+
     /**
      * Display a listing of live classes grouped by branches.
      */

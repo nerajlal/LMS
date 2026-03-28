@@ -66,10 +66,66 @@
         </div>
 
         <!-- Order Summary Sidebar -->
-        <div class="md:col-span-2">
+        <div class="md:col-span-2" 
+             x-data="{ 
+                couponCode: '', 
+                discount: 0, 
+                appliedCode: '',
+                isVerifying: false, 
+                errorMessage: '',
+                basePrice: {{ $admission->course->price }},
+                async applyCoupon() {
+                    if (!this.couponCode) return;
+                    this.isVerifying = true;
+                    this.errorMessage = '';
+                    try {
+                        const response = await fetch('{{ route('admissions.validate-coupon') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                code: this.couponCode,
+                                admission_id: {{ $admission->id }}
+                            })
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            this.discount = data.discount;
+                            this.appliedCode = data.code;
+                        } else {
+                            this.errorMessage = data.message;
+                        }
+                    } catch (e) {
+                        this.errorMessage = 'Verification failed. Try again.';
+                    } finally {
+                        this.isVerifying = false;
+                    }
+                }
+             }">
             <div class="bg-white p-8 rounded-[16px] border border-border shadow-xl shadow-navy/5 space-y-6 sticky top-24">
                 <h3 class="text-[18px] font-[800] text-navy tracking-tight border-b border-border pb-4">Order Summary</h3>
                 
+                <!-- Coupon Section -->
+                <div class="space-y-3 pt-2">
+                    <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] px-1">Have a Coupon?</label>
+                    <div class="flex gap-2">
+                        <input type="text" x-model="couponCode" :disabled="appliedCode" 
+                               placeholder="Enter code" 
+                               class="flex-1 px-4 py-2.5 bg-slate-50 border border-border rounded-[10px] text-[13px] font-[700] text-navy focus:border-primary/30 focus:ring-0 transition-all uppercase placeholder:text-slate-300 outline-none">
+                        <button type="button" @click="applyCoupon" :disabled="isVerifying || !couponCode || appliedCode" 
+                                class="px-4 py-2.5 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[10px] hover:bg-primary transition-all disabled:opacity-50">
+                            <span x-show="!isVerifying">Apply</span>
+                            <span x-show="isVerifying" style="display: none;"><i class="bi bi-arrow-repeat animate-spin"></i></span>
+                        </button>
+                    </div>
+                    <p x-show="errorMessage" x-text="errorMessage" class="text-[10px] font-[800] text-red-500 uppercase px-1" style="display: none;"></p>
+                    <p x-show="appliedCode" class="text-[10px] font-[900] text-emerald-600 uppercase px-1 flex items-center gap-1" style="display: none;">
+                        <i class="bi bi-patch-check-fill"></i> Coupon <span x-text="appliedCode" class="underline decoration-2"></span> Applied
+                    </p>
+                </div>
+
                 <div class="space-y-4">
                     <div class="flex justify-between items-center text-[15px]">
                         <span class="text-muted font-[500]">Course Price</span>
@@ -81,18 +137,19 @@
                     </div>
                     <div class="flex justify-between items-center text-[15px]">
                         <span class="text-muted font-[500]">Discount</span>
-                        <span class="text-navy font-[700]">₹0</span>
+                        <span class="text-emerald-600 font-[900]" x-text="'-₹' + Math.floor(discount).toLocaleString()">₹0</span>
                     </div>
                 </div>
 
                 <div class="pt-6 border-t border-border">
                     <div class="flex justify-between items-center mb-8">
                         <span class="text-[20px] font-[800] text-navy">Total</span>
-                        <span class="text-[28px] font-[900] text-navy tracking-tighter">₹{{ number_format($admission->course->price) }}</span>
+                        <span class="text-[28px] font-[900] text-navy tracking-tighter" x-text="'₹' + Math.floor(basePrice - discount).toLocaleString()">₹{{ number_format($admission->course->price) }}</span>
                     </div>
 
                     <form action="{{ route('admissions.pay', $admission->id) }}" method="POST">
                         @csrf
+                        <input type="hidden" name="coupon_code" :value="appliedCode">
                         <button type="submit" class="w-full py-4 bg-primary text-white font-[800] rounded-[12px] hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 uppercase tracking-widest text-[14px]">
                             Pay & Enroll Now
                         </button>
