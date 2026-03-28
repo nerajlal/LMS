@@ -42,8 +42,11 @@
                             <span class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest border-r border-slate-200 pr-3">
                                 {{ $branch->course->title ?? 'General Batch' }}
                             </span>
-                            <span class="text-[10px] text-primary font-[900] uppercase tracking-widest">
-                                <i class="bi bi-person-badge"></i> {{ $branch->trainer->name ?? 'System Admin' }}
+                            <span class="text-[10px] text-primary font-[900] uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="bi bi-person-badge"></i> 
+                                <span class="truncate max-w-[150px]">
+                                    {{ $branch->trainers->count() > 0 ? $branch->trainers->pluck('name')->join(', ') : 'No Tutors Assigned' }}
+                                </span>
                             </span>
                         </div>
                     </div>
@@ -71,9 +74,9 @@
                                     class="w-full px-4 py-3 text-left text-[10px] font-[900] text-navy uppercase tracking-[0.1em] hover:bg-slate-50 flex items-center gap-3 transition-colors">
                                 <i class="bi bi-ticket-perforated-fill text-primary text-[14px]"></i> Add Coupon
                             </button>
-                            <button @click="menuOpen = false; $dispatch('open-tutor-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}', currentTrainerId: '{{ $branch->trainer_id }}' })" 
+                            <button @click="menuOpen = false; $dispatch('open-tutor-modal', { batchId: {{ $branch->id }}, batchName: '{{ $branch->name }}' })" 
                                     class="w-full px-4 py-3 text-left text-[10px] font-[900] text-navy uppercase tracking-[0.1em] hover:bg-slate-50 flex items-center gap-3 transition-colors border-t border-slate-50">
-                                <i class="bi bi-person-badge-fill text-primary text-[14px]"></i> Add Tutor
+                                <i class="bi bi-person-plus-fill text-primary text-[14px]"></i> Add Tutor
                             </button>
                         </div>
                     </div>

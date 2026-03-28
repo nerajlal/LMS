@@ -39,6 +39,12 @@
                     <div>
                         <h3 class="text-[15px] font-[900] text-navy uppercase tracking-tight">{{ $branch->name }}</h3>
                         <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">{{ $branch->course->title ?? 'General Batch' }}</p>
+                        @if($branch->trainers->where('id', '!=', auth()->id())->count() > 0)
+                            <div class="mt-1 flex items-center gap-1.5 opacity-60">
+                                <i class="bi bi-people-fill text-[10px] text-primary"></i>
+                                <span class="text-[9px] font-[800] text-slate-400 uppercase tracking-widest">Collaborators: {{ $branch->trainers->where('id', '!=', auth()->id())->pluck('name')->join(', ') }}</span>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="flex items-center gap-3">

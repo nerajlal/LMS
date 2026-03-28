@@ -18,9 +18,9 @@ class LiveClassBranch extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function trainer()
+    public function trainers()
     {
-        return $this->belongsTo(User::class, 'trainer_id');
+        return $this->belongsToMany(User::class, 'live_class_branch_trainer', 'live_class_branch_id', 'trainer_id')->withTimestamps();
     }
 
     public function liveClasses()

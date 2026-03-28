@@ -35,11 +35,16 @@ class TrainerLiveClassController extends Controller
     {
         $trainerName = auth()->user()->name;
         
-        // Get all branches created by this trainer, with their classes
-        $branches = \App\Models\LiveClassBranch::where('trainer_id', auth()->id())
+        // Get all branches where this trainer is either the creator or a collaborator
+        $branches = \App\Models\LiveClassBranch::where(function($query) {
+                $query->where('trainer_id', auth()->id())
+                      ->orWhereHas('trainers', function($q) {
+                          $q->where('users.id', auth()->id());
+                      });
+            })
             ->with(['liveClasses' => function($query) {
                 $query->orderBy('start_time', 'asc');
-            }, 'course'])
+            }, 'course', 'trainers'])
             ->latest()
             ->get();
 
@@ -83,7 +88,12 @@ class TrainerLiveClassController extends Controller
     public function create(Request $request)
     {
         $courses = \App\Models\Course::where('instructor_name', auth()->user()->name)->select('id', 'title')->get();
-        $branches = \App\Models\LiveClassBranch::where('trainer_id', auth()->id())->get();
+        $branches = \App\Models\LiveClassBranch::where(function($query) {
+                $query->where('trainer_id', auth()->id())
+                      ->orWhereHas('trainers', function($q) {
+                          $q->where('users.id', auth()->id());
+                      });
+            })->get();
         
         $selectedBranchId = $request->query('branch_id');
         $selectedCourseId = null;

@@ -85,4 +85,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Payment::class);
     }
+
+    public function liveClassBranches()
+    {
+        return $this->belongsToMany(LiveClassBranch::class, 'live_class_branch_trainer', 'trainer_id', 'live_class_branch_id')->withTimestamps();
+    }
 }

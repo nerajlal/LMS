@@ -35,7 +35,7 @@ class AdminLiveClassController extends Controller
     {
         $branches = \App\Models\LiveClassBranch::with(['liveClasses' => function($query) {
             $query->orderBy('start_time', 'asc');
-        }, 'course', 'trainer'])
+        }, 'course', 'trainers'])
         ->latest()
         ->get();
 
@@ -58,11 +58,10 @@ class AdminLiveClassController extends Controller
             'trainer_id' => 'required|exists:users,id',
         ]);
 
-        $branch->update([
-            'trainer_id' => $validated['trainer_id']
-        ]);
+        // Support multiple trainers (collaborative model)
+        $branch->trainers()->syncWithoutDetaching([$validated['trainer_id']]);
 
-        return redirect()->route('admin.live-classes.index')->with('success', 'Batch tutor updated successfully.');
+        return redirect()->route('admin.live-classes.index')->with('success', 'Specialized tutor added to the batch.');
     }
 
     public function create()
