@@ -77,6 +77,16 @@ class AdmissionController extends Controller
             ]),
         ]);
 
+        // Synchronize Financial Ledger (Create Pending Fee)
+        \App\Models\Fee::create([
+            'user_id'      => auth()->id(),
+            'course_id'    => $data['course_id'],
+            'total_amount' => $course->price,
+            'paid_amount'  => ($course->price > 0) ? 0 : $course->price,
+            'status'       => ($course->price > 0) ? 'pending' : 'paid',
+            'due_date'     => now()->addDays(7),
+        ]);
+
         if ($course->price > 0) {
             return redirect()->route('admissions.checkout', $admission->id)->with('info', 'Please complete the payment to start learning.');
         }
@@ -112,6 +122,19 @@ class AdmissionController extends Controller
             'status'     => 'success',
             'type'       => 'course_enrollment',
         ]);
+
+        // Sync Financial Ledger (Update Fee Status)
+        $fee = \App\Models\Fee::where('user_id', auth()->id())
+            ->where('course_id', $admission->course_id)
+            ->where('status', 'pending')
+            ->first();
+            
+        if ($fee) {
+            $fee->update([
+                'paid_amount' => $course->price,
+                'status'      => 'paid',
+            ]);
+        }
 
         // Automatically Approve
         $admission->update(['status' => 'approved']);
