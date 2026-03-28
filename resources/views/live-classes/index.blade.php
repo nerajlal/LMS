@@ -3,7 +3,7 @@
 @section('title', 'Live Interactive Classes - EduLMS')
 
 @section('content')
-<div class="space-y-8" x-data="{ activeTab: 'active' }">
+<div class="space-y-8" x-data="{ activeTab: '{{ count($activeClasses) > 0 ? 'active' : (count($upcomingClasses) > 0 ? 'upcoming' : 'active') }}' }">
     <!-- Compact Cinematic Header -->
     <div class="relative overflow-hidden rounded-[16px] bg-navy p-6 md:p-8 text-white shadow-xl">
         <div class="absolute top-[-20px] right-[-20px] w-[150px] h-[150px] bg-primary/20 rounded-full blur-[60px]"></div>
