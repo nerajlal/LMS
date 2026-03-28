@@ -237,5 +237,3 @@
     @endguest
 </body>
 </html>
-</body>
-</html>
