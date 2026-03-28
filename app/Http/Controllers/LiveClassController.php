@@ -20,7 +20,7 @@ class LiveClassController extends Controller
         $enrolledBatchIds = $admissions->pluck('batch_id')->filter()->toArray();
 
         // Fetch ALL live classes so users can discover them
-        $allClasses = LiveClass::with('course')
+        $allClasses = LiveClass::with(['course', 'liveClassBranch'])
             ->latest()
             ->get();
 

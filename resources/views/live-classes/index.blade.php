@@ -124,6 +124,14 @@
                         </div>
                     </div>
 
+                    @if($class->liveClassBranch)
+                    <div class="mb-4">
+                        <div class="inline-flex px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-md text-emerald-600 text-[9px] font-[900] uppercase tracking-widest">
+                            <i class="bi bi-people-fill mr-1"></i> {{ $class->liveClassBranch->name }}
+                        </div>
+                    </div>
+                    @endif
+
                     @php
                         $hasBatchAccess = $class->live_class_branch_id === null || in_array($class->live_class_branch_id, $enrolledBatchIds);
                     @endphp
