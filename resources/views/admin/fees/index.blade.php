@@ -81,7 +81,12 @@
                                 </div>
                             </td>
                             <td class="px-6 py-5">
-                                <div class="text-[14px] font-[900] text-navy">₹{{ number_format($fee->total_amount) }}</div>
+                                <div class="flex items-baseline gap-2">
+                                    <div class="text-[14px] font-[900] text-navy">₹{{ number_format($fee->total_amount) }}</div>
+                                    @if($fee->original_amount && $fee->original_amount > $fee->total_amount)
+                                        <div class="text-[11px] font-[700] text-slate-400 line-through decoration-red-400/50 decoration-2">₹{{ number_format($fee->original_amount) }}</div>
+                                    @endif
+                                </div>
                                 <div class="text-[9px] text-slate-400 font-[700] uppercase tracking-widest mt-0.5">Base Invoice</div>
                             </td>
                             <td class="px-6 py-5 hidden md:table-cell">
