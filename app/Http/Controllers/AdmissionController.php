@@ -46,7 +46,7 @@ class AdmissionController extends Controller
     {
         return view('admissions.create', [
             'courses' => Course::all(),
-            'batches' => Batch::all(),
+            'batches' => \App\Models\LiveClassBranch::where('status', 'active')->get(),
         ]);
     }
 
@@ -57,7 +57,7 @@ class AdmissionController extends Controller
             'email'              => 'required|email|max:255',
             'phone'              => 'required|string|max:20',
             'course_id'         => 'required|exists:courses,id',
-            'batch_id'          => 'nullable|exists:batches,id',
+            'batch_id'          => 'nullable|exists:live_class_branches,id',
             'address'           => 'nullable|string',
             'previous_education' => 'nullable|string',
         ]);

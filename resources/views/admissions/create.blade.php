@@ -33,14 +33,21 @@
             <form action="{{ route('admissions.store') }}" method="POST" class="space-y-8">
                 @csrf
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" 
+                     x-data="{ 
+                        selectedCourse: '{{ request('course_id', '') }}',
+                        batches: @js($batches),
+                        get filteredBatches() {
+                            return this.batches.filter(b => b.course_id == this.selectedCourse);
+                        }
+                     }">
                     <div class="md:col-span-2">
                         <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Select Your Course</label>
                         <div class="relative group">
-                            <select name="course_id" required class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[12px] focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all text-[14px] font-[700] appearance-none cursor-pointer text-navy">
+                            <select name="course_id" required x-model="selectedCourse" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[12px] focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all text-[14px] font-[700] appearance-none cursor-pointer text-navy">
                                 <option value="">-- Choose Course --</option>
                                 @foreach($courses as $course)
-                                    <option value="{{ $course->id }}" {{ request('course_id') == $course->id ? 'selected' : '' }}>
+                                    <option value="{{ $course->id }}">
                                         {{ $course->title }}
                                     </option>
                                 @endforeach
@@ -48,6 +55,20 @@
                             <i class="bi bi-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-muted text-sm pointer-events-none group-hover:text-primary transition-colors"></i>
                         </div>
                         @error('course_id') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="md:col-span-2" x-show="filteredBatches.length > 0" x-transition>
+                        <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Preferred Batch</label>
+                        <div class="relative group">
+                            <select name="batch_id" required class="w-full px-5 py-4 bg-emerald-50/30 border border-emerald-100 rounded-[12px] focus:ring-4 focus:ring-emerald-500/5 focus:bg-white focus:border-emerald-500/20 transition-all text-[14px] font-[700] appearance-none cursor-pointer text-navy italic">
+                                <option value="">-- Select Your Batch --</option>
+                                <template x-for="batch in filteredBatches" :key="batch.id">
+                                    <option :value="batch.id" x-text="batch.name"></option>
+                                </template>
+                            </select>
+                            <i class="bi bi-people absolute right-5 top-1/2 -translate-y-1/2 text-emerald-500 text-sm pointer-events-none group-hover:scale-110 transition-transform"></i>
+                        </div>
+                        <p class="mt-3 text-[10px] font-[700] text-emerald-600 uppercase tracking-widest px-1"><i class="bi bi-info-circle mr-1"></i> Selection required for live class access</p>
                     </div>
 
                     <div>
