@@ -57,6 +57,11 @@
                             <span class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest border-r border-slate-200 pr-3">
                                 {{ $branch->course->title ?? 'General Batch' }}
                             </span>
+                            @if($branch->course)
+                            <span class="text-[10px] text-emerald-600 font-[900] uppercase tracking-widest border-r border-slate-200 pr-3">
+                                ₹{{ number_format($branch->course->price, 2) }}
+                            </span>
+                            @endif
                             <span class="text-[10px] text-primary font-[900] uppercase tracking-widest flex items-center gap-1.5">
                                 <i class="bi bi-person-badge"></i> 
                                 <span class="truncate max-w-[150px]">
