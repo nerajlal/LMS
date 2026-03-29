@@ -1,6 +1,6 @@
 # EduLMS — Learning Management System
 
-EduLMS is a modern, premium **Learning Management System (LMS)** built with **Laravel 11**, **React 18**, and **Inertia.js**. It is designed to provide a seamless experience for both instructors and students, featuring a design inspired by the high-end **Courseplus** theme.
+EduLMS is a modern, premium **Learning Management System (LMS)** built with **Laravel 11**. It is designed to provide a seamless experience for both instructors and students, featuring a design inspired by the high-end **Courseplus** theme and custom-tailored for **The Ace India** brand.
 
 ---
 
@@ -27,7 +27,7 @@ EduLMS is a modern, premium **Learning Management System (LMS)** built with **La
 | Layer | Technology |
 |-------|-----------|
 | **Backend** | Laravel 11 (PHP 8.2+) |
-| **Frontend** | React 18 + Inertia.js |
+| **Frontend** | Laravel Blade |
 | **Styling** | Bootstrap 5 + Bootstrap Icons + Inter Font |
 | **Database** | MySQL |
 | **Integrations** | PhonePe (Payments), Zoom (Live Classes), YouTube (Video) |
@@ -93,8 +93,8 @@ EduLMS is a modern, premium **Learning Management System (LMS)** built with **La
 ## 📁 Project Structure
 
 - `app/Http/Controllers/`: Backend logic for courses, admissions, and payments.
-- `resources/js/Pages/`: React components for all project pages.
-- `resources/js/Layouts/`: Shared layout components (Sidebar, Navbar).
+- `resources/views/`: Blade templates for all project pages.
+- `resources/views/layouts/`: Shared layout components (Sidebar, Navbar).
 - `database/migrations/`: Database schema definitions.
 - `routes/web.php`: URL routing for the entire application.
 
