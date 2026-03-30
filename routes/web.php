@@ -83,6 +83,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 
     // Students
     Route::get('students', [AdminStudentController::class, 'index'])->name('students.index');
+    Route::post('students/{student}/toggle-status', [AdminStudentController::class, 'toggleStatus'])->name('students.toggle-status');
 
     // Trainers
     Route::resource('trainers', \App\Http\Controllers\Admin\AdminTrainerController::class)->only(['index', 'create', 'store']);

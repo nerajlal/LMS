@@ -32,20 +32,21 @@
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Student Profile</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden md:table-cell text-center">Involvement</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Contact Details</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Actions</th>
                     </tr>
                 </thead>
                     <tbody class="divide-y divide-slate-50">
                         @forelse($students as $student)
-                        <tr class="hover:bg-slate-50/30 transition-colors group">
+                        <tr class="hover:bg-slate-50/30 transition-colors group {{ !$student->is_active ? 'opacity-75 grayscale-[0.5]' : '' }}">
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-[12px] bg-navy/5 text-navy flex items-center justify-center font-[900] text-sm border border-slate-200 shadow-sm group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+                                    <div class="w-10 h-10 rounded-[12px] {{ $student->is_active ? 'bg-navy/5 text-navy' : 'bg-slate-200 text-slate-400' }} flex items-center justify-center font-[900] text-sm border border-slate-200 shadow-sm group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
                                         {{ substr($student->name, 0, 1) }}
                                     </div>
                                     <div>
                                         <div class="text-[14px] font-[800] text-navy leading-tight mb-1 group-hover:text-primary transition-colors uppercase leading-none">{{ $student->name }}</div>
-                                        <div class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest">Joined: {{ $student->created_at->format('M d, Y') }}</div>
+                                        <div class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest">{{ $student->is_active ? 'Verified Learner' : 'Account Suspended' }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -63,12 +64,25 @@
                             </td>
                             <td class="px-6 py-5">
                                 <div class="text-[13px] font-[600] text-navy mb-1">{{ $student->email }}</div>
-                                <div class="text-[10px] text-slate-400 font-[600] uppercase tracking-widest">Verified Learner</div>
+                                <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest italic">Since {{ $student->created_at->format('M Y') }}</div>
+                            </td>
+                            <td class="px-6 py-5">
+                                <span class="px-2.5 py-1 {{ $student->is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100' }} rounded-lg text-[9px] font-[900] uppercase tracking-widest border shadow-sm">
+                                    {{ $student->is_active ? 'Authorized' : 'Frozen' }}
+                                </span>
                             </td>
                             <td class="px-6 py-5 text-right">
-                                <a href="{{ route('admin.admissions.index', ['user_id' => $student->id]) }}" class="px-4 py-2 bg-slate-50 text-navy text-[10px] font-[900] uppercase tracking-widest rounded-[8px] border border-slate-200 hover:bg-navy hover:text-white hover:border-navy transition-all shadow-sm">
-                                    View History
-                                </a>
+                                <div class="flex items-center justify-end gap-2 text-right">
+                                    <form action="{{ route('admin.students.toggle-status', $student->id) }}" method="POST" onsubmit="return confirm('Change status for this student?')">
+                                        @csrf
+                                        <button type="submit" class="w-[32px] h-[32px] {{ $student->is_active ? 'bg-amber-50 text-amber-500 hover:bg-amber-500' : 'bg-emerald-50 text-emerald-500 hover:bg-emerald-500' }} rounded-[8px] flex items-center justify-center hover:text-white transition-all shadow-sm border border-slate-200" title="{{ $student->is_active ? 'Freeze Account' : 'Activate Account' }}">
+                                            <i class="bi {{ $student->is_active ? 'bi-snow' : 'bi-fire' }} text-[16px]"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('admin.admissions.index', ['user_id' => $student->id]) }}" class="w-[32px] h-[32px] bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all shadow-sm border border-slate-200" title="View History">
+                                        <i class="bi bi-clock-history text-[16px]"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @empty
