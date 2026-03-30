@@ -67,7 +67,7 @@
     <div class="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto min-w-full scrollbar-hide focus:outline-none">
             <table class="w-full text-left border-collapse">
-                <thead>
+                <thead class="hidden md:table-header-group">
                     <tr class="bg-slate-50/50 border-b border-slate-100">
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Product Description</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Valuation</th>
@@ -75,45 +75,61 @@
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
+                <tbody class="divide-y divide-slate-50 block md:table-row-group">
                     @forelse($allFees as $fee)
-                        <tr class="hover:bg-slate-50/30 transition-colors group">
-                            <td class="px-6 py-5">
-                                <div class="text-[14px] font-[900] text-navy leading-tight mb-1 group-hover:text-primary transition-colors uppercase leading-none">{{ $fee->course->title ?? 'Platform Access' }}</div>
-                                <div class="flex items-center gap-2 mt-1.5">
-                                    <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">Batch: {{ $fee->user->admissions->where('course_id', $fee->course_id)->first()?->batch?->name ?? 'Sync Pending' }}</span>
-                                    <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
-                                    <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">ID: #FE-{{ str_pad($fee->id, 5, '0', STR_PAD_LEFT) }}</span>
+                        @php
+                            $statusStyles = [
+                                'paid' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
+                                'partially_paid' => 'bg-amber-50 text-amber-600 border-amber-100',
+                                'pending' => 'bg-red-50 text-red-600 border-red-100',
+                            ];
+                            $style = $statusStyles[$fee->status] ?? 'bg-slate-50 text-slate-600 border-slate-200';
+                        @endphp
+                        <tr class="hover:bg-slate-50/30 transition-colors group block md:table-row">
+                            <td class="px-6 py-5 block md:table-cell">
+                                <div class="flex justify-between items-start md:block">
+                                    <div>
+                                        <div class="text-[14px] font-[900] text-navy leading-tight mb-1 group-hover:text-primary transition-colors uppercase leading-none">{{ $fee->course->title ?? 'Platform Access' }}</div>
+                                        <div class="flex flex-wrap items-center gap-2 mt-1.5">
+                                            <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">Batch: {{ $fee->user->admissions->where('course_id', $fee->course_id)->first()?->batch?->name ?? 'Sync Pending' }}</span>
+                                            <span class="hidden md:inline w-1 h-1 bg-slate-300 rounded-full"></span>
+                                            <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">ID: #FE-{{ str_pad($fee->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="md:hidden">
+                                        <span class="px-2.5 py-1 {{ $style }} rounded-lg text-[9px] font-[900] uppercase tracking-widest border shadow-sm">
+                                            {{ str_replace('_', ' ', $fee->status) }}
+                                        </span>
+                                    </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-5">
-                                <div class="flex items-baseline gap-2">
-                                    <div class="text-[14px] font-[900] text-navy tracking-tight">₹{{ number_format($fee->total_amount) }}</div>
-                                    @if($fee->original_amount && $fee->original_amount > $fee->total_amount)
-                                        <div class="text-[11px] font-[700] text-slate-400 line-through decoration-red-400/50 decoration-2">₹{{ number_format($fee->original_amount) }}</div>
-                                    @endif
-                                </div>
-                                <div class="text-[9px] text-emerald-500 font-[900] uppercase tracking-widest mt-0.5">
-                                    Verified Credit: ₹{{ number_format($fee->paid_amount) }}
+                            <td class="px-6 py-3 md:py-5 block md:table-cell border-t md:border-none border-slate-50">
+                                <div class="flex justify-between items-baseline md:block">
+                                    <span class="md:hidden text-[10px] font-[800] text-slate-400 uppercase tracking-widest">Valuation</span>
+                                    <div>
+                                        <div class="flex items-baseline gap-2">
+                                            <div class="text-[14px] font-[900] text-navy tracking-tight">₹{{ number_format($fee->total_amount) }}</div>
+                                            @if($fee->original_amount && $fee->original_amount > $fee->total_amount)
+                                                <div class="text-[11px] font-[700] text-slate-400 line-through decoration-red-400/50 decoration-2">₹{{ number_format($fee->original_amount) }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="text-[9px] text-emerald-500 font-[900] uppercase tracking-widest mt-0.5">
+                                            Verified Credit: ₹{{ number_format($fee->paid_amount) }}
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-5">
-                                @php
-                                    $statusStyles = [
-                                        'paid' => 'bg-emerald-50 text-emerald-600 border-emerald-100',
-                                        'partially_paid' => 'bg-amber-50 text-amber-600 border-amber-100',
-                                        'pending' => 'bg-red-50 text-red-600 border-red-100',
-                                    ];
-                                    $style = $statusStyles[$fee->status] ?? 'bg-slate-50 text-slate-600 border-slate-200';
-                                @endphp
+                            <td class="px-6 py-4 hidden md:table-cell">
                                 <span class="px-2.5 py-1 {{ $style }} rounded-lg text-[9px] font-[900] uppercase tracking-widest border shadow-sm">
                                     {{ str_replace('_', ' ', $fee->status) }}
                                 </span>
                             </td>
-                            <td class="px-6 py-5 text-right">
+                            <td class="px-6 py-5 text-right block md:table-cell border-t md:border-none border-slate-50">
                                 @if($fee->status !== 'paid')
-                                    <a href="{{ route('payments.create', ['fee_id' => $fee->id]) }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[12px] hover:bg-primary transition-all shadow-lg shadow-navy/10 active:scale-95">
-                                        Initiate Settlement <i class="bi bi-arrow-right"></i>
+                                    <a href="{{ route('payments.create', ['fee_id' => $fee->id]) }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[12px] hover:bg-primary transition-all shadow-lg shadow-navy/10 active:scale-95 w-full md:w-auto justify-center">
+                                        <span class="hidden md:inline">Initiate Settlement</span>
+                                        <span class="md:hidden">Pay Balance</span>
+                                        <i class="bi bi-arrow-right"></i>
                                     </a>
                                 @else
                                     <div class="flex items-center justify-end gap-2 text-emerald-500">
@@ -124,8 +140,8 @@
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="4" class="px-8 py-20 text-center text-slate-400 font-[800] italic uppercase tracking-[0.2em] text-[10px]">Registry Protocol: Zero Financial Records Detected</td>
+                        <tr class="block md:table-row">
+                            <td colspan="4" class="px-8 py-20 text-center text-slate-400 font-[800] italic uppercase tracking-[0.2em] text-[10px] block w-full whitespace-normal">Registry Protocol: Zero Financial Records Detected</td>
                         </tr>
                     @endforelse
                 </tbody>
