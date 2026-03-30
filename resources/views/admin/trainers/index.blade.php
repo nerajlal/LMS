@@ -60,21 +60,22 @@
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Instructor Identity</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden md:table-cell">Contact Details</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden sm:table-cell">Privileges</th>
+                        <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider hidden lg:table-cell">Joined</th>
                         <th class="px-6 py-4 text-[11px] font-[800] text-navy uppercase tracking-wider text-right">Actions</th>
                     </tr>
                 </thead>
                     <tbody class="divide-y divide-slate-50">
                         @forelse($trainers as $trainer)
-                        <tr class="hover:bg-slate-50/30 transition-colors group">
+                        <tr class="hover:bg-slate-50/30 transition-colors group {{ !$trainer->is_active ? 'opacity-75 grayscale-[0.5]' : '' }}">
                             <td class="px-6 py-5">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-10 h-10 rounded-[12px] bg-navy/5 text-navy flex items-center justify-center font-[900] text-sm border border-slate-200 shadow-sm group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
+                                    <div class="w-10 h-10 rounded-[12px] {{ $trainer->is_active ? 'bg-navy/5 text-navy' : 'bg-slate-200 text-slate-400' }} flex items-center justify-center font-[900] text-sm border border-slate-200 shadow-sm group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all">
                                         {{ substr($trainer->name, 0, 1) }}
                                     </div>
                                     <div>
                                         <button @click="fetchTrainer('{{ addslashes($trainer->name) }}')" class="text-[14px] font-[800] text-navy leading-tight mb-1 group-hover:text-primary transition-colors uppercase leading-none text-left hover:underline underline-offset-4 decoration-2">{{ $trainer->name }}</button>
-                                        <div class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest mt-1">UID: #{{ sprintf('%03d', $trainer->id) }}</div>
+                                        <div class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest mt-1 italic">{{ $trainer->is_active ? 'Active Educator' : 'Account Frozen' }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -86,16 +87,24 @@
                                     Lead Instructor
                                 </span>
                             </td>
+                            <td class="px-6 py-5">
+                                <span class="px-2.5 py-1 {{ $trainer->is_active ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-red-50 text-red-600 border-red-100' }} rounded-lg text-[9px] font-[900] uppercase tracking-widest border shadow-sm">
+                                    {{ $trainer->is_active ? 'Authorized' : 'Suspended' }}
+                                </span>
+                            </td>
                             <td class="px-6 py-5 hidden lg:table-cell text-[11px] font-[800] text-slate-400 uppercase tracking-widest">
                                 {{ $trainer->created_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-5 text-right">
                                 <div class="flex items-center justify-end gap-2">
+                                    <form action="{{ route('admin.trainers.toggle-status', $trainer->id) }}" method="POST" onsubmit="return confirm('Change status for this instructor?')">
+                                        @csrf
+                                        <button type="submit" class="w-[32px] h-[32px] {{ $trainer->is_active ? 'bg-amber-50 text-amber-500 hover:bg-amber-500' : 'bg-emerald-50 text-emerald-500 hover:bg-emerald-500' }} rounded-[8px] flex items-center justify-center hover:text-white transition-all shadow-sm border border-slate-200" title="{{ $trainer->is_active ? 'Freeze Account' : 'Activate Account' }}">
+                                            <i class="bi {{ $trainer->is_active ? 'bi-snow' : 'bi-fire' }} text-[16px]"></i>
+                                        </button>
+                                    </form>
                                     <button class="w-[32px] h-[32px] bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all shadow-sm border border-slate-200" title="Quick Insights" @click="fetchTrainer('{{ addslashes($trainer->name) }}')">
                                         <i class="bi bi-eye text-[16px]"></i>
-                                    </button>
-                                    <button class="w-[32px] h-[32px] bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all shadow-sm border border-slate-200">
-                                        <i class="bi bi-pencil-square text-[16px]"></i>
                                     </button>
                                 </div>
                             </td>

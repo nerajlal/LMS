@@ -86,6 +86,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 
     // Trainers
     Route::resource('trainers', \App\Http\Controllers\Admin\AdminTrainerController::class)->only(['index', 'create', 'store']);
+    Route::post('trainers/{trainer}/toggle-status', [\App\Http\Controllers\Admin\AdminTrainerController::class, 'toggleStatus'])->name('trainers.toggle-status');
 
     // Admissions
     Route::get('admissions', [AdminAdmissionController::class, 'index'])->name('admissions.index');

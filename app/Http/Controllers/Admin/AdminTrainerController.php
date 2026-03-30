@@ -51,4 +51,19 @@ class AdminTrainerController extends Controller
 
         return redirect()->route('admin.trainers.index')->with('success', 'Trainer created successfully.');
     }
+
+    /**
+     * Toggle the active status of a trainer.
+     */
+    public function toggleStatus(User $trainer)
+    {
+        if (!$trainer->is_trainer) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $trainer->update(['is_active' => !$trainer->is_active]);
+
+        $status = $trainer->is_active ? 'activated' : 'frozen';
+        return back()->with('success', "Trainer account has been {$status} successfully.");
+    }
 }
