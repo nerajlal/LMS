@@ -74,11 +74,9 @@
         @else
             <nav class="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
                 <div class="max-w-7xl mx-auto px-6 flex justify-between h-[72px] items-center">
-                    <a href="{{ url('/') }}" class="flex items-center gap-[12px]">
-                        <div class="w-[36px] h-[36px] bg-primary rounded-[8px] flex items-center justify-center text-white font-black text-lg shadow-lg shadow-orange-500/20 shrink-0">
-                            <i class="bi bi-building-fill text-[18px]"></i>
-                        </div>
-                        <span class="text-[20px] font-[800] tracking-tight text-navy uppercase letter-spacing-[-0.5px]">The Ace India</span>
+                    <a href="{{ url('/') }}" class="flex items-center gap-3">
+                        <img src="{{ asset('ace logo.svg') }}" class="h-10 w-auto" alt="The Ace India">
+                        <img src="{{ asset('logo side.png') }}" class="h-7 w-auto" alt="The Ace India">
                     </a>
                     <div class="flex items-center gap-6">
                         <a href="{{ route('login') }}" class="text-[14px] font-[700] text-muted hover:text-primary transition-colors">Log In</a>
@@ -117,12 +115,18 @@
                 class="bg-white border-r border-border flex flex-col fixed inset-y-0 left-0 z-[1040] transition-all duration-300 sidebar-shadow"
             >
                 <!-- Sidebar Header -->
-                <div class="h-[72px] flex items-center px-[24px] gap-[12px] shrink-0 overflow-hidden">
-                    <div class="w-[36px] h-[36px] bg-primary rounded-[8px] flex items-center justify-center text-white shrink-0">
-                        <i class="bi bi-building-fill text-[18px]"></i>
-                    </div>
-                    <div x-show="sidebarOpen" x-transition class="font-[800] text-[20px] text-navy tracking-tight whitespace-nowrap overflow-hidden">
-                        The Ace India
+                <div class="h-[72px] flex items-center px-[20px] shrink-0 overflow-hidden">
+                    <div class="flex items-center gap-3">
+                        <img src="{{ asset('ace logo.svg') }}" 
+                             class="transition-all duration-300"
+                             :class="sidebarOpen ? 'h-10 w-auto' : 'h-8 w-auto mx-auto'" 
+                             alt="The Ace India">
+                        <img x-show="sidebarOpen" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-x-2"
+                             x-transition:enter-end="opacity-100 translate-x-0"
+                             src="{{ asset('logo side.png') }}" 
+                             class="h-7 w-auto" alt="Ace India">
                     </div>
                 </div>
 

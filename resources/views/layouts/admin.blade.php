@@ -96,12 +96,10 @@
             @resize.window="if (window.innerWidth > 1024) sidebarOpen = true"
         >
             <!-- Sidebar Header -->
-            <div class="h-[72px] flex items-center px-[24px] gap-[12px] shrink-0 overflow-hidden border-b border-border/50">
-                <div class="w-[36px] h-[36px] bg-primary rounded-[10px] flex items-center justify-center text-white shrink-0 shadow-lg shadow-orange-500/20">
-                    <i class="bi bi-building-fill text-[18px]"></i>
-                </div>
-                <div class="font-[900] text-[18px] text-navy tracking-tight whitespace-nowrap">
-                    The Ace <span class="text-primary">India</span>
+            <div class="h-[72px] flex items-center px-[24px] shrink-0 overflow-hidden border-b border-border/50">
+                <div class="flex items-center gap-3">
+                    <img src="{{ asset('ace logo.svg') }}" class="h-10 w-auto" alt="The Ace India">
+                    <img src="{{ asset('logo side.png') }}" class="h-7 w-auto" alt="Ace India">
                 </div>
                 <!-- Mobile Close Button -->
                 <button @click="sidebarOpen = false" class="lg:hidden ml-auto text-navy">

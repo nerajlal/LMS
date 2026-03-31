@@ -27,16 +27,13 @@
         </div>
 
         <div class="relative z-10 text-center text-white max-w-lg space-y-8">
-            <div class="w-[80px] h-[80px] bg-white/20 backdrop-blur-md rounded-[20px] flex items-center justify-center mx-auto shadow-2xl">
-                <i class="bi bi-mortarboard-fill text-[40px]"></i>
+            <div class="flex flex-col items-center gap-6">
+                <img src="{{ asset('ace logo.svg') }}" class="h-20 w-auto" alt="The Ace India">
+                <h1 class="text-[48px] font-[900] tracking-tight leading-tight">The Ace India</h1>
             </div>
-            
-            <div class="space-y-4">
-                <h1 class="text-[48px] font-[900] tracking-tight leading-tight">EduLMS</h1>
-                <p class="text-[18px] font-[500] opacity-90 leading-relaxed">
-                    Your complete learning management system. Learn, grow, and achieve.
-                </p>
-            </div>
+            <p class="text-[18px] font-[500] opacity-90 leading-relaxed">
+                Empowering the next generation of professionals. Learn, grow, and achieve.
+            </p>
 
             <div class="flex items-center justify-center gap-12 pt-8">
                 <div class="text-center">
