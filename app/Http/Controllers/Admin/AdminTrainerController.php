@@ -66,4 +66,18 @@ class AdminTrainerController extends Controller
         $status = $trainer->is_active ? 'activated' : 'frozen';
         return back()->with('success', "Trainer account has been {$status} successfully.");
     }
+
+    /**
+     * Delete a trainer record.
+     */
+    public function destroy(User $trainer)
+    {
+        if (!$trainer->is_trainer) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $trainer->delete();
+
+        return redirect()->route('admin.trainers.index')->with('success', 'Trainer account has been purged from the system.');
+    }
 }

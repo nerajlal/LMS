@@ -70,7 +70,7 @@
                             <i class="bi bi-plus-lg"></i> Add Session
                         </a>
                         
-                        <form action="{{ route('trainer.live-classes.branches.complete', $branch->id) }}" method="POST" onsubmit="return confirm('Archive this batch? No further sessions can be added once completed. Australia.')">
+                        <form action="{{ route('trainer.live-classes.branches.complete', $branch->id) }}" method="POST" onsubmit="return confirm('Archive this batch? No further sessions can be added once completed.')">
                             @csrf
                             <button type="submit" class="px-4 py-2 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[8px] hover:bg-slate-800 transition-all shadow-sm">
                                 <i class="bi bi-check-all text-[14px]"></i> Complete
@@ -106,9 +106,18 @@
                                         {{ $class->isLive() ? 'Live Now' : ($class->isEnded() ? 'Ended' : 'Upcoming') }}
                                     </div>
                                     @if($class->isEnded())
-                                        <div class="px-4 py-2 bg-slate-100 text-slate-400 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest border border-slate-200 cursor-not-allowed">
-                                            Ended <i class="bi bi-clock-history"></i>
-                                        </div>
+                                        @if($class->recording_url)
+                                            <a href="{{ $class->recording_url }}" target="_blank" class="px-4 py-2 bg-emerald-50 text-emerald-600 rounded-[10px] text-[11px] font-[800] uppercase tracking-widest border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all">
+                                                Watch <i class="bi bi-play-circle"></i>
+                                            </a>
+                                            <button onclick="openRecordingModal({{ $class->id }}, '{{ $class->recording_url }}', '{{ $class->recording_description }}')" class="p-2 text-slate-400 hover:text-navy transition-colors">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        @else
+                                            <button onclick="openRecordingModal({{ $class->id }})" class="px-4 py-2 bg-primary/10 text-primary rounded-[10px] text-[11px] font-[800] uppercase tracking-widest border border-primary/20 hover:bg-primary hover:text-white transition-all">
+                                                Add Recording <i class="bi bi-plus-lg"></i>
+                                            </button>
+                                        @endif
                                     @else
                                         <a href="{{ $class->zoom_link }}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-navy rounded-[10px] text-[11px] font-[800] uppercase tracking-widest hover:bg-navy hover:text-white transition-all border border-slate-200">
                                             Join <i class="bi bi-box-arrow-up-right"></i>
@@ -214,16 +223,19 @@
                 </div>
                 
                 <div>
-                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Related Course (Optional)</label>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Select Academic Blueprint</label>
                     <div class="relative">
-                        <select name="course_id" class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
-                            <option value="">General Branch</option>
+                        <select name="course_id" required class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
+                            <option value="" disabled selected>Choose a Course...</option>
                             @foreach($courses as $course)
                                 <option value="{{ $course->id }}">{{ $course->title }}</option>
                             @endforeach
                         </select>
                         <i class="bi bi-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-navy/30 pointer-events-none"></i>
                     </div>
+                    <p class="mt-2.5 px-1 text-[9px] text-slate-400 font-[700] uppercase tracking-widest leading-relaxed">
+                        <i class="bi bi-info-circle text-primary"></i> The batch will inherit all recorded curriculum from this course blueprint.
+                    </p>
                 </div>
 
                 <div class="pt-4">
@@ -242,5 +254,58 @@
             ...
     </dialog>
     --}}
+
+    <!-- Recording Modal -->
+    <dialog id="recordingModal" class="p-0 rounded-[24px] shadow-2xl border-none backdrop:backdrop-blur-sm">
+        <div class="w-[500px] bg-white">
+            <div class="p-8 border-b border-border bg-slate-50/50">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Add Session <span class="text-primary">Recording</span></h3>
+                    <button onclick="document.getElementById('recordingModal').close()" class="text-slate-400 hover:text-navy transition-colors">
+                        <i class="bi bi-x-lg text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Provide the URL for the recorded session (e.g. YouTube/Drive)</p>
+            </div>
+            
+            <form id="recordingForm" action="" method="POST" class="p-8 space-y-6">
+                @csrf
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Recording URL</label>
+                    <input type="url" name="recording_url" id="rec_url" required placeholder="https://youtube.com/watch?v=..." 
+                           class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[14px] font-[600] text-navy placeholder:text-slate-300">
+                </div>
+                
+                <div>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Brief Description (Optional)</label>
+                    <textarea name="recording_description" id="rec_desc" rows="3" placeholder="Summary of what was covered..." 
+                              class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[14px] font-[600] text-navy placeholder:text-slate-300 resize-none"></textarea>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
+                        Save Recording
+                    </button>
+                    <p class="text-center mt-4 text-[10px] text-slate-400 font-[600] uppercase tracking-widest">Students in this batch will see this instantly.</p>
+                </div>
+            </form>
+        </div>
+    </dialog>
 </div>
+
+<script>
+    function openRecordingModal(classId, existingUrl = '', existingDesc = '') {
+        const modal = document.getElementById('recordingModal');
+        const form = document.getElementById('recordingForm');
+        const urlInput = document.getElementById('rec_url');
+        const descInput = document.getElementById('rec_desc');
+        
+        // Update form action with named route pattern
+        form.action = `/trainer/live-classes/${classId}/recording`;
+        urlInput.value = existingUrl;
+        descInput.value = existingDesc;
+        
+        modal.showModal();
+    }
+</script>
 @endsection

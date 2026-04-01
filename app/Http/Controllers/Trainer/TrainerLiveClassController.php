@@ -162,4 +162,27 @@ class TrainerLiveClassController extends Controller
 
         return redirect()->route('trainer.live-classes.index')->with('success', 'Live class scheduled successfully.');
     }
+
+    /**
+     * Update the recording URL for a live class.
+     */
+    public function updateRecording(Request $request, LiveClass $liveClass)
+    {
+        // Authorization: Ensure trainer is assigned to the branch
+        if ($liveClass->live_class_branch_id) {
+            $branch = \App\Models\LiveClassBranch::findOrFail($liveClass->live_class_branch_id);
+            if ($branch->trainer_id !== auth()->id() && !$branch->trainers()->where('users.id', auth()->id())->exists()) {
+                abort(403, 'Unauthorized access to this batch.');
+            }
+        }
+
+        $validated = $request->validate([
+            'recording_url' => 'required|url',
+            'recording_description' => 'nullable|string|max:500',
+        ]);
+
+        $liveClass->update($validated);
+
+        return redirect()->back()->with('success', 'Session recording updated successfully.');
+    }
 }

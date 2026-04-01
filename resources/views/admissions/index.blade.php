@@ -111,10 +111,16 @@
                         <div class="flex items-center gap-4 text-[12px] font-[600] text-muted">
                             @if($admission->certificate_path)
                                 <a href="{{ asset('storage/' . $admission->certificate_path) }}" target="_blank" class="flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 hover:underline">
-                                    <i class="bi bi-award-fill"></i> Download Certificate
+                                    <i class="bi bi-award-fill text-lg"></i> Download Certificate
                                 </a>
+                            @elseif($admission->latestExamResult && $admission->latestExamResult->status === 'passed')
+                                <span class="flex items-center gap-2 text-primary font-[900] uppercase tracking-widest text-[10px]">
+                                    <i class="bi bi-hourglass-split animate-spin-slow"></i> Processing Certificate
+                                </span>
                             @else
-                                <span class="flex items-center gap-1.5 opacity-50"><i class="bi bi-award"></i> Processing Certificate</span>
+                                <a href="{{ route('courses.exam.show', $admission->course_id) }}" class="flex items-center gap-2 px-4 py-2 bg-navy text-white rounded-[10px] text-[10px] font-[900] uppercase tracking-widest hover:bg-primary transition-all shadow-lg active:scale-[0.95]">
+                                    <i class="bi bi-mortarboard"></i> Take Assessment
+                                </a>
                             @endif
                         </div>
                     </div>

@@ -25,6 +25,16 @@ class Course extends Model
         return $this->hasMany(StudyMaterial::class);
     }
 
+    public function questions()
+    {
+        return $this->hasMany(CourseQuestion::class);
+    }
+
+    public function examResults()
+    {
+        return $this->hasMany(CourseExamResult::class);
+    }
+
     public function batches()   { return $this->hasMany(Batch::class); }
     public function admissions(){ return $this->hasMany(Admission::class); }
     public function enrollments(){ return $this->hasMany(Enrollment::class); }
@@ -32,5 +42,10 @@ class Course extends Model
     public function liveClassBranches()
     {
         return $this->hasMany(LiveClassBranch::class);
+    }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(CourseFeedback::class);
     }
 }

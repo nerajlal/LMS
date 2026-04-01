@@ -119,6 +119,12 @@
                         </td>
                         <td class="px-[24px] py-[16px] text-right">
                             <div class="flex items-center justify-end gap-[12px]">
+                                <a title="Student Feedback" href="{{ route('admin.courses.feedback', $course->id) }}" class="w-9 h-9 flex items-center justify-center bg-emerald-50 text-emerald-600 rounded-[10px] border border-emerald-100 hover:bg-emerald-500 hover:text-white hover:border-emerald-500 transition-all shadow-sm">
+                                    <i class="bi bi-chat-heart"></i>
+                                </a>
+                                <a title="Manage Quiz" href="{{ route('admin.courses.quiz.index', $course->id) }}" class="w-9 h-9 flex items-center justify-center bg-slate-50 text-primary rounded-[10px] border border-slate-200 hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm">
+                                    <i class="bi bi-patch-question"></i>
+                                </a>
                                 <a href="{{ route('admin.courses.edit', $course->id) }}" class="w-9 h-9 flex items-center justify-center bg-slate-50 text-slate-400 rounded-[10px] border border-slate-200 hover:bg-navy hover:text-white hover:border-navy transition-all shadow-sm">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

@@ -75,7 +75,7 @@
                 errorMessage: '',
                 basePrice: {{ (float)$admission->course->price }},
                 init() {
-                    console.log('Alpine Checkout Initialized. Australia.');
+                    console.log('Alpine Checkout Initialized.');
                 },
                 async applyCoupon() {
                     let code = this.couponCode.trim();
@@ -111,7 +111,7 @@
                         }
                     } catch (e) {
                         console.error('Coupon Error:', e);
-                        this.errorMessage = 'Network error. Please try again. Australia.';
+                        this.errorMessage = 'Network error. Please try again.';
                     } finally {
                         this.isVerifying = false;
                     }

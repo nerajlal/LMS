@@ -9,6 +9,9 @@
     activeTitle: '{{ count($course->lessons) > 0 ? $course->lessons[0]->title : "Select a lesson" }}',
     activeLessonId: '{{ count($course->lessons) > 0 ? $course->lessons[0]->id : "" }}',
     completedLessons: @js($completedLessons),
+    progress: {{ $initialProgress }},
+    hasFeedback: {{ $hasFeedback ? 'true' : 'false' }},
+    showFeedbackModal: false,
     getEmbedUrl(url) {
         if (!url) return '';
         let videoId = '';
@@ -31,6 +34,11 @@
         .then(data => {
             if(data.success) {
                 this.completedLessons = data.completed_lessons;
+                this.progress = data.new_progress;
+                
+                if (this.progress === 100 && !this.hasFeedback) {
+                    this.showFeedbackModal = true;
+                }
             }
         });
     },
@@ -41,6 +49,10 @@
         @if(count($course->lessons) > 0)
             this.activeVideo = this.getEmbedUrl('{{ $course->lessons[0]->video_url }}');
         @endif
+        
+        if (this.progress === 100 && !this.hasFeedback) {
+            setTimeout(() => { this.showFeedbackModal = true; }, 1000);
+        }
     }
 }">
     
@@ -76,6 +88,29 @@
                         <span x-text="isLessonCompleted(activeLessonId) ? 'Completed' : 'Mark as Completed'"></span>
                     </button>
                 </div>
+
+                <!-- FINAL EXAM SECTION -->
+                <template x-if="completedLessons.length === {{ count($course->lessons) ?: -1 }}">
+                    <div class="mt-10 p-8 rounded-[24px] bg-navy text-white shadow-2xl relative overflow-hidden group border border-white/10">
+                        <div class="absolute top-[-20px] right-[-20px] w-48 h-48 bg-primary/20 rounded-full blur-[60px] group-hover:scale-125 transition-transform duration-700"></div>
+                        
+                        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div class="flex items-center gap-6">
+                                <div class="w-16 h-16 rounded-[20px] bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-xl">
+                                    <i class="bi bi-mortarboard text-3xl text-primary"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl md:text-2xl font-[900] uppercase tracking-tight">Final <span class="text-primary">Examination</span></h3>
+                                    <p class="text-slate-400 text-[12px] md:text-[13px] font-[600] uppercase tracking-widest mt-1">Unlock your institutional certification.</p>
+                                </div>
+                            </div>
+                            
+                            <a href="{{ route('courses.exam.show', $course->id) }}" class="px-10 py-5 bg-white text-navy font-[900] text-[13px] uppercase tracking-[0.2em] rounded-[18px] hover:bg-primary hover:text-white transition-all shadow-xl active:scale-[0.98] whitespace-nowrap">
+                                Take Final Exam <i class="bi bi-arrow-right ml-2 text-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                </template>
 
                 @if($course->description)
                 <div class="text-[14px] text-muted font-[500] leading-relaxed mt-4 bg-border/20 p-4 rounded-[8px] border-l-4 border-primary/20">
@@ -322,5 +357,62 @@
         </div>
     </div>
     @endif
+
+    <!-- FEEDBACK POPUP MODAL -->
+    <template x-if="showFeedbackModal">
+        <div class="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-6" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 pb-12" x-transition:enter-end="opacity-100 pb-0">
+            <!-- Glassmorphism Backdrop -->
+            <div class="absolute inset-0 bg-navy/40 backdrop-blur-xl"></div>
+            
+            <!-- Modal Content -->
+            <div class="relative bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl shadow-navy/20 border border-white/20 animate-in zoom-in duration-500">
+
+                <div class="relative">
+                    <div class="h-32 bg-navy relative overflow-hidden">
+                        <div class="absolute top-[-20px] right-[-20px] w-32 h-32 bg-primary/20 rounded-full blur-[40px]"></div>
+                        <div class="absolute bottom-[-10px] left-10 w-20 h-20 bg-emerald-500/10 rounded-full blur-[30px]"></div>
+                        <div class="absolute inset-0 flex items-center justify-center pt-8">
+                            <div class="w-20 h-20 bg-white rounded-[24px] shadow-2xl flex items-center justify-center border-4 border-white/50">
+                                <i class="bi bi-patch-check-fill text-4xl text-emerald-500"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-8 pt-12 text-center">
+                        <h3 class="text-2xl font-[900] text-navy uppercase tracking-tight mb-2">Curriculum <span class="text-primary">Mastered!</span></h3>
+                        <p class="text-slate-500 font-[500] text-[14px] mb-8 leading-relaxed">Congratulations, you've completed 100% of the course. Before you unlock the exam, please share your experience.</p>
+                        
+                        <form action="{{ route('feedback.store', $course->id) }}" method="POST" x-data="{ currentRating: 0 }" class="space-y-6">
+                            @csrf
+                            <input type="hidden" name="rating" :value="currentRating" required>
+                            
+                            <!-- Star Rating Interactor -->
+                            <div class="flex items-center justify-center gap-4">
+                                <template x-for="i in 5">
+                                    <button type="button" @click="currentRating = i" 
+                                            class="text-4xl transition-all duration-300 transform hover:scale-125" 
+                                            :class="currentRating >= i ? 'text-primary scale-110 drop-shadow-lg' : 'text-slate-100'">
+                                        <i :class="currentRating >= i ? 'bi bi-star-fill' : 'bi bi-star'"></i>
+                                    </button>
+                                </template>
+                            </div>
+
+                            <div class="relative">
+                                <textarea name="comment" placeholder="Describe your learning journey..." 
+                                          class="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-[20px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[14px] font-[600] text-navy placeholder:text-slate-300 resize-none" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" :disabled="currentRating === 0" 
+                                    class="w-full py-5 bg-navy text-white rounded-[20px] font-[900] text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-navy/20 hover:bg-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed group">
+                                <span class="flex items-center justify-center gap-2">
+                                    Submit Appreciation
+                                    <i class="bi bi-arrow-right-short text-xl group-hover:translate-x-1 transition-transform"></i>
+                                </span>
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
 </div>
 @endsection

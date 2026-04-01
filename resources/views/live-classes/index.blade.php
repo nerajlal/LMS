@@ -268,8 +268,22 @@
                     </div>
                     @endif
                 </div>
+                @php
+                    $isEnrolled = in_array($class->course_id, $enrolledCourseIds);
+                    $studentBatchId = $courseBatchMap[$class->course_id] ?? null;
+                    $isPrivileged = auth()->user()->is_admin || auth()->user()->is_trainer;
+                    $hasBatchAccess = $isPrivileged 
+                        || $class->live_class_branch_id === null 
+                        || (int)$class->live_class_branch_id === (int)$studentBatchId;
+                @endphp
                 <div class="shrink-0 pt-4 md:pt-0">
-                    <span class="px-5 py-2.5 bg-slate-50 text-slate-400 rounded-full text-[12px] font-[800] uppercase tracking-widest border border-slate-100">Ended</span>
+                    @if($class->recording_url && $isEnrolled && $hasBatchAccess)
+                        <a href="{{ $class->recording_url }}" target="_blank" class="px-6 py-3 bg-emerald-600 text-white rounded-[12px] text-[12px] font-[900] uppercase tracking-widest shadow-lg shadow-emerald-500/20 hover:bg-emerald-700 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                            Watch Recording <i class="bi bi-play-circle-fill text-lg"></i>
+                        </a>
+                    @else
+                        <span class="px-5 py-2.5 bg-slate-50 text-slate-400 rounded-full text-[12px] font-[800] uppercase tracking-widest border border-slate-100">Ended</span>
+                    @endif
                 </div>
             </div>
         @empty

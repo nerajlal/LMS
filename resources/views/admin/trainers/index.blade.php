@@ -106,6 +106,13 @@
                                     <button class="w-[32px] h-[32px] bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all shadow-sm border border-slate-200" title="Quick Insights" @click="fetchTrainer('{{ addslashes($trainer->name) }}')">
                                         <i class="bi bi-eye text-[16px]"></i>
                                     </button>
+                                    <form action="{{ route('admin.trainers.destroy', $trainer->id) }}" method="POST" onsubmit="return confirm('Permanently purge this instructor account? This action is irreversible.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="w-[32px] h-[32px] bg-red-50 text-red-500 rounded-[8px] flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm border border-red-100" title="Delete Account">
+                                            <i class="bi bi-trash3 text-[16px]"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

@@ -91,8 +91,23 @@
                             <span class="px-3 py-1.5 {{ $style }} rounded-full text-[9px] font-[900] uppercase tracking-widest border shadow-sm">
                                 {{ $admission->status }}
                             </span>
+
                             @if($admission->status === 'approved')
-                                <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest mt-2">{{ $admission->progress ?? 0 }}% Mastery</div>
+                                <div class="mt-2 space-y-1">
+                                    <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">{{ $admission->progress ?? 0 }}% Mastery</div>
+                                    
+                                    @if($admission->latestExamResult)
+                                        <div @class([
+                                            'text-[9px] font-[900] uppercase tracking-widest px-2 py-0.5 rounded-sm inline-block',
+                                            'bg-emerald-50 text-emerald-600' => $admission->latestExamResult->status === 'passed',
+                                            'bg-rose-50 text-rose-600' => $admission->latestExamResult->status === 'failed',
+                                        ])>
+                                            Exam: {{ number_format($admission->latestExamResult->score) }}% {{ $admission->latestExamResult->status }}
+                                        </div>
+                                    @else
+                                        <div class="text-[8px] text-slate-300 font-[700] uppercase tracking-widest italic">Exam Pending</div>
+                                    @endif
+                                </div>
                             @else
                                 <div class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest mt-2 uppercase leading-none">{{ $admission->created_at->format('d M Y') }}</div>
                             @endif

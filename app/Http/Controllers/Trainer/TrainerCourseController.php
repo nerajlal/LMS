@@ -212,4 +212,14 @@ class TrainerCourseController extends Controller
         return redirect()->route('trainer.courses.index')
             ->with('success', 'Course and all associated content deleted successfully!');
     }
+
+    public function feedback($id)
+    {
+        $course = Course::findOrFail($id);
+        if ($course->instructor_name !== auth()->user()->name) {
+            abort(403, 'Unauthorized access to feedback reports.');
+        }
+        $feedbacks = $course->feedbacks()->with('user')->latest()->get();
+        return view('trainer.courses.feedback.index', compact('course', 'feedbacks'));
+    }
 }

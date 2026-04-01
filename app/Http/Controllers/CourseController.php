@@ -25,15 +25,24 @@ class CourseController extends Controller
     {
         $course = Course::with(['lessons', 'batches', 'studyMaterials'])->findOrFail($id);
         $completedLessons = [];
+        $progress = 0;
+        $hasFeedback = false;
+        $isEnrolled = false;
+
         if (auth()->check()) {
             $admission = Admission::where('user_id', auth()->id())
                 ->where('course_id', $id)
                 ->first();
             
             if ($admission) {
+                $progress = $admission->progress ?? 0;
                 $completedLessons = is_array($admission->completed_lessons) 
                     ? $admission->completed_lessons 
                     : json_decode($admission->completed_lessons ?? '[]', true);
+
+                $hasFeedback = \App\Models\CourseFeedback::where('user_id', auth()->id())
+                    ->where('course_id', $id)
+                    ->exists();
 
                 if (auth()->user()->is_admin || auth()->user()->is_trainer) {
                     $isEnrolled = true;
@@ -41,7 +50,6 @@ class CourseController extends Controller
                     $isEnrolled = $admission->status === 'approved';
                 }
             } else {
-                // Check old Enrollment model as fallback
                 $isEnrolled = Enrollment::where('user_id', auth()->id())
                     ->where('course_id', $id)
                     ->where('status', 'active')
@@ -52,7 +60,9 @@ class CourseController extends Controller
         return view('courses.show', [
             'course' => $course,
             'isEnrolled' => $isEnrolled,
-            'completedLessons' => $completedLessons
+            'completedLessons' => $completedLessons,
+            'initialProgress' => $progress,
+            'hasFeedback' => $hasFeedback
         ]);
     }
 

@@ -81,6 +81,16 @@
                         class="px-8 py-3.5 rounded-[12px] font-[800] uppercase tracking-widest text-[11px] transition-all flex items-center gap-3">
                     <i class="bi bi-file-earmark-text-fill"></i> Resources
                 </button>
+                <button @click="activeTab = 'assessment'" 
+                        :class="activeTab === 'assessment' ? 'bg-primary text-white shadow-xl shadow-orange-500/30' : 'text-white/60 hover:text-white'"
+                        class="px-8 py-3.5 rounded-[12px] font-[800] uppercase tracking-widest text-[11px] transition-all flex items-center gap-3">
+                    <i class="bi bi-mortarboard-fill"></i> Assessment
+                </button>
+                <button @click="activeTab = 'feedbacks'" 
+                        :class="activeTab === 'feedbacks' ? 'bg-primary text-white shadow-xl shadow-orange-500/30' : 'text-white/60 hover:text-white'"
+                        class="px-8 py-3.5 rounded-[12px] font-[800] uppercase tracking-widest text-[11px] transition-all flex items-center gap-3">
+                    <i class="bi bi-chat-heart-fill"></i> Feedbacks
+                </button>
             </div>
         </div>
     </div>
@@ -229,6 +239,69 @@
                         <p class="text-slate-400 font-[800] text-xs uppercase tracking-widest">No materials uploaded yet</p>
                     </div>
                     @endforelse
+                </div>
+            </div>
+
+            <!-- Tab Content: Assessment -->
+            <div x-show="activeTab === 'assessment'" x-transition x-cloak class="space-y-6">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Final Examination Bank</h3>
+                    <div class="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full text-[10px] font-[900] uppercase tracking-widest">Certification Gateway</div>
+                </div>
+                
+                <div class="bg-white p-10 rounded-[24px] border border-slate-200 shadow-xl shadow-slate-200/10 text-center space-y-8 relative overflow-hidden group">
+                    <!-- Decorative Background -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-primary/10 transition-colors duration-700"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-24 h-24 bg-navy/5 rounded-[32px] flex items-center justify-center mx-auto mb-8 animate-bounce-slow">
+                            <i class="bi bi-patch-question-fill text-5xl text-primary"></i>
+                        </div>
+                        <h4 class="text-2xl font-[900] text-navy uppercase tracking-tight mb-4">Certification Module</h4>
+                        <p class="text-slate-500 font-[500] max-w-md mx-auto mb-10 text-[15px] leading-relaxed">
+                            Currently managing <span class="font-[900] text-navy">{{ $course->questions->count() }} questions</span> for this Recorded Course assessment protocol.
+                        </p>
+                        
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                            <a href="{{ route('trainer.courses.quiz.index', $course->id) }}" class="px-12 py-5 bg-navy text-white rounded-[20px] font-[900] text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-navy/20 hover:bg-primary transition-all active:scale-[0.98] w-full md:w-auto">
+                                Manage Assessment <i class="bi bi-arrow-right ml-2 text-lg"></i>
+                            </a>
+                            <div class="text-[11px] font-[700] text-slate-400 uppercase tracking-widest">
+                                <i class="bi bi-shield-check text-emerald-500 mr-2"></i> Integrity Status: Verified
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Feedbacks -->
+            <div x-show="activeTab === 'feedbacks'" x-transition x-cloak class="space-y-6">
+                <div class="flex items-center justify-between px-2">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Student Testimonials</h3>
+                    <div class="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full text-[10px] font-[900] uppercase tracking-widest">Experience Reports</div>
+                </div>
+                
+                <div class="bg-white p-10 rounded-[24px] border border-slate-200 shadow-xl shadow-slate-200/10 text-center space-y-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-emerald-500/10 transition-colors duration-700"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="w-24 h-24 bg-emerald-50 rounded-[32px] flex items-center justify-center mx-auto mb-8 shadow-inner animate-pulse">
+                            <i class="bi bi-chat-heart text-5xl text-emerald-500"></i>
+                        </div>
+                        <h4 class="text-2xl font-[900] text-navy uppercase tracking-tight mb-4">Satisfaction Reports</h4>
+                        <p class="text-slate-500 font-[500] max-w-md mx-auto mb-10 text-[15px] leading-relaxed">
+                            A total of <span class="font-[900] text-navy">{{ $course->feedbacks->count() }} students</span> have submitted their appreciation and insights for this curriculum.
+                        </p>
+                        
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                            <a href="{{ route('trainer.courses.feedback', $course->id) }}" class="px-12 py-5 bg-navy text-white rounded-[20px] font-[900] text-[13px] uppercase tracking-[0.2em] shadow-xl shadow-navy/20 hover:bg-primary transition-all active:scale-[0.98] w-full md:w-auto">
+                                View Feedback Wall <i class="bi bi-arrow-right ml-2 text-lg"></i>
+                            </a>
+                            <div class="text-[11px] font-[700] text-slate-400 uppercase tracking-widest">
+                                <i class="bi bi-star-fill text-primary mr-2"></i> Rating: {{ number_format($course->feedbacks->avg('rating') ?: 0, 1) }}/5.0
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

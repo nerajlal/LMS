@@ -11,7 +11,7 @@ class AdminAdmissionController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Admission::with(['user', 'course', 'batch'])->latest();
+        $query = Admission::with(['user', 'course', 'batch', 'latestExamResult'])->latest();
 
         if ($request->has('user_id')) {
             $query->where('user_id', $request->user_id);

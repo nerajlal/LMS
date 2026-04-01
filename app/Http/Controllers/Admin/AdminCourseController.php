@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class AdminCourseController extends Controller
 {
+    public function feedback(Course $course)
+    {
+        $feedbacks = $course->feedbacks()->with('user')->latest()->get();
+        return view('admin.courses.feedback.index', compact('course', 'feedbacks'));
+    }
+
     public function index()
     {
         $courses = Course::withCount(['admissions', 'enrollments', 'lessons'])

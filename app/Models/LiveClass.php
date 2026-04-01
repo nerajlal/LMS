@@ -13,6 +13,8 @@ class LiveClass extends Model
         'start_time',
         'duration',
         'zoom_link',
+        'recording_url',
+        'recording_description',
         'status',
         'live_class_branch_id',
     ];

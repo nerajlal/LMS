@@ -16,7 +16,7 @@ class AdmissionController extends Controller
         $allAdmissions = Admission::where('user_id', $userId)
             ->with(['course' => function($query) {
                 $query->withCount(['lessons', 'studyMaterials']);
-            }, 'batch'])
+            }, 'batch', 'latestExamResult'])
             ->latest()
             ->get();
 
