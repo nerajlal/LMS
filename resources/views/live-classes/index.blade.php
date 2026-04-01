@@ -152,7 +152,9 @@
                         </a>
                     @elseif($isLive)
                         @if($hasBatchAccess)
-                            <a href="{{ $class->zoom_link }}" target="_blank" class="w-full py-3.5 bg-rose-500 text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-rose-500/20 hover:bg-rose-600 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-2">
+                            <a href="{{ $class->zoom_link }}" target="_blank" 
+                               onclick="markAttendance({{ $class->id }})"
+                               class="w-full py-3.5 bg-rose-500 text-white rounded-[12px] font-[800] text-[13px] uppercase tracking-widest shadow-xl shadow-rose-500/20 hover:bg-rose-600 hover:-translate-y-1 transition-all text-center flex items-center justify-center gap-2">
                                 Join Now <i class="bi bi-camera-video ml-1"></i>
                             </a>
                         @else
@@ -293,4 +295,23 @@
         @endforelse
     </div>
 </div>
+    <script>
+        function markAttendance(classId) {
+            fetch(`/live-classes/${classId}/attendance`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Attendance Logged:', data);
+            })
+            .catch(error => {
+                console.error('Attendance Error:', error);
+            });
+        }
+    </script>
 @endsection

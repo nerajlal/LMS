@@ -90,4 +90,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(LiveClassBranch::class, 'live_class_branch_trainer', 'trainer_id', 'live_class_branch_id')->withTimestamps();
     }
+
+    public function liveClassAttendances()
+    {
+        return $this->hasMany(LiveClassAttendance::class);
+    }
 }

@@ -101,6 +101,11 @@
                         </div>
                     </div>
 
+                    <!-- Overall Stats Button -->
+                    <button onclick="viewBatchSummary({{ $branch->id }}, '{{ addslashes($branch->name) }}')" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-[900] uppercase tracking-widest rounded-full hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center gap-2">
+                        <i class="bi bi-graph-up-arrow"></i> Overall Stats
+                    </button>
+
                     <!-- Chevron Toggle (Expansion Target) -->
                     <div @click="expanded = !expanded" class="w-8 h-8 rounded-full bg-navy/5 flex items-center justify-center text-navy/40 transition-transform duration-300 cursor-pointer hover:bg-navy hover:text-white" :class="{ 'rotate-180 bg-navy text-white': expanded }">
                         <i class="bi bi-chevron-down"></i>
@@ -153,11 +158,11 @@
                                             <a href="{{ $class->zoom_link }}" target="_blank" class="w-8 h-8 bg-slate-50 text-slate-400 rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-slate-100 shadow-sm" title="Join Session">
                                                 <i @class(['bi text-lg', 'bi-broadcast text-primary animate-pulse' => $class->isLive(), 'bi-link-45deg' => !$class->isLive()])></i>
                                             </a>
-                                        @else
-                                            <span class="w-8 h-8 bg-slate-50 text-slate-300 rounded-[8px] flex items-center justify-center border border-slate-100 cursor-not-allowed" title="Meeting Ended">
-                                                <i class="bi bi-slash-circle text-lg"></i>
-                                            </span>
                                         @endif
+                                        
+                                        <button onclick="viewAttendance({{ $class->id }}, '{{ addslashes($class->title) }}')" class="w-8 h-8 bg-navy/5 text-navy rounded-[8px] flex items-center justify-center hover:bg-navy hover:text-white transition-all border border-navy/10 shadow-sm" title="View Attendance">
+                                            <i class="bi bi-people"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -317,5 +322,237 @@
             </form>
         </div>
     </dialog>
+    <!-- Attendance Modal -->
+    <dialog id="attendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md">
+        <div class="w-[600px] bg-white min-h-[400px] flex flex-col">
+            <div class="p-8 border-b border-border bg-slate-50/50">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Attendance <span class="text-primary">Protocol</span></h3>
+                    <button onclick="document.getElementById('attendanceModal').close()" class="text-slate-400 hover:text-navy transition-colors">
+                        <i class="bi bi-x-lg text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest" id="attendanceClassTitle">Session Participation Log</p>
+            </div>
+            
+            <div class="flex-1 p-0 overflow-y-auto max-h-[500px]" id="attendanceContent">
+                <div class="p-20 text-center text-slate-400">
+                    <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
+                    <p class="text-[12px] font-[600] uppercase tracking-widest">Fetching logs...</p>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-border bg-slate-50/50 text-center">
+                <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">
+                    <i class="bi bi-info-circle text-primary mr-1"></i> Logs are recorded only when students click 'Join Now' on their dashboard.
+                </p>
+            </div>
+        </div>
+    </dialog>
 </div>
+
+    <!-- Batch Attendance Summary Modal -->
+    <dialog id="batchAttendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md">
+        <div class="w-[800px] bg-white min-h-[500px] flex flex-col">
+            <div class="p-8 border-b border-border bg-slate-50/50">
+                <div class="flex justify-between items-center mb-1">
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Batch Attendance <span class="text-primary">Master Report</span></h3>
+                    <button onclick="document.getElementById('batchAttendanceModal').close()" class="text-slate-400 hover:text-navy transition-colors">
+                        <i class="bi bi-x-lg text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest" id="summaryBatchName">Overall Participation Summary</p>
+            </div>
+            
+            <div class="flex-1 p-0 overflow-y-auto max-h-[600px]" id="summaryContent">
+                <div class="p-20 text-center text-slate-400">
+                    <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
+                    <p class="text-[12px] font-[600] uppercase tracking-widest">Aggregating session data...</p>
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-border bg-slate-100/50 flex justify-between items-center">
+                <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">
+                    <i class="bi bi-info-circle text-primary mr-1"></i> Based on all Live or Completed sessions.
+                </p>
+                <div id="summaryTotalSessions" class="text-[10px] font-[900] text-navy uppercase tracking-widest bg-white px-3 py-1.5 rounded-full border border-border mt-0"></div>
+            </div>
+        </div>
+    </dialog>
+</div>
+
+<script>
+    function viewAttendance(classId, classTitle) {
+        const modal = document.getElementById('attendanceModal');
+        const content = document.getElementById('attendanceContent');
+        const titleText = document.getElementById('attendanceClassTitle');
+        
+        titleText.innerText = classTitle;
+        content.innerHTML = `
+            <div class="p-20 text-center text-slate-400">
+                <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
+                <p class="text-[12px] font-[600] uppercase tracking-widest">Analyzing participation data...</p>
+            </div>
+        `;
+        
+        modal.showModal();
+        
+        fetch(`/live-classes/${classId}/attendance`)
+            .then(response => {
+                if (response.status === 403) throw new Error('Unauthorized Access Protocol');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    if (data.attendances.length === 0) {
+                        content.innerHTML = `
+                            <div class="p-20 text-center">
+                                <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 mx-auto mb-4">
+                                    <i class="bi bi-person-x text-2xl"></i>
+                                </div>
+                                <h4 class="text-navy font-[800] uppercase tracking-tight">No Participants Yet</h4>
+                                <p class="text-[12px] text-slate-400 font-[500] mt-1">Attendance logs will appear here once students join.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    let tableHtml = `
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 border-b border-border">
+                                <tr>
+                                    <th class="px-8 py-4 text-[10px] font-[900] text-navy uppercase tracking-widest">Student</th>
+                                    <th class="px-8 py-4 text-[10px] font-[900] text-navy uppercase tracking-widest">Joined At</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                    `;
+
+                    data.attendances.forEach(att => {
+                        const date = new Date(att.joined_at);
+                        const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        const dateStr = date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                        
+                        // Safe-render student info
+                        const studentName = att.user ? att.user.name : 'Unknown Student';
+                        const studentEmail = att.user ? att.user.email : 'Deleted User';
+                        
+                        tableHtml += `
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-8 py-5">
+                                    <div class="text-[14px] font-[800] text-navy">${studentName}</div>
+                                    <div class="text-[10px] text-slate-400 font-[600] uppercase tracking-widest">${studentEmail}</div>
+                                </td>
+                                <td class="px-8 py-5">
+                                    <div class="text-[13px] font-[700] text-navy">${timeStr}</div>
+                                    <div class="text-[10px] text-slate-400 font-[600] uppercase tracking-widest">${dateStr}</div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `</tbody></table>`;
+                    content.innerHTML = tableHtml;
+                } else {
+                    content.innerHTML = `<p class="p-8 text-rose-500 font-[600] text-center">Failed to load logs.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const msg = error.message === 'Unauthorized Access Protocol' ? 'Unauthorized Access Protocol' : 'Network error while fetching logs.';
+                content.innerHTML = `<p class="p-8 text-rose-500 font-[600] text-center uppercase tracking-widest text-[11px]">${msg}</p>`;
+            });
+    }
+
+    function viewBatchSummary(branchId, branchName) {
+        const modal = document.getElementById('batchAttendanceModal');
+        const content = document.getElementById('summaryContent');
+        const titleText = document.getElementById('summaryBatchName');
+        const sessionBadge = document.getElementById('summaryTotalSessions');
+        
+        titleText.innerText = branchName;
+        content.innerHTML = `
+            <div class="p-20 text-center text-slate-400">
+                <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
+                <p class="text-[12px] font-[600] uppercase tracking-widest">Compiling overall participation matrix...</p>
+            </div>
+        `;
+        sessionBadge.innerText = '';
+        
+        modal.showModal();
+        
+        fetch(`/live-classes/batches/${branchId}/attendance-summary`)
+            .then(response => {
+                if (response.status === 403) throw new Error('Unauthorized Summary Request');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    sessionBadge.innerText = `${data.total_sessions} Total Sessions Held`;
+                    
+                    if (data.summary.length === 0) {
+                        content.innerHTML = `
+                            <div class="p-20 text-center">
+                                <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 mx-auto mb-4">
+                                    <i class="bi bi-people-fill text-2xl"></i>
+                                </div>
+                                <h4 class="text-navy font-[800] uppercase tracking-tight">No Enrolled Students</h4>
+                                <p class="text-[12px] text-slate-400 font-[500] mt-1">No student admissions found for this batch.</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    let tableHtml = `
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 border-b border-border sticky top-0 z-10 shadow-sm">
+                                <tr>
+                                    <th class="px-8 py-4 text-[10px] font-[900] text-navy uppercase tracking-widest">Student Details</th>
+                                    <th class="px-8 py-4 text-[10px] font-[900] text-navy uppercase tracking-widest text-center">Engagement</th>
+                                    <th class="px-8 py-4 text-[10px] font-[900] text-navy uppercase tracking-widest text-right">Attendance %</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                    `;
+
+                    data.summary.forEach(item => {
+                        const progressColor = item.percentage >= 80 ? 'emerald' : (item.percentage >= 50 ? 'amber' : 'rose');
+                        
+                        tableHtml += `
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-8 py-5">
+                                    <div class="text-[14px] font-[800] text-navy">${item.student_name}</div>
+                                    <div class="text-[10px] text-slate-400 font-[600] uppercase tracking-widest">${item.student_email}</div>
+                                </td>
+                                <td class="px-8 py-5 text-center">
+                                    <div class="inline-flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-border">
+                                        <span class="text-[13px] font-[900] text-navy">${item.attended}</span>
+                                        <span class="text-[10px] text-slate-400 font-[700]">/ ${item.total}</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-5 text-right">
+                                    <div class="flex flex-col items-end gap-1.5 text-right">
+                                        <div class="text-[15px] font-[900] text-${progressColor}-600 tracking-tighter">${item.percentage}%</div>
+                                        <div class="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                            <div class="h-full bg-${progressColor}-500 rounded-full" style="width: ${item.percentage}%"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `</tbody></table>`;
+                    content.innerHTML = tableHtml;
+                } else {
+                    content.innerHTML = `<p class="p-8 text-rose-500 font-[600] text-center">Failed to generate summary report.</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const msg = error.message === 'Unauthorized Summary Request' ? 'Unauthorized Summary Request' : 'Network error while generating report.';
+                content.innerHTML = `<p class="p-8 text-rose-500 font-[600] text-center uppercase tracking-widest text-[11px]">${msg}</p>`;
+            });
+    }
+</script>
 @endsection

@@ -49,6 +49,27 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $studentNames = [
+            'Aiswarya Nair', 'Arjun Das', 'Meera Krishnan', 'Siddharth Menon', 'Sneha Pillai'
+        ];
+        
+        $studentEmails = [
+            'aiswarya@example.com', 'arjun@example.com', 'meera@example.com', 'sid@example.com', 'sneha@example.com'
+        ];
+
+        $students = [$student];
+        foreach ($studentNames as $index => $name) {
+            $students[] = User::updateOrCreate(
+                ['email' => $studentEmails[$index]],
+                [
+                    'name' => $name,
+                    'password' => Hash::make('password'),
+                    'is_admin' => false,
+                    'is_active' => true,
+                ]
+            );
+        }
+
         // ── Seed Official Curriculum ────────────────
         $course1 = Course::updateOrCreate(
             ['id' => 1],
@@ -260,6 +281,22 @@ class DatabaseSeeder extends Seeder
                 'option_d' => 'To store emergency water',
                 'correct_option' => 'c',
             ],
+            [
+                'question' => 'Which refrigerant is commonly used in VRF systems?',
+                'option_a' => 'R-22',
+                'option_b' => 'R-410A',
+                'option_c' => 'Nitrogen',
+                'option_d' => 'Propane',
+                'correct_option' => 'b',
+            ],
+            [
+                'question' => 'What is the standard frequency of AC power in India?',
+                'option_a' => '60 Hz',
+                'option_b' => '50 Hz',
+                'option_c' => '100 Hz',
+                'option_d' => '120 Hz',
+                'correct_option' => 'b',
+            ],
         ];
 
         foreach ($mepQuestions as $q) {
@@ -287,6 +324,14 @@ class DatabaseSeeder extends Seeder
                 'option_d' => 'The amount of floors processed',
                 'correct_option' => 'c',
             ],
+            [
+                'question' => 'In Revit, which file extension is used for Families?',
+                'option_a' => '.rvt',
+                'option_b' => '.rfa',
+                'option_c' => '.rte',
+                'option_d' => '.rft',
+                'correct_option' => 'b',
+            ],
         ];
 
         foreach ($bimQuestions as $q) {
@@ -296,8 +341,42 @@ class DatabaseSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Exam questions provisioned.');
+        // ── Seed Course Testimonials (Feedback) ───
+        $feedbackData = [
+            [
+                'user_id' => $student->id,
+                'course_id' => $course1->id,
+                'rating' => 5,
+                'comment' => 'The MEP course is exceptionally detailed. The load calculations section was a game changer for my career.',
+            ],
+            [
+                'user_id' => $student->id,
+                'course_id' => $course2->id,
+                'rating' => 4,
+                'comment' => 'Great BIM curriculum. Navisworks coordination workflow was explained very clearly.',
+            ],
+        ];
+
+        foreach ($feedbackData as $fb) {
+            \App\Models\CourseFeedback::updateOrCreate(
+                ['user_id' => $fb['user_id'], 'course_id' => $fb['course_id']],
+                $fb
+            );
+        }
+
+        // ── Seed Live Class Attendance ────────────
+        // Record student attendance for both sessions
+        $pastClasses = \App\Models\LiveClass::where('status', 'completed')->get();
+        foreach ($pastClasses as $class) {
+            foreach ($students as $s) {
+                \App\Models\LiveClassAttendance::updateOrCreate(
+                    ['user_id' => $s->id, 'live_class_id' => $class->id],
+                    ['joined_at' => $class->start_time->copy()->addMinutes(rand(1, 15))]
+                );
+            }
+        }
+
+        $this->command->info('✅ Multi-student Feedback and Attendance logs provisioned.');
         $this->command->info('✅ EduLMS Fresh Synchronization Complete!');
-        $this->command->info('   Institutional Curriculum, Batches, and Session Recordings provisioned.');
     }
 }

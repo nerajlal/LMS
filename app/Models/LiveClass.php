@@ -67,4 +67,9 @@ class LiveClass extends Model
         // Active if now is after (start - 15 mins)
         return now()->isAfter($this->start_time->copy()->subMinutes(15));
     }
+
+    public function attendances()
+    {
+        return $this->hasMany(LiveClassAttendance::class);
+    }
 }

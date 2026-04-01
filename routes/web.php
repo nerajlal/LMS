@@ -11,6 +11,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StudyMaterialController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\LiveClassController;
+use App\Http\Controllers\LiveClassAttendanceController;
 use App\Http\Controllers\FeeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,9 @@ Route::middleware('auth')->group(function () {
 
     // Live Classes
     Route::get('/live-classes', [LiveClassController::class, 'index'])->name('live-classes.index');
+    Route::post('/live-classes/{liveClass}/attendance', [LiveClassAttendanceController::class, 'markAttendance'])->name('live-classes.attendance');
+    Route::get('/live-classes/{liveClass}/attendance', [LiveClassAttendanceController::class, 'index'])->name('live-classes.attendance.report');
+    Route::get('/live-classes/batches/{branch}/attendance-summary', [LiveClassAttendanceController::class, 'batchSummary'])->name('live-classes.batch.summary');
 
     // Study Materials
     Route::get('/materials', [StudyMaterialController::class, 'index'])->name('materials.index');
