@@ -35,12 +35,16 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'whatsapp_number' => 'required|string|min:10|max:20',
+            'linkedin_url' => 'nullable|url|max:255',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'whatsapp_number' => $request->whatsapp_number,
+            'linkedin_url' => $request->linkedin_url,
         ]);
 
         event(new Registered($user));

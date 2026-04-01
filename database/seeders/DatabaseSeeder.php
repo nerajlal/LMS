@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
                 'is_admin' => false,
                 'is_trainer' => true,
                 'is_active' => true,
+                'whatsapp_number' => '+919876543210',
+                'linkedin_url' => 'https://linkedin.com/search/results/all/?keywords=expert-trainer',
             ]
         );
 
@@ -46,6 +48,8 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'is_admin' => false,
                 'is_active' => true,
+                'whatsapp_number' => '+919999999999',
+                'linkedin_url' => 'https://linkedin.com/in/rahul-sharma',
             ]
         );
 
@@ -66,6 +70,8 @@ class DatabaseSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'is_admin' => false,
                     'is_active' => true,
+                    'whatsapp_number' => '+91888888888' . $index,
+                    'linkedin_url' => 'https://linkedin.com/in/' . strtolower(str_replace(' ', '-', $name)),
                 ]
             );
         }

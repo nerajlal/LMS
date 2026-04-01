@@ -83,6 +83,28 @@
                         @enderror
                     </div>
 
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="whatsapp_number" class="block text-[13px] font-[700] text-navy mb-2 pl-1">WhatsApp Number</label>
+                            <input id="whatsapp_number" name="whatsapp_number" type="text" required
+                                class="w-full px-[16px] py-[12px] bg-white border border-slate-300 rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[15px] font-[600] text-navy placeholder:text-slate-400"
+                                value="{{ old('whatsapp_number') }}" placeholder="+91 98765 43210">
+                            @error('whatsapp_number')
+                                <p class="mt-2 text-[12px] font-[700] text-primary">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="linkedin_url" class="block text-[13px] font-[700] text-navy mb-2 pl-1">LinkedIn Profile (URL)</label>
+                            <input id="linkedin_url" name="linkedin_url" type="url"
+                                class="w-full px-[16px] py-[12px] bg-white border border-slate-300 rounded-[8px] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-[15px] font-[600] text-navy placeholder:text-slate-400"
+                                value="{{ old('linkedin_url') }}" placeholder="https://linkedin.com/in/username">
+                            @error('linkedin_url')
+                                <p class="mt-2 text-[12px] font-[700] text-primary">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div>
                         <label for="password" class="block text-[13px] font-[700] text-navy mb-2 pl-1">Password</label>
                         <input id="password" name="password" type="password" autocomplete="new-password" required

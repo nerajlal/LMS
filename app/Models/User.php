@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'whatsapp_number',
+        'linkedin_url',
         'is_active',
     ];
 
