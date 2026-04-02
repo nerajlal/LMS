@@ -19,6 +19,9 @@
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="{{ $course->title }}">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div class="absolute top-4 right-4 flex items-center gap-2">
+                    @if($course->admissions_exists)
+                        <span class="px-3 py-1 bg-emerald-500 rounded-lg text-[10px] font-black text-white uppercase tracking-widest shadow-lg shadow-emerald-500/20">Enrolled</span>
+                    @endif
                     <span class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-bold text-white uppercase tracking-widest">{{ $course->lessons_count }} Lessons</span>
                 </div>
             </div>
@@ -31,8 +34,8 @@
                         <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Price</div>
                         <div class="text-2xl font-black text-slate-900">₹{{ number_format($course->price) }}</div>
                     </div>
-                    <a href="{{ route('courses.show', $course->id) }}" class="px-6 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#F37021] transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-orange-500/20">
-                        View Details
+                    <a href="{{ route('courses.show', $course->id) }}" class="px-6 py-3 {{ $course->admissions_exists ? 'bg-primary' : 'bg-slate-900' }} text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-[#F37021] transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-orange-500/20">
+                        {{ $course->admissions_exists ? 'Continue Learning' : 'View Details' }}
                     </a>
                 </div>
             </div>
