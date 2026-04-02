@@ -93,6 +93,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
         'destroy' => 'courses.destroy',
     ]);
     Route::get('api/courses/{course}', [AdminCourseController::class, 'apiShow'])->name('api.courses.show');
+    Route::post('courses/store-coupon', [AdminCourseController::class, 'storeCoupon'])->name('courses.store-coupon');
     Route::get('api/trainers/courses', [AdminCourseController::class, 'apiTrainerCourses'])->name('api.trainers.courses');
 
     // Students

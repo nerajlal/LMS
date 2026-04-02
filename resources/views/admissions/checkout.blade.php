@@ -65,80 +65,30 @@
             </div>
         </div>
 
-        <!-- Order Summary Sidebar -->
         <div class="md:col-span-2" 
              x-data="{ 
-                couponCode: '', 
-                discount: 0, 
-                appliedCode: '',
-                isVerifying: false, 
-                errorMessage: '',
-                basePrice: {{ (float)$admission->course->price }},
-                init() {
-                    console.log('Alpine Checkout Initialized.');
-                },
-                async applyCoupon() {
-                    let code = this.couponCode.trim();
-                    if (!code) return;
-                    
-                    this.isVerifying = true;
-                    this.errorMessage = '';
-                    
-                    try {
-                        const response = await fetch('{{ route('admissions.validate-coupon') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                code: code,
-                                admission_id: {{ $admission->id }}
-                            })
-                        });
-                        
-                        const data = await response.json();
-                        
-                        if (response.ok && data.success) {
-                            this.discount = parseFloat(data.discount);
-                            this.appliedCode = data.code;
-                            this.errorMessage = '';
-                        } else {
-                            this.discount = 0;
-                            this.appliedCode = '';
-                            this.errorMessage = data.message || 'Invalid coupon code.';
-                        }
-                    } catch (e) {
-                        console.error('Coupon Error:', e);
-                        this.errorMessage = 'Network error. Please try again.';
-                    } finally {
-                        this.isVerifying = false;
-                    }
-                }
+                discount: {{ $directCoupon ? (float)$directCoupon->discount_amount : 0 }}, 
+                appliedCode: '{{ $directCoupon ? $directCoupon->code : '' }}',
+                isDirect: {{ $directCoupon ? 'true' : 'false' }},
+                basePrice: {{ (float)$admission->course->price }}
              }">
             <div class="bg-white p-8 rounded-[16px] border border-border shadow-xl shadow-navy/5 space-y-6 sticky top-24">
                 <h3 class="text-[18px] font-[800] text-navy tracking-tight border-b border-border pb-4">Order Summary</h3>
                 
-                <!-- Coupon Section -->
-                <div class="space-y-3 pt-2">
-                    <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] px-1">Have a Coupon?</label>
-                    <div class="flex gap-2">
-                        <input type="text" x-model="couponCode" :readonly="appliedCode.length > 0" 
-                               @keydown.enter.prevent="applyCoupon"
-                               placeholder="Enter code" 
-                               class="flex-1 px-4 py-2.5 bg-slate-50 border border-border rounded-[10px] text-[13px] font-[700] text-navy focus:ring-1 focus:ring-primary/20 transition-all uppercase placeholder:text-slate-300 outline-none"
-                               :class="{ 'opacity-50 cursor-not-allowed': appliedCode.length > 0 }">
-                        <button type="button" @click="applyCoupon" :disabled="isVerifying || !couponCode || appliedCode.length > 0" 
-                                class="px-4 py-2.5 bg-navy text-white text-[10px] font-[900] uppercase tracking-widest rounded-[10px] hover:bg-primary transition-all disabled:opacity-50">
-                            <span x-show="!isVerifying">Apply</span>
-                            <span x-show="isVerifying" x-cloak><i class="bi bi-arrow-repeat animate-spin"></i></span>
-                        </button>
+                <!-- Coupon Section (Direct Only) -->
+                <div class="space-y-3 pt-2" x-show="isDirect">
+                    <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] px-1">Personal Discount Applied</label>
+
+                    <!-- Direct Discount Badge -->
+                    <div class="p-4 rounded-[12px] bg-emerald-50 border border-emerald-100 flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                            <i class="bi bi-gift-fill text-[14px]"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="text-[11px] font-[900] text-emerald-800 uppercase tracking-widest">Student Bonus Activated</div>
+                            <div class="text-[10px] text-emerald-600 font-[600] mt-0.5">₹<span x-text="Math.floor(discount)"></span> directly deducted from your total.</div>
+                        </div>
                     </div>
-                    <p x-show="errorMessage" x-text="errorMessage" class="text-[10px] font-[800] text-red-500 uppercase px-1" style="display: none;"></p>
-                    <p x-show="appliedCode" class="text-[10px] font-[900] text-emerald-600 uppercase px-1 flex items-center gap-1" style="display: none;">
-                        <i class="bi bi-patch-check-fill"></i> Coupon <span x-text="appliedCode" class="underline decoration-2"></span> Applied
-                    </p>
                 </div>
 
                 <div class="space-y-4">
@@ -170,10 +120,6 @@
                         </button>
                     </form>
                 </div>
-
-                <p class="text-[11px] text-center text-muted font-[500] leading-relaxed px-4">
-                    By clicking "Pay & Enroll Now", you agree to the Terms of Service and Privacy Policy of The Ace India.
-                </p>
 
                 <div class="flex items-center justify-center gap-6 pt-2 grayscale opacity-40">
                     <i class="bi bi-shield-check text-2xl"></i>

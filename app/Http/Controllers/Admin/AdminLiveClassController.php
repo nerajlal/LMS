@@ -17,16 +17,22 @@ class AdminLiveClassController extends Controller
      */
     public function storeCoupon(Request $request)
     {
-        $validated = $request->validate([
-            'code' => 'required|string|unique:coupons,code',
+        $request->validate([
             'discount_amount' => 'required|numeric|min:1',
+            'student_email' => 'required|email|max:255',
             'batch_id' => 'required|exists:live_class_branches,id',
         ]);
 
-        $validated['user_id'] = auth()->id();
-        $validated['is_used'] = false;
+        $code = 'OFFER-' . strtoupper(str_replace('.', '', uniqid('', true)));
 
-        Coupon::create($validated);
+        Coupon::create([
+            'code' => $code,
+            'discount_amount' => $request->discount_amount,
+            'student_email' => $request->student_email,
+            'batch_id' => $request->batch_id,
+            'user_id' => auth()->id(),
+            'is_used' => false,
+        ]);
 
         return redirect()->route('admin.live-classes.index')->with('success', 'Coupon code generated successfully.');
     }

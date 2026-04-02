@@ -22,6 +22,8 @@
 <div class="space-y-8" x-data="{ 
     courseDetail: null, 
     trainerDetail: null,
+    showOfferModal: false,
+    selectedCourse: { id: null, title: '' },
     loading: false,
     async fetchCourse(id) {
         this.loading = true;
@@ -49,6 +51,10 @@
             <h1 class="text-[24px] font-[800] text-navy tracking-tight uppercase">System <span class="text-primary">Catalog</span></h1>
             <p class="text-muted mt-1 font-[500] text-[12px] uppercase tracking-widest">Global educational inventory & performance metrics</p>
         </div>
+        <a href="{{ route('admin.courses.create') }}" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
+            <i class="bi bi-plus-lg text-lg"></i>
+            <span>Add New Course</span>
+        </a>
     </div>
 
     <!-- Stats Preview -->
@@ -128,6 +134,9 @@
                                 <a href="{{ route('admin.courses.edit', $course->id) }}" class="w-9 h-9 flex items-center justify-center bg-slate-50 text-slate-400 rounded-[10px] border border-slate-200 hover:bg-navy hover:text-white hover:border-navy transition-all shadow-sm">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
+                                <button type="button" @click="selectedCourse = { id: {{ $course->id }}, title: '{{ addslashes($course->title) }}' }; showOfferModal = true" title="Direct Student Offer" class="w-9 h-9 flex items-center justify-center bg-orange-50 text-primary rounded-[10px] border border-orange-100 hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm">
+                                    <i class="bi bi-gift"></i>
+                                </button>
                                 <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Archive this course?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="w-9 h-9 flex items-center justify-center bg-slate-50 text-slate-400 rounded-[10px] border border-slate-200 hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all shadow-sm">
@@ -277,6 +286,61 @@
                 </div> <!-- End of overflow-y-auto -->
             </div> <!-- End of relative bg-white -->
         </div> <!-- End of fixed overlay -->
+    </template>
+
+    <!-- Direct Student Offer Modal -->
+    <template x-if="showOfferModal">
+        <div class="fixed inset-0 z-[1200] flex items-center justify-center p-4">
+            <div class="fixed inset-0 bg-navy/60 backdrop-blur-sm" @click="showOfferModal = false"></div>
+            
+            <div class="relative bg-white w-full max-w-md rounded-[24px] shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in duration-200">
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-orange-500 text-white flex items-center justify-center shadow-lg shadow-orange-500/20">
+                                <i class="bi bi-gift-fill text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-[900] text-navy uppercase tracking-tight leading-none">Direct Offer</h3>
+                                <p class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest mt-1.5">Targeted Student Discount</p>
+                            </div>
+                        </div>
+                        <button @click="showOfferModal = false" class="text-slate-400 hover:text-navy transition-colors text-xl">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-[16px] border border-slate-100 mb-8">
+                        <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest mb-1.5">Applying To Course</div>
+                        <div class="text-[14px] font-[800] text-navy uppercase leading-tight" x-text="selectedCourse.title"></div>
+                    </div>
+
+                    <form action="{{ route('admin.courses.store-coupon') }}" method="POST" class="space-y-5">
+                        @csrf
+                        <input type="hidden" name="course_id" :value="selectedCourse.id">
+                        
+                        <div>
+                            <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-2 px-1">Student E-mail Identifier</label>
+                            <input type="email" name="student_email" required placeholder="student@example.com"
+                                   class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[16px] text-sm font-[700] text-navy focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-2 px-1">Discount Magnitude (₹)</label>
+                            <input type="number" name="discount_amount" required min="1" placeholder="e.g. 500"
+                                   class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[16px] text-sm font-[800] text-navy focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all outline-none">
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit" class="w-full py-4 bg-navy text-white font-[900] rounded-[16px] hover:bg-primary transition-all shadow-xl shadow-navy/10 uppercase tracking-widest text-[12px] flex items-center justify-center gap-3 group">
+                                Authorize Direct Offer
+                                <i class="bi bi-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </template>
 </div>
 @endsection
