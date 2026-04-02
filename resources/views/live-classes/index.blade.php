@@ -147,28 +147,29 @@
             @forelse($availableBatches as $batch)
                 @php
                     $instructor = $batch->trainers->first();
+                    $meta = $batch->getDisplayMetadata();
                 @endphp
                 <div class="bg-white rounded-[24px] border border-slate-100 shadow-sm hover:shadow-xl transition-all overflow-hidden flex flex-col group">
                     <div class="relative h-48 overflow-hidden">
-                        <img src="{{ $batch->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
+                        <img src="{{ $meta->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent"></div>
                         <div class="absolute bottom-4 left-6">
                             <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em] block mb-1">Live Program</span>
-                            <h4 class="text-lg font-[900] text-white leading-tight">{{ $batch->name }}</h4>
+                            <h4 class="text-lg font-[900] text-white leading-tight">{{ $meta->title }}</h4>
                         </div>
                     </div>
                     <div class="p-6 flex-1 flex flex-col">
                         <p class="text-slate-500 text-[13px] font-[600] mb-6 line-clamp-3 italic opacity-80">
-                            {{ $batch->course?->description ?? 'Master professional skills with expert trainers in our interactive live sessions.' }}
+                            {{ $meta->description }}
                         </p>
                         
                         <div class="flex items-center justify-between mt-auto pt-6 border-t border-slate-50">
                             <div>
                                 <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 truncate">With {{ $instructor?->name ?? 'Global Expert' }}</div>
-                                <div class="text-xl font-black text-navy">₹{{ number_format($batch->course?->price ?? 0) }}</div>
+                                <div class="text-xl font-black text-navy">₹{{ number_format($meta->price) }}</div>
                             </div>
-                            <a href="{{ route('courses.show', $batch->course_id) }}" class="px-6 py-3 bg-navy text-white text-[11px] font-black uppercase tracking-widest rounded-[12px] hover:bg-primary transition-all shadow-lg hover:shadow-orange-500/20">
+                            <a href="{{ route('live-classes.batches.show', $batch->id) }}" class="px-6 py-3 bg-navy text-white text-[11px] font-black uppercase tracking-widest rounded-[12px] hover:bg-primary transition-all shadow-lg hover:shadow-orange-500/20">
                                 Enroll Now
                             </a>
                         </div>

@@ -32,10 +32,10 @@
                     </a>
                 </div>
 
-                <button onclick="document.getElementById('branchModal').showModal()" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
+                <a href="{{ route('trainer.live-classes.branches.create') }}" class="px-6 py-3.5 bg-primary text-white font-[900] text-[12px] rounded-[12px] hover:bg-orange-600 transition-all flex items-center gap-3 uppercase tracking-widest shadow-xl shadow-orange-500/20">
                     <i class="bi bi-plus-lg text-lg"></i>
                     <span>New Batch</span>
-                </button>
+                </a>
             </div>
         </div>
     </div>
@@ -50,8 +50,13 @@
                         <i class="bi bi-folder2-open"></i>
                     </div>
                     <div>
-                        <h3 class="text-[15px] font-[900] text-navy uppercase tracking-tight">{{ $branch->name }}</h3>
-                        <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">{{ $branch->course->title ?? 'General Batch' }}</p>
+                        <div class="flex items-center gap-3 mb-1">
+                            <h3 class="text-[15px] font-[900] text-navy uppercase tracking-tight">{{ $branch->name }}</h3>
+                            <a href="{{ route('trainer.live-classes.branches.edit', $branch->id) }}" class="text-slate-300 hover:text-primary transition-colors" title="Edit Master Blueprint">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">{{ $branch->is_standalone ? 'Independent Batch' : ($branch->course->title ?? 'General Batch') }}</p>
                         @if($branch->trainers->where('id', '!=', auth()->id())->count() > 0)
                             <div class="mt-1 flex items-center gap-1.5 opacity-60">
                                 <i class="bi bi-people-fill text-[10px] text-primary"></i>
@@ -204,56 +209,30 @@
             <p class="text-slate-500 text-[14px] max-w-sm mx-auto mb-10">Create a batch to group your live sessions. It helps you and your students stay organized.</p>
             <button onclick="document.getElementById('branchModal').showModal()" class="px-8 py-4 bg-navy text-white font-[900] text-[13px] rounded-[16px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20">
                 Create Your First Batch
-            </button>
+            </a>
         </div>
         @endif
     </div>
 
-    <!-- Create Branch Modal -->
-    <dialog id="branchModal" class="p-0 rounded-[24px] shadow-2xl border-none backdrop:backdrop-blur-sm">
-        <div class="w-[450px] bg-white">
-            <div class="p-8 border-b border-border bg-slate-50/50">
-                <div class="flex justify-between items-center mb-1">
-                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Create New <span class="text-primary">Batch</span></h3>
-                    <button onclick="document.getElementById('branchModal').close()" class="text-slate-400 hover:text-navy transition-colors">
-                        <i class="bi bi-x-lg text-xl"></i>
-                    </button>
-                </div>
-                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Group your live classes for a specific cohort</p>
-            </div>
-            
-            <form action="{{ route('trainer.live-classes.branches.store') }}" method="POST" class="p-8 space-y-6">
-                @csrf
-                <div>
-                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Batch Name</label>
-                    <input type="text" name="name" required placeholder="e.g. Batch A - Morning" 
-                           class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy placeholder:text-slate-300 italic">
-                </div>
-                
-                <div>
-                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Select Academic Blueprint</label>
-                    <div class="relative">
-                        <select name="course_id" required class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[700] text-navy appearance-none cursor-pointer">
-                            <option value="" disabled selected>Choose a Course...</option>
-                            @foreach($courses as $course)
-                                <option value="{{ $course->id }}">{{ $course->title }}</option>
-                            @endforeach
-                        </select>
-                        <i class="bi bi-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-navy/30 pointer-events-none"></i>
-                    </div>
-                    <p class="mt-2.5 px-1 text-[9px] text-slate-400 font-[700] uppercase tracking-widest leading-relaxed">
-                        <i class="bi bi-info-circle text-primary"></i> The batch will inherit all recorded curriculum from this course blueprint.
-                    </p>
-                </div>
+    {{-- Legacy Branch Modal Removed - Replaced by Dedicated Designer Page --}}
 
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
-                        Create Batch
-                    </button>
-                </div>
-            </form>
-        </div>
-    </dialog>
+    <script>
+        function previewImage(event, id) {
+            const input = event.target;
+            const preview = document.getElementById(id);
+            const placeholder = document.getElementById(id === 'batchPreview' ? 'batchPlaceholder' : '');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    if(placeholder) placeholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
     {{-- Commented out: moved to Admin --}}
     {{-- 

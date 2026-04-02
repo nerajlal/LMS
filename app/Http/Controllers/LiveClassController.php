@@ -57,4 +57,15 @@ class LiveClassController extends Controller
             'enrolledCourseIds', 'enrolledBatchIds', 'courseBatchMap'
         ));
     }
+
+    public function showBatch(\App\Models\LiveClassBranch $branch)
+    {
+        $branch->load(['trainers', 'liveClasses' => function($q) {
+            $q->where('start_time', '>=', now())->orderBy('start_time', 'asc');
+        }]);
+
+        $meta = $branch->getDisplayMetadata();
+        
+        return view('live-classes.show', compact('branch', 'meta'));
+    }
 }
