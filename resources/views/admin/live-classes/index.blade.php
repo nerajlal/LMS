@@ -45,18 +45,14 @@
         <div class="bg-white rounded-[20px] border border-slate-200 shadow-sm border-l-4 border-l-navy transition-all hover:shadow-md" 
              x-data="{ expanded: false, menuOpen: false }"
              :class="{ 'overflow-visible z-[100] relative': menuOpen, 'overflow-hidden': !menuOpen }">
-            <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center select-none group/header">
-                <!-- Expansion Click Target (Left Side) -->
-                <div @click="expanded = !expanded" class="flex items-center gap-4 cursor-pointer flex-1 py-1">
-                    <div class="w-10 h-10 rounded-[12px] bg-navy text-white flex items-center justify-center shadow-lg shadow-navy/10 transform transition-transform group-hover/header:rotate-6">
-                        <i class="bi bi-folder-symlink-fill"></i>
+            <div class="px-6 py-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 bg-white transition-all group-hover:bg-slate-50/50">
+                <div class="flex items-start sm:items-center gap-4">
+                    <div class="w-12 h-12 rounded-[14px] bg-navy text-white flex-shrink-0 flex items-center justify-center shadow-lg shadow-navy/10 transform transition-transform group-hover:scale-110">
+                        <i class="bi bi-folder-fill text-xl"></i>
                     </div>
-                    <div>
-                        <h3 class="text-[14px] font-[900] text-navy uppercase tracking-tight leading-none mb-1.5">{{ $branch->name }}</h3>
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] text-slate-400 font-[800] uppercase tracking-widest border-r border-slate-200 pr-3">
-                                {{ $branch->course->title ?? 'General Batch' }}
-                            </span>
+                    <div class="min-w-0">
+                        <h3 class="text-[17px] font-[900] text-navy uppercase tracking-tight truncate">{{ $branch->name }}</h3>
+                        <div class="flex flex-wrap items-center gap-3 mt-1.5">
                             @if($branch->course)
                             <span class="text-[10px] text-emerald-600 font-[900] uppercase tracking-widest border-r border-slate-200 pr-3">
                                 ₹{{ number_format($branch->course->price, 2) }}
@@ -73,11 +69,16 @@
                 </div>
 
                 <!-- Tools & Interactive Elements (Right Side) -->
-                <div class="flex items-center gap-4">
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 md:justify-end">
                     <div class="text-[9px] font-[900] text-slate-400 uppercase tracking-widest bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">
                         {{ $branch->liveClasses->count() }} Sessions
                     </div>
                     
+                    <!-- Overall Stats Button -->
+                    <button onclick="viewBatchSummary({{ $branch->id }}, '{{ addslashes($branch->name) }}')" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-[900] uppercase tracking-widest rounded-full hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center gap-2">
+                        <i class="bi bi-graph-up-arrow"></i> Overall Stats
+                    </button>
+
                     <!-- 3-Dot Options Menu (Unified x-data) -->
                     <div class="relative">
                         <button @click="menuOpen = !menuOpen" @click.away="menuOpen = false" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-navy/10 transition-colors text-slate-400 focus:outline-none relative z-[60]">
@@ -101,14 +102,9 @@
                         </div>
                     </div>
 
-                    <!-- Overall Stats Button -->
-                    <button onclick="viewBatchSummary({{ $branch->id }}, '{{ addslashes($branch->name) }}')" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 border border-emerald-100 text-[9px] font-[900] uppercase tracking-widest rounded-full hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center gap-2">
-                        <i class="bi bi-graph-up-arrow"></i> Overall Stats
-                    </button>
-
                     <!-- Chevron Toggle (Expansion Target) -->
                     <div @click="expanded = !expanded" class="w-8 h-8 rounded-full bg-navy/5 flex items-center justify-center text-navy/40 transition-transform duration-300 cursor-pointer hover:bg-navy hover:text-white" :class="{ 'rotate-180 bg-navy text-white': expanded }">
-                        <i class="bi bi-chevron-down"></i>
+                        <i class="bi bi-chevron-down text-[12px]"></i>
                     </div>
                 </div>
             </div>
@@ -322,9 +318,10 @@
             </form>
         </div>
     </dialog>
-    <!-- Attendance Modal -->
-    <dialog id="attendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md">
-        <div class="w-[600px] bg-white min-h-[400px] flex flex-col">
+
+    <!-- Attendance Protocol Modal -->
+    <dialog id="attendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md w-[95vw] max-w-[600px]">
+        <div class="bg-white min-h-[400px] flex flex-col">
             <div class="p-8 border-b border-border bg-slate-50/50">
                 <div class="flex justify-between items-center mb-1">
                     <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Attendance <span class="text-primary">Protocol</span></h3>
@@ -338,22 +335,21 @@
             <div class="flex-1 p-0 overflow-y-auto max-h-[500px]" id="attendanceContent">
                 <div class="p-20 text-center text-slate-400">
                     <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
-                    <p class="text-[12px] font-[600] uppercase tracking-widest">Fetching logs...</p>
+                    <p class="text-[12px] font-[600] uppercase tracking-widest">Analyzing participation data...</p>
                 </div>
             </div>
 
-            <div class="p-6 border-t border-border bg-slate-50/50 text-center">
-                <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">
-                    <i class="bi bi-info-circle text-primary mr-1"></i> Logs are recorded only when students click 'Join Now' on their dashboard.
+            <div class="p-6 border-t border-border bg-slate-100/50">
+                <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest text-center">
+                    <i class="bi bi-shield-check text-primary mr-1"></i> Authenticated Participation Log Verified
                 </p>
             </div>
         </div>
     </dialog>
-</div>
 
     <!-- Batch Attendance Summary Modal -->
-    <dialog id="batchAttendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md">
-        <div class="w-[800px] bg-white min-h-[500px] flex flex-col">
+    <dialog id="batchAttendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md w-[95vw] max-w-[800px]">
+        <div class="bg-white min-h-[500px] flex flex-col">
             <div class="p-8 border-b border-border bg-slate-50/50">
                 <div class="flex justify-between items-center mb-1">
                     <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Batch Attendance <span class="text-primary">Master Report</span></h3>
@@ -364,14 +360,14 @@
                 <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest" id="summaryBatchName">Overall Participation Summary</p>
             </div>
             
-            <div class="flex-1 p-0 overflow-y-auto max-h-[600px]" id="summaryContent">
+            <div class="flex-1 p-0 overflow-y-auto max-h-[600px] overflow-x-auto" id="summaryContent">
                 <div class="p-20 text-center text-slate-400">
                     <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
                     <p class="text-[12px] font-[600] uppercase tracking-widest">Aggregating session data...</p>
                 </div>
             </div>
 
-            <div class="p-6 border-t border-border bg-slate-100/50 flex justify-between items-center">
+            <div class="p-6 border-t border-border bg-slate-100/50 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">
                     <i class="bi bi-info-circle text-primary mr-1"></i> Based on all Live or Completed sessions.
                 </p>

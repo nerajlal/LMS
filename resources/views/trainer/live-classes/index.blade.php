@@ -44,9 +44,9 @@
     <div class="space-y-8">
         @foreach($branches as $branch)
         <div class="bg-white rounded-[20px] border border-border shadow-sm overflow-hidden">
-            <div class="px-6 py-4 bg-slate-50/50 border-b border-border flex justify-between items-center" x-data="{ open: false }">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-[10px] bg-navy text-white flex items-center justify-center">
+            <div class="px-6 py-5 bg-slate-50/50 border-b border-border flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4" x-data="{ open: false }">
+                <div class="flex items-start sm:items-center gap-3">
+                    <div class="w-10 h-10 rounded-[10px] bg-navy text-white flex-shrink-0 flex items-center justify-center">
                         <i class="bi bi-folder2-open"></i>
                     </div>
                     <div>
@@ -55,13 +55,13 @@
                         @if($branch->trainers->where('id', '!=', auth()->id())->count() > 0)
                             <div class="mt-1 flex items-center gap-1.5 opacity-60">
                                 <i class="bi bi-people-fill text-[10px] text-primary"></i>
-                                <span class="text-[9px] font-[800] text-slate-400 uppercase tracking-widest">Collaborators: {{ $branch->trainers->where('id', '!=', auth()->id())->pluck('name')->join(', ') }}</span>
+                                <span class="text-[9px] font-[800] text-slate-400 uppercase tracking-widest leading-normal">Collaborators: {{ $branch->trainers->where('id', '!=', auth()->id())->pluck('name')->join(', ') }}</span>
                             </div>
                         @endif
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-[10px] font-[800] text-slate-400 uppercase tracking-widest bg-white border border-border px-3 py-1.5 rounded-full">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <div class="text-[9px] font-[800] text-slate-400 uppercase tracking-widest bg-white border border-border px-3 py-1.5 rounded-full">
                         {{ $branch->liveClasses->count() }} Sessions
                     </div>
                     
@@ -300,9 +300,9 @@
         </div>
     </dialog>
     
-    <!-- Attendance Modal -->
-    <dialog id="attendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md">
-        <div class="w-[600px] bg-white min-h-[400px] flex flex-col">
+    <!-- Attendance Protocol Modal -->
+    <dialog id="attendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md w-[95vw] max-w-[600px]">
+        <div class="bg-white min-h-[400px] flex flex-col">
             <div class="p-8 border-b border-border bg-slate-50/50">
                 <div class="flex justify-between items-center mb-1">
                     <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Attendance <span class="text-primary">Protocol</span></h3>
@@ -316,22 +316,21 @@
             <div class="flex-1 p-0 overflow-y-auto max-h-[500px]" id="attendanceContent">
                 <div class="p-20 text-center text-slate-400">
                     <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
-                    <p class="text-[12px] font-[600] uppercase tracking-widest">Fetching logs...</p>
+                    <p class="text-[12px] font-[600] uppercase tracking-widest">Analyzing participation data...</p>
                 </div>
             </div>
 
-            <div class="p-6 border-t border-border bg-slate-50/50 text-center">
-                <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">
-                    <i class="bi bi-info-circle text-primary mr-1"></i> Logs are recorded only when students click 'Join Now' on their dashboard.
+            <div class="p-6 border-t border-border bg-slate-100/50">
+                <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest text-center">
+                    <i class="bi bi-shield-check text-primary mr-1"></i> Authenticated Participation Log Verified
                 </p>
             </div>
         </div>
     </dialog>
-</div>
 
     <!-- Batch Attendance Summary Modal -->
-    <dialog id="batchAttendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md">
-        <div class="w-[800px] bg-white min-h-[500px] flex flex-col">
+    <dialog id="batchAttendanceModal" class="p-0 rounded-[28px] shadow-2xl border-none backdrop:backdrop-blur-md w-[95vw] max-w-[800px]">
+        <div class="bg-white min-h-[500px] flex flex-col">
             <div class="p-8 border-b border-border bg-slate-50/50">
                 <div class="flex justify-between items-center mb-1">
                     <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Batch Attendance <span class="text-primary">Master Report</span></h3>
@@ -342,16 +341,16 @@
                 <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest" id="summaryBatchName">Overall Participation Summary</p>
             </div>
             
-            <div class="flex-1 p-0 overflow-y-auto max-h-[600px]" id="summaryContent">
+            <div class="flex-1 p-0 overflow-y-auto max-h-[600px] overflow-x-auto" id="summaryContent">
                 <div class="p-20 text-center text-slate-400">
                     <div class="inline-block animate-spin mb-4"><i class="bi bi-arrow-repeat text-2xl"></i></div>
                     <p class="text-[12px] font-[600] uppercase tracking-widest">Aggregating session data...</p>
                 </div>
             </div>
 
-            <div class="p-6 border-t border-border bg-slate-100/50 flex justify-between items-center">
+            <div class="p-6 border-t border-border bg-slate-100/50 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <p class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest">
-                    <i class="bi bi-info-circle text-primary mr-1"></i> Based on all Live or Completed sessions in this batch.
+                    <i class="bi bi-info-circle text-primary mr-1"></i> Based on all Live or Completed sessions.
                 </p>
                 <div id="summaryTotalSessions" class="text-[10px] font-[900] text-navy uppercase tracking-widest bg-white px-3 py-1.5 rounded-full border border-border mt-0"></div>
             </div>
