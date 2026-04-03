@@ -32,20 +32,35 @@
             
             <!-- Context Section (Row 1) -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-6 rounded-[16px] border border-slate-100">
-                @if(isset($selectedCourseId))
-                    <input type="hidden" name="course_id" value="{{ $selectedCourseId }}">
+                @if(isset($selectedBranchId))
+                    @php $branch = $branches->find($selectedBranchId); @endphp
+                    <input type="hidden" name="live_class_branch_id" value="{{ $selectedBranchId }}">
+                    <input type="hidden" name="course_id" value="{{ $branch->course_id }}">
+                    
                     <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-[10px] bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                            <i class="bi bi-collection-fill"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <label class="block text-[9px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-0.5">Assigned Batch</label>
+                            <div class="text-[13px] font-[800] text-navy leading-tight truncate">{{ $branch->name ?? 'Selected Batch' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4 border-l border-slate-200 pl-6">
                         <div class="w-10 h-10 rounded-[10px] bg-navy/5 text-navy flex items-center justify-center border border-navy/10">
                             <i class="bi bi-journal-check"></i>
                         </div>
                         <div class="overflow-hidden">
-                            <label class="block text-[9px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-0.5">Program</label>
-                            <div class="text-[13px] font-[800] text-navy leading-tight truncate">{{ $courses->find($selectedCourseId)->title ?? 'General Course' }}</div>
+                            <label class="block text-[9px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-0.5">Parent Program</label>
+                            <div class="text-[13px] font-[800] text-navy leading-tight truncate">
+                                {{ $branch->is_standalone ? 'Independent Live Batch' : ($branch->course->title ?? 'General Course') }}
+                            </div>
                         </div>
                     </div>
                 @else
                     <div>
-                        <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-2 px-1">Target Course</label>
+                        <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-2 px-1">Target Course (Optional)</label>
                         <div class="relative">
                             <select name="course_id" class="w-full pl-5 pr-10 py-3.5 bg-white border border-border rounded-[12px] focus:border-primary/30 focus:ring-0 transition-all text-[13px] font-[700] text-navy appearance-none cursor-pointer">
                                 <option value="">General Course</option>
@@ -56,20 +71,7 @@
                             <i class="bi bi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-navy/20 pointer-events-none"></i>
                         </div>
                     </div>
-                @endif
 
-                @if(isset($selectedBranchId))
-                    <input type="hidden" name="live_class_branch_id" value="{{ $selectedBranchId }}">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-[10px] bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
-                            <i class="bi bi-collection-fill"></i>
-                        </div>
-                        <div class="overflow-hidden">
-                            <label class="block text-[9px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-0.5">Batch</label>
-                            <div class="text-[13px] font-[800] text-navy leading-tight truncate">{{ $branches->find($selectedBranchId)->name ?? 'Selected Batch' }}</div>
-                        </div>
-                    </div>
-                @else
                     <div>
                         <label class="block text-[10px] font-[900] text-navy/40 uppercase tracking-[0.2em] mb-2 px-1">Batch Assignment</label>
                         <div class="relative">

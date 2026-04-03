@@ -13,11 +13,21 @@ class CourseController extends Controller
     {
         $query = Course::withCount(['lessons', 'enrollments']);
 
+        if (auth()->check()) {
+            $query->withExists(['admissions' => function ($q) {
+                $q->where('user_id', auth()->id())
+                  ->where('status', 'approved');
+            }]);
+            
+            // Sort by existence (False/0 first, True/1 last)
+            $query->orderBy('admissions_exists', 'asc');
+        }
+
         if ($request->has('instructor')) {
             $query->where('instructor_name', $request->instructor);
         }
 
-        $courses = $query->get();
+        $courses = $query->latest('id')->get();
         return view('courses.index', compact('courses'));
     }
 

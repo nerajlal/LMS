@@ -233,12 +233,12 @@
         <div class="w-[450px] bg-white">
             <div class="p-8 border-b border-border bg-slate-50/50">
                 <div class="flex justify-between items-center mb-1">
-                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight">Generate <span class="text-primary">Coupon</span></h3>
+                    <h3 class="text-xl font-[900] text-navy uppercase tracking-tight text-nowrap">Direct Student <span class="text-primary">Offer</span></h3>
                     <button @click="$el.closest('dialog').close()" class="text-slate-400 hover:text-navy transition-colors">
                         <i class="bi bi-x-lg text-xl"></i>
                     </button>
                 </div>
-                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Single-use discount for <span class="text-navy" x-text="batchName"></span></p>
+                <p class="text-[11px] text-slate-400 font-[700] uppercase tracking-widest">Automatic discount for <span class="text-navy" x-text="batchName"></span></p>
             </div>
             
             <form action="{{ route('admin.live-classes.coupons.store') }}" method="POST" class="p-8 space-y-6">
@@ -246,17 +246,16 @@
                 <input type="hidden" name="batch_id" :value="batchId">
                 
                 <div>
-                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Coupon Code</label>
+                    <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Target Student Email</label>
                     <div class="relative group">
-                        <input type="text" name="code" id="coupon_code" required placeholder="e.g. SAVE500" 
-                               class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[900] text-navy placeholder:text-slate-300 tracking-widest uppercase outline-none">
-                        <button type="button" @click="document.getElementById('coupon_code').value = 'CPN' + Math.random().toString(36).substring(2, 8).toUpperCase()"
-                                class="absolute right-4 top-1/2 -translate-y-1/2 text-primary font-[900] text-[10px] uppercase tracking-widest hover:scale-105 transition-transform">
-                            Generate
-                        </button>
+                        <input type="email" name="student_email" required placeholder="e.g. student@example.com" 
+                               class="w-full px-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[14px] font-[700] text-navy placeholder:text-slate-300 outline-none">
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+                            <i class="bi bi-envelope text-lg"></i>
+                        </div>
                     </div>
                 </div>
-                
+
                 <div>
                     <label class="block text-[11px] font-[900] text-navy/50 uppercase tracking-[0.2em] mb-2.5 px-1">Discount Amount (Fixed ₹)</label>
                     <div class="relative">
@@ -264,11 +263,14 @@
                         <input type="number" name="discount_amount" required placeholder="500" 
                                class="w-full pl-10 pr-5 py-4 bg-slate-50 border-2 border-transparent rounded-[14px] focus:border-primary/20 focus:bg-white focus:ring-0 transition-all text-[15px] font-[900] text-navy placeholder:text-slate-300 outline-none">
                     </div>
+                    <p class="text-[9px] text-slate-400 font-[700] uppercase tracking-widest mt-3 px-1 italic">
+                        The student will directly receive this discount at checkout.
+                    </p>
                 </div>
 
                 <div class="pt-4">
                     <button type="submit" class="w-full py-4 bg-navy text-white rounded-[14px] font-[900] text-[13px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-xl shadow-navy/20 active:scale-[0.98]">
-                        Activate Coupon
+                        Confirm Direct Offer
                     </button>
                 </div>
             </form>

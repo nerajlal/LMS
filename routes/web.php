@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
 
     // Admissions
     Route::resource('admissions', AdmissionController::class)->only(['index', 'create', 'store']);
+    Route::get('/admissions/express-enroll', [AdmissionController::class, 'expressEnroll'])->name('admissions.express');
     Route::get('/admissions/{admission}/checkout', [AdmissionController::class, 'checkout'])->name('admissions.checkout');
     Route::post('/admissions/{admission}/pay', [AdmissionController::class, 'pay'])->name('admissions.pay');
     Route::post('/admissions/validate-coupon', [AdmissionController::class, 'validateCoupon'])->name('admissions.validate-coupon');
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
 
     // Live Classes
     Route::get('/live-classes', [LiveClassController::class, 'index'])->name('live-classes.index');
+Route::get('/live-classes/batches/{branch}', [LiveClassController::class, 'showBatch'])->name('live-classes.batches.show');
     Route::post('/live-classes/{liveClass}/attendance', [LiveClassAttendanceController::class, 'markAttendance'])->name('live-classes.attendance');
     Route::get('/live-classes/{liveClass}/attendance', [LiveClassAttendanceController::class, 'index'])->name('live-classes.attendance.report');
     Route::get('/live-classes/batches/{branch}/attendance-summary', [LiveClassAttendanceController::class, 'batchSummary'])->name('live-classes.batch.summary');
@@ -93,6 +95,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
         'destroy' => 'courses.destroy',
     ]);
     Route::get('api/courses/{course}', [AdminCourseController::class, 'apiShow'])->name('api.courses.show');
+    Route::post('courses/store-coupon', [AdminCourseController::class, 'storeCoupon'])->name('courses.store-coupon');
     Route::get('api/trainers/courses', [AdminCourseController::class, 'apiTrainerCourses'])->name('api.trainers.courses');
 
     // Students
@@ -149,7 +152,10 @@ Route::middleware(['auth', 'role:trainer'])->prefix('trainer')->name('trainer.')
     Route::delete('/courses/{course}/materials/{material}', [TrainerCourseController::class, 'destroyMaterial'])->name('courses.materials.destroy');
     
     Route::resource('live-classes', TrainerLiveClassController::class)->except(['destroy']);
+    Route::get('/live-classes/batches/create', [TrainerLiveClassController::class, 'createBranch'])->name('live-classes.branches.create');
     Route::post('/live-classes/branches', [TrainerLiveClassController::class, 'storeBranch'])->name('live-classes.branches.store');
+    Route::get('/live-classes/branches/{branch}/edit', [TrainerLiveClassController::class, 'editBranch'])->name('live-classes.branches.edit');
+    Route::put('/live-classes/branches/{branch}', [TrainerLiveClassController::class, 'updateBranch'])->name('live-classes.branches.update');
     Route::post('/live-classes/branches/{branch}/complete', [TrainerLiveClassController::class, 'completeBranch'])->name('live-classes.branches.complete');
     Route::post('/live-classes/{liveClass}/recording', [TrainerLiveClassController::class, 'updateRecording'])->name('live-classes.recording.update');
     Route::post('/coupons', [TrainerLiveClassController::class, 'storeCoupon'])->name('coupons.store');

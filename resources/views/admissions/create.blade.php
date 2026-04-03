@@ -36,40 +36,45 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6" 
                      x-data="{ 
                         selectedCourse: '{{ request('course_id', '') }}',
-                        batches: @js($batches),
-                        get filteredBatches() {
-                            return this.batches.filter(b => b.course_id == this.selectedCourse);
-                        }
+                        selectedBatch: '{{ request('batch_id', '') }}'
                      }">
-                    <div class="md:col-span-2">
-                        <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Select Your Course</label>
-                        <div class="relative group">
-                            <select name="course_id" required x-model="selectedCourse" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[12px] focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all text-[14px] font-[700] appearance-none cursor-pointer text-navy">
-                                <option value="">-- Choose Course --</option>
-                                @foreach($courses as $course)
-                                    <option value="{{ $course->id }}">
-                                        {{ $course->title }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <i class="bi bi-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-muted text-sm pointer-events-none group-hover:text-primary transition-colors"></i>
+                    
+                    @if(request('batch_id'))
+                        <input type="hidden" name="batch_id" value="{{ request('batch_id') }}">
+                        @php
+                            $targetBatch = \App\Models\LiveClassBranch::find(request('batch_id'));
+                            $meta = $targetBatch?->getDisplayMetadata();
+                        @endphp
+                        <div class="md:col-span-2">
+                            <div class="p-6 bg-slate-50 rounded-[20px] border border-primary/10 flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-[14px] overflow-hidden shrink-0 border-2 border-white shadow-sm">
+                                    <img src="{{ $meta->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400' }}" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <span class="text-[9px] font-black text-primary uppercase tracking-[0.2em] block mb-1">Enrolling In Live Batch</span>
+                                    <h4 class="text-navy font-[900] leading-tight">{{ $meta->title }}</h4>
+                                    <div class="text-[11px] text-slate-400 font-[700] mt-1 italic">₹{{ number_format($meta->price) }} • Interactive Sessions</div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="course_id" value="{{ $targetBatch->course_id }}">
                         </div>
-                        @error('course_id') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
-                    </div>
-
-                    <div class="md:col-span-2" x-show="filteredBatches.length > 0" x-transition>
-                        <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Preferred Batch</label>
-                        <div class="relative group">
-                            <select name="batch_id" required class="w-full px-5 py-4 bg-emerald-50/30 border border-emerald-100 rounded-[12px] focus:ring-4 focus:ring-emerald-500/5 focus:bg-white focus:border-emerald-500/20 transition-all text-[14px] font-[700] appearance-none cursor-pointer text-navy italic">
-                                <option value="">-- Select Your Batch --</option>
-                                <template x-for="batch in filteredBatches" :key="batch.id">
-                                    <option :value="batch.id" x-text="batch.name"></option>
-                                </template>
-                            </select>
-                            <i class="bi bi-people absolute right-5 top-1/2 -translate-y-1/2 text-emerald-500 text-sm pointer-events-none group-hover:scale-110 transition-transform"></i>
+                    @else
+                        <div class="md:col-span-2">
+                            <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Select Your Course</label>
+                            <div class="relative group">
+                                <select name="course_id" required x-model="selectedCourse" class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[12px] focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all text-[14px] font-[700] appearance-none cursor-pointer text-navy">
+                                    <option value="">-- Choose Course --</option>
+                                    @foreach($courses as $course)
+                                        <option value="{{ $course->id }}">
+                                            {{ $course->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="bi bi-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-muted text-sm pointer-events-none group-hover:text-primary transition-colors"></i>
+                            </div>
+                            @error('course_id') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
                         </div>
-                        <p class="mt-3 text-[10px] font-[700] text-emerald-600 uppercase tracking-widest px-1"><i class="bi bi-info-circle mr-1"></i> Selection required for live class access</p>
-                    </div>
+                    @endif
 
                     <div>
                         <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Full Name</label>
@@ -80,11 +85,11 @@
                     </div>
 
                     <div>
-                        <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">Phone Number</label>
-                        <input type="text" name="phone" required value="{{ old('phone') }}" 
+                        <label class="block text-[11px] font-[900] text-navy uppercase tracking-[0.15em] mb-3 ml-1">WhatsApp Number</label>
+                        <input type="text" name="whatsapp_number" required value="{{ old('whatsapp_number', auth()->user()->whatsapp_number ?? '') }}" 
                                placeholder="+91" 
                                class="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-[12px] focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all text-[14px] font-[700] text-navy">
-                        @error('phone') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
+                        @error('whatsapp_number') <p class="mt-2 text-xs font-bold text-red-500">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="md:col-span-2">

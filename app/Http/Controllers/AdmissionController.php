@@ -46,8 +46,85 @@ class AdmissionController extends Controller
     {
         return view('admissions.create', [
             'courses' => Course::all(),
-            'batches' => \App\Models\LiveClassBranch::where('status', 'active')->get(),
         ]);
+    }
+
+    /**
+     * Express Enrollment: Creates an admission record instantly using user profile data.
+     */
+    public function expressEnroll(Request $request)
+    {
+        $batchId = $request->query('batch_id');
+        $courseId = $request->query('course_id');
+
+        if (!$batchId && !$courseId) {
+            return redirect()->route('courses.index')->with('error', 'Select a program to enroll.');
+        }
+
+        $user = auth()->user();
+
+        // 1. Check for existing enrollment to prevent duplicates
+        $existing = Admission::where('user_id', $user->id)
+            ->where(function($q) use ($batchId, $courseId) {
+                if ($batchId) $q->where('batch_id', $batchId);
+                if ($courseId) $q->where('course_id', $courseId);
+            })
+            ->first();
+
+        if ($existing) {
+            if ($existing->status === 'approved') {
+                return redirect()->route('admissions.index')->with('info', 'You are already enrolled in this program.');
+            }
+            return redirect()->route('admissions.checkout', $existing->id);
+        }
+
+        // 2. Resolve Price and Data
+        $price = 0;
+        $activeBatchId = null;
+        $activeCourseId = null;
+
+        if ($batchId) {
+            $batch = \App\Models\LiveClassBranch::findOrFail($batchId);
+            $price = $batch->is_standalone ? $batch->price : ($batch->course->price ?? 0);
+            $activeBatchId = $batch->id;
+            $activeCourseId = $batch->course_id;
+        } else {
+            $course = Course::findOrFail($courseId);
+            $price = $course->price;
+            $activeCourseId = $course->id;
+        }
+
+        // 3. Create Admission with Default Profile Data
+        $admission = Admission::create([
+            'user_id'   => $user->id,
+            'course_id' => $activeCourseId,
+            'batch_id'  => $activeBatchId,
+            'status'    => ($price > 0) ? 'pending' : 'approved',
+            'details'   => json_encode([
+                'full_name'          => $user->name,
+                'whatsapp_number'    => 'Not Provided',
+                'address'            => '',
+                'previous_education' => '',
+            ]),
+        ]);
+
+        // 4. Create Financial Ledger Entry
+        \App\Models\Fee::create([
+            'user_id'         => $user->id,
+            'course_id'       => $activeCourseId,
+            'batch_id'        => $activeBatchId,
+            'original_amount' => $price,
+            'total_amount'    => $price,
+            'paid_amount'     => ($price > 0) ? 0 : $price,
+            'status'          => ($price > 0) ? 'pending' : 'paid',
+            'due_date'        => now()->addDays(7),
+        ]);
+
+        if ($price > 0) {
+            return redirect()->route('admissions.checkout', $admission->id)->with('success', 'Express enrollment successful!');
+        }
+
+        return redirect()->route('admissions.index')->with('success', 'You have been enrolled successfully!');
     }
 
     public function store(Request $request)
@@ -55,23 +132,35 @@ class AdmissionController extends Controller
         $data = $request->validate([
             'full_name'          => 'required|string|max:255',
             'email'              => 'required|email|max:255',
-            'phone'              => 'required|string|max:20',
-            'course_id'         => 'required|exists:courses,id',
+            'whatsapp_number'    => 'required|string|max:20',
+            'course_id'         => 'nullable|exists:courses,id',
             'batch_id'          => 'nullable|exists:live_class_branches,id',
             'address'           => 'nullable|string',
             'previous_education' => 'nullable|string',
         ]);
 
-        $course = Course::findOrFail($data['course_id']);
+        if (empty($data['course_id']) && empty($data['batch_id'])) {
+            return redirect()->back()->withErrors(['error' => 'Please select either a course or a live batch.']);
+        }
+
+        $price = 0;
+        if (!empty($data['batch_id'])) {
+            $batch = \App\Models\LiveClassBranch::findOrFail($data['batch_id']);
+            $price = $batch->is_standalone ? $batch->price : ($batch->course->price ?? 0);
+            $data['course_id'] = $data['course_id'] ?? $batch->course_id;
+        } elseif (!empty($data['course_id'])) {
+            $course = Course::findOrFail($data['course_id']);
+            $price = $course->price;
+        }
         
         $admission = Admission::create([
             'user_id'   => auth()->id(),
-            'course_id' => $data['course_id'],
+            'course_id' => $data['course_id'] ?? null,
             'batch_id'  => $data['batch_id'] ?? null,
-            'status'    => ($course->price > 0) ? 'pending' : 'approved',
+            'status'    => ($price > 0) ? 'pending' : 'approved',
             'details'   => json_encode([
                 'full_name'          => $data['full_name'],
-                'phone'              => $data['phone'],
+                'whatsapp_number'    => $data['whatsapp_number'],
                 'address'            => $data['address'] ?? '',
                 'previous_education' => $data['previous_education'] ?? '',
             ]),
@@ -80,15 +169,16 @@ class AdmissionController extends Controller
         // Synchronize Financial Ledger (Create Pending Fee)
         \App\Models\Fee::create([
             'user_id'         => auth()->id(),
-            'course_id'       => $data['course_id'],
-            'original_amount' => $course->price,
-            'total_amount'    => $course->price,
-            'paid_amount'     => ($course->price > 0) ? 0 : $course->price,
-            'status'       => ($course->price > 0) ? 'pending' : 'paid',
+            'course_id'       => $data['course_id'] ?? null,
+            'batch_id'        => $data['batch_id'] ?? null,
+            'original_amount' => $price,
+            'total_amount'    => $price,
+            'paid_amount'     => ($price > 0) ? 0 : $price,
+            'status'       => ($price > 0) ? 'pending' : 'paid',
             'due_date'     => now()->addDays(7),
         ]);
 
-        if ($course->price > 0) {
+        if ($price > 0) {
             return redirect()->route('admissions.checkout', $admission->id)->with('info', 'Please complete the payment to start learning.');
         }
 
@@ -103,7 +193,17 @@ class AdmissionController extends Controller
         }
 
         $admission->load('course');
-        return view('admissions.checkout', compact('admission'));
+
+        // Check for direct-to-student discounts (Direct Coupons)
+        $directCoupon = \App\Models\Coupon::where('student_email', auth()->user()->email)
+            ->where('is_used', false)
+            ->where(function($q) use ($admission) {
+                $q->where('batch_id', $admission->batch_id)
+                  ->orWhere('course_id', $admission->course_id);
+            })
+            ->first();
+
+        return view('admissions.checkout', compact('admission', 'directCoupon'));
     }
 
     public function pay(Admission $admission, Request $request)
@@ -118,22 +218,45 @@ class AdmissionController extends Controller
             return redirect()->route('admissions.index')->with('info', 'This cohort is already active and settled.');
         }
 
-        $course = $admission->course;
-
-        $discount = 0;
-        if ($request->filled('coupon_code')) {
-            $coupon = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->coupon_code)])
-                ->where('is_used', false)
-                ->where('batch_id', $admission->batch_id)
-                ->first();
-
-            if ($coupon) {
-                $discount = $coupon->discount_amount;
-                $coupon->update(['is_used' => true]);
-            }
+        $price = 0;
+        if ($admission->batch_id) {
+            $batch = $admission->batch;
+            $price = $batch->is_standalone ? $batch->price : ($batch->course->price ?? 0);
+        } else {
+            $price = $admission->course->price ?? 0;
         }
 
-        $finalPrice = max(0, $course->price - $discount);
+        $discount = 0;
+        $appliedCoupon = null;
+
+        // 1. Check for manual coupon code
+        if ($request->filled('coupon_code')) {
+            $appliedCoupon = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->coupon_code)])
+                ->where('is_used', false)
+                ->where(function($q) use ($admission) {
+                    $q->where('batch_id', $admission->batch_id)
+                      ->orWhere('course_id', $admission->course_id);
+                })
+                ->first();
+        } 
+        
+        // 2. Else: Check for direct-to-student discount if no manual code or manual code was invalid
+        if (!$appliedCoupon) {
+            $appliedCoupon = \App\Models\Coupon::where('student_email', auth()->user()->email)
+                ->where('is_used', false)
+                ->where(function($q) use ($admission) {
+                    $q->where('batch_id', $admission->batch_id)
+                      ->orWhere('course_id', $admission->course_id);
+                })
+                ->first();
+        }
+
+        if ($appliedCoupon) {
+            $discount = $appliedCoupon->discount_amount;
+            $appliedCoupon->update(['is_used' => true]);
+        }
+
+        $finalPrice = max(0, $price - $discount);
 
         // Create a simulated payment record
         \App\Models\Payment::create([
@@ -146,13 +269,16 @@ class AdmissionController extends Controller
 
         // Sync Financial Ledger (Update Fee Status)
         $fee = \App\Models\Fee::where('user_id', auth()->id())
-            ->where('course_id', $admission->course_id)
+            ->where(function($q) use ($admission) {
+                if ($admission->batch_id) $q->where('batch_id', $admission->batch_id);
+                else $q->where('course_id', $admission->course_id);
+            })
             ->where('status', 'pending')
             ->first();
             
         if ($fee) {
             $fee->update([
-                'original_amount' => $fee->original_amount ?? $course->price,
+                'original_amount' => $fee->original_amount ?? $price,
                 'total_amount'    => $finalPrice,
                 'paid_amount'     => $finalPrice,
                 'status'          => 'paid',
@@ -181,7 +307,10 @@ class AdmissionController extends Controller
 
         $coupon = \App\Models\Coupon::whereRaw('UPPER(code) = ?', [strtoupper($request->code)])
             ->where('is_used', false)
-            ->where('batch_id', $admission->batch_id)
+            ->where(function($q) use ($admission) {
+                $q->where('batch_id', $admission->batch_id)
+                  ->orWhere('course_id', $admission->course_id);
+            })
             ->first();
 
         if (!$coupon) {
