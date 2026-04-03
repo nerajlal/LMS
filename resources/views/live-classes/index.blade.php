@@ -86,6 +86,25 @@
                                 </span>
                             </div>
                             <h3 class="text-xl font-[900] text-navy mb-1 group-hover:text-primary transition-colors">{{ $batch->name }}</h3>
+                            <div class="flex items-center justify-between gap-4 mb-6">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-[10px] font-[900] text-navy/40 uppercase tracking-widest">Attendance Tracker</span>
+                                        <span class="text-[10px] font-[900] {{ $batch->attendance_stats['percentage'] >= 80 ? 'text-emerald-500' : ($batch->attendance_stats['percentage'] >= 40 ? 'text-amber-500' : 'text-rose-500') }} uppercase tracking-widest">
+                                            {{ $batch->attendance_stats['percentage'] }}%
+                                        </span>
+                                    </div>
+                                    <div class="h-2 bg-slate-50 rounded-full overflow-hidden border border-slate-100 shadow-inner">
+                                        <div class="h-full rounded-full transition-all duration-1000 {{ $batch->attendance_stats['percentage'] >= 80 ? 'bg-emerald-500' : ($batch->attendance_stats['percentage'] >= 40 ? 'bg-amber-500' : 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.3)]') }}" 
+                                             style="width: {{ $batch->attendance_stats['percentage'] }}%"></div>
+                                    </div>
+                                </div>
+                                <div class="px-4 py-2 bg-slate-50 rounded-[14px] border border-slate-100 text-center shrink-0">
+                                    <div class="text-[12px] font-[900] text-navy">{{ $batch->attendance_stats['attended'] }}/{{ $batch->attendance_stats['past'] }}</div>
+                                    <div class="text-[7px] font-[900] text-slate-400 uppercase tracking-widest">Sessions</div>
+                                </div>
+                            </div>
+
                             <p class="text-slate-400 text-[11px] font-[700] uppercase tracking-widest mb-6 border-b border-slate-50 pb-4">
                                 Lead: {{ $instructor?->name ?? 'Expert Faculty' }}
                             </p>

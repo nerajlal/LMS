@@ -27,6 +27,28 @@ class LiveClassController extends Controller
 
         // Identify Enrolled vs Available Batches
         $enrolledBatches = $allBatches->filter(fn($b) => in_array($b->id, $enrolledBatchIds))->values();
+        
+        // Enhance Enrolled Batches with Attendance Stats
+        $enrolledBatches = $enrolledBatches->map(function($branch) use ($userId) {
+            $pastClassesCount = \App\Models\LiveClass::where('live_class_branch_id', $branch->id)
+                ->where('start_time', '<', now())
+                ->count();
+                
+            $attendedCount = \App\Models\LiveClassAttendance::where('user_id', $userId)
+                ->whereHas('liveClass', function($q) use ($branch) {
+                    $q->where('live_class_branch_id', $branch->id);
+                })
+                ->count();
+                
+            $branch->attendance_stats = [
+                'past' => $pastClassesCount,
+                'attended' => $attendedCount,
+                'percentage' => $pastClassesCount > 0 ? round(($attendedCount / $pastClassesCount) * 100) : 0
+            ];
+            
+            return $branch;
+        });
+
         $availableBatches = $allBatches->filter(fn($b) => !in_array($b->id, $enrolledBatchIds))->values();
 
         // 2. Fetch Individual Sessions for global view / recordings
