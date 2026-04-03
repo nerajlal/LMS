@@ -45,10 +45,16 @@ class DashboardController extends Controller
             ];
         });
 
+        $liveBatchesCount = Admission::where('user_id', $user->id)
+            ->where('status', 'approved')
+            ->whereNotNull('batch_id')
+            ->distinct('batch_id')
+            ->count('batch_id');
+
         $stats = [
             'enrolled'       => $admissions->count(),
             'completed'      => $admissions->where('progress', 100)->count(),
-            'wishlist'       => 0, // No wishlist table currently
+            'live_batches'   => $liveBatchesCount,
             'certifications' => $admissions->where('progress', 100)->count(), // Assuming cert on 100%
         ];
 

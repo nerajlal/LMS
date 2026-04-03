@@ -9,6 +9,7 @@ class Admission extends Model {
     ];
     public function course() { return $this->belongsTo(Course::class); }
     public function batch()  { return $this->belongsTo(LiveClassBranch::class, 'batch_id'); }
+    public function liveClassBranch() { return $this->belongsTo(LiveClassBranch::class, 'batch_id'); }
     public function user()   { return $this->belongsTo(\App\Models\User::class); }
     public function examResults() { return $this->hasMany(CourseExamResult::class); }
     public function latestExamResult() { return $this->hasOne(CourseExamResult::class)->latestOfMany(); }

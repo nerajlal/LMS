@@ -13,7 +13,7 @@
                     <i class="bi bi-person-workspace text-primary text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-[900] tracking-tight">Learning <span class="text-primary">Workspace</span></h1>
+                    <h1 class="text-2xl font-[900] tracking-tight">Recorded <span class="text-primary">Library</span></h1>
                     <p class="text-slate-400 text-[12px] font-[600] uppercase tracking-widest mt-0.5">Welcome back, {{ auth()->user()->name }}</p>
                 </div>
             </div>
@@ -21,11 +21,11 @@
             <!-- Inline Stats -->
             <div class="flex items-center gap-4 sm:gap-8 md:border-l border-white/10 md:pl-8">
                 <div class="flex flex-col">
-                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Ongoing</span>
+                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Courses Ongoing</span>
                     <span class="text-lg md:text-xl font-[900] text-primary">{{ $stats['in_progress'] }}</span>
                 </div>
                 <div class="flex flex-col border-l border-white/10 pl-4 sm:pl-8">
-                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Done</span>
+                    <span class="text-[9px] md:text-[10px] font-[800] text-white/40 uppercase tracking-widest whitespace-nowrap">Completed</span>
                     <span class="text-lg md:text-xl font-[900] text-emerald-400">{{ $stats['completed'] }}</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
         </div>
 
         <a href="{{ route('courses.index') }}" class="text-[12px] font-[800] text-primary uppercase tracking-widest hover:underline flex items-center gap-2">
-            Explore Courses <i class="bi bi-chevron-right"></i>
+            Browse All Courses <i class="bi bi-chevron-right"></i>
         </a>
     </div>
 
@@ -59,23 +59,23 @@
             @forelse($inProgress as $admission)
                 <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
                     <div class="relative w-full md:w-[280px] h-[200px] md:h-auto overflow-hidden shrink-0">
-                        <img src="{{ $admission->batch_id ? ($admission->liveClassBranch?->thumbnail) : ($admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                        <img src="{{ $admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                         <div class="absolute inset-0 bg-gradient-to-r from-navy/60 to-transparent flex flex-col justify-end p-6">
                             <span class="inline-flex px-3 py-1 bg-primary text-white text-[9px] font-[900] uppercase tracking-widest rounded-full shadow-lg w-fit">
-                                {{ $admission->batch_id ? 'Live Cohort' : 'Active Learning' }}
+                                Self-Paced
                             </span>
                         </div>
                     </div>
                     <div class="flex-1 p-5 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-border/50">
                         <div>
-                            <div class="text-[10px] md:text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">{{ $admission->batch_id ? 'Live Campus' : ($admission->course?->category ?? 'Specialization') }}</div>
+                            <div class="text-[10px] md:text-[11px] font-[900] text-primary uppercase tracking-[0.3em] mb-2">{{ $admission->course?->category ?? 'Specialization' }}</div>
                             <h3 class="text-xl md:text-2xl font-[800] text-navy mb-4 group-hover:text-primary transition-colors leading-tight">
-                                {{ $admission->batch_id ? $admission->liveClassBranch?->name : ($admission->course?->title ?? 'Technical Program') }}
+                                {{ $admission->course?->title ?? 'Technical Program' }}
                             </h3>
                             <div class="flex items-center gap-6 mb-6">
                                 <div class="flex items-center gap-2 text-[13px] font-[600] text-muted">
-                                    <i class="bi {{ $admission->batch_id ? 'bi-broadcast' : 'bi-play-circle' }} text-primary"></i> 
-                                    {{ $admission->batch_id ? 'Live Interactive sessions' : ($admission->course?->lessons_count ?? 0) . ' Lessons' }}
+                                    <i class="bi bi-play-circle text-primary"></i> 
+                                    {{ ($admission->course?->lessons_count ?? 0) . ' Lessons' }}
                                 </div>
                             </div>
                         </div>
@@ -90,15 +90,9 @@
                         </div>
                     </div>
                     <div class="w-full md:w-[260px] p-5 md:p-8 flex flex-col justify-center bg-slate-50/50 group-hover:bg-white transition-colors">
-                        @if($admission->batch_id)
-                            <a href="{{ route('live-classes.batches.show', $admission->batch_id) }}" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[12px] md:text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary transition-all text-center">
-                                View Hub <i class="bi bi-chevron-right text-lg"></i>
-                            </a>
-                        @else
-                            <a href="{{ route('courses.show', $admission->course_id) }}" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[12px] md:text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary transition-all text-center">
-                                Continue <i class="bi bi-arrow-right-short text-lg"></i>
-                            </a>
-                        @endif
+                        <a href="{{ route('courses.show', $admission->course_id) }}" class="w-full py-3.5 bg-navy text-white rounded-[12px] font-[800] text-[12px] md:text-[13px] uppercase tracking-widest shadow-xl shadow-navy/20 hover:bg-primary transition-all text-center">
+                            Continue <i class="bi bi-arrow-right-short text-lg"></i>
+                        </a>
                     </div>
                 </div>
             @empty

@@ -44,7 +44,7 @@
                 ['label' => 'Courses Active', 'value' => $stats['enrolled'], 'icon' => 'bi-play-fill', 'gradient' => 'from-navy to-[#254d85]', 'iconColor' => 'text-primary'],
                 ['label' => 'Certifications', 'value' => $stats['certifications'], 'icon' => 'bi-award-fill', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-navy'],
                 ['label' => 'Completed', 'value' => $stats['completed'], 'icon' => 'bi-check-circle-fill', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-emerald-500'],
-                ['label' => 'Watchlist', 'value' => $stats['wishlist'], 'icon' => 'bi-bookmark-heart-fill', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-rose-500'],
+                ['label' => 'Live Batches', 'value' => $stats['live_batches'], 'icon' => 'bi-broadcast-pin', 'gradient' => 'from-white to-slate-50', 'iconColor' => 'text-primary'],
             ];
         @endphp
 

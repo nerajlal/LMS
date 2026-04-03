@@ -14,9 +14,10 @@ class AdmissionController extends Controller
         $userId = auth()->id();
         
         $allAdmissions = Admission::where('user_id', $userId)
+            ->whereNotNull('course_id') // Ensure courses show up even if linked to a batch
             ->with(['course' => function($query) {
                 $query->withCount(['lessons', 'studyMaterials']);
-            }, 'batch', 'latestExamResult'])
+            }, 'latestExamResult'])
             ->latest()
             ->get();
 
