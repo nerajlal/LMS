@@ -61,6 +61,7 @@ class DashboardController extends Controller
         $enrolledBatchIds = $admissions->pluck('batch_id')->filter()->toArray();
 
         $upcomingClasses = \App\Models\LiveClass::whereIn('live_class_branch_id', $enrolledBatchIds)
+            ->with('liveClassBranch')
             ->where('status', 'scheduled')
             ->where('start_time', '>=', now())
             ->orderBy('start_time', 'asc')
@@ -76,14 +77,22 @@ class DashboardController extends Controller
                 ];
             });
 
+        // Optimize trainer course counts by pre-fetching counts
+        $trainerNames = \App\Models\User::where('is_trainer', true)->take(5)->pluck('name')->toArray();
+        $courseCounts = \App\Models\Course::whereIn('instructor_name', $trainerNames)
+            ->selectRaw('instructor_name, count(*) as count')
+            ->groupBy('instructor_name')
+            ->pluck('count', 'instructor_name')
+            ->toArray();
+
         $topInstructors = \App\Models\User::where('is_trainer', true)
             ->take(5)
             ->get()
-            ->map(function($trainer) {
+            ->map(function($trainer) use ($courseCounts) {
                 return [
                     'id' => $trainer->id,
                     'name' => $trainer->name,
-                    'courses' => \App\Models\Course::where('instructor_name', $trainer->name)->count(),
+                    'courses' => $courseCounts[$trainer->name] ?? 0,
                     'avatar' => 'https://ui-avatars.com/api/?name=' . urlencode($trainer->name) . '&background=random',
                 ];
             });

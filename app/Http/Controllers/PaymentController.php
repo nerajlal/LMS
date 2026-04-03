@@ -55,8 +55,11 @@ class PaymentController extends Controller
 
         // Sync Admission Status if paid
         if ($fee->status === 'paid') {
-            Admission::where('user_id', $fee->user_id)
-                ->where('course_id', $fee->course_id)
+            Admission::where('user_id', auth()->id()) // Strict ownership check
+                ->where(function($q) use ($fee) {
+                    if ($fee->batch_id) $q->where('batch_id', $fee->batch_id);
+                    else $q->where('course_id', $fee->course_id);
+                })
                 ->where('status', 'pending')
                 ->update(['status' => 'approved']);
         }

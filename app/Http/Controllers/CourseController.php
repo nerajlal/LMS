@@ -91,7 +91,7 @@ class CourseController extends Controller
             $completedLessons[] = $lessonId;
         }
 
-        $course = Course::withCount('lessons')->find($id);
+        $course = Course::withCount('lessons')->findOrFail($id);
         $totalLessons = $course->lessons_count ?: 1;
         
         // Calculate progress based on unique completed lessons
