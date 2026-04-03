@@ -144,11 +144,9 @@ class AdmissionController extends Controller
             return redirect()->back()->withErrors(['error' => 'Please select either a course or a live batch.']);
         }
 
-        $price = 0;
         if (!empty($data['batch_id'])) {
             $batch = \App\Models\LiveClassBranch::findOrFail($data['batch_id']);
             $price = $batch->is_standalone ? $batch->price : ($batch->course->price ?? 0);
-            $data['course_id'] = $data['course_id'] ?? $batch->course_id;
         } elseif (!empty($data['course_id'])) {
             $course = Course::findOrFail($data['course_id']);
             $price = $course->price;
@@ -181,6 +179,14 @@ class AdmissionController extends Controller
 
         if ($price > 0) {
             return redirect()->route('admissions.checkout', $admission->id)->with('info', 'Please complete the payment to start learning.');
+        }
+
+        // Auto-sync to legacy enrollment table for free courses
+        if ($admission->status === 'approved' && $admission->course_id) {
+            \App\Models\Enrollment::updateOrCreate(
+                ['user_id' => $admission->user_id, 'course_id' => $admission->course_id],
+                ['batch_id' => $admission->batch_id, 'status' => 'active', 'progress' => 0]
+            );
         }
 
         return redirect()->route('admissions.index')->with('success', 'You have been enrolled successfully!');
@@ -288,6 +294,14 @@ class AdmissionController extends Controller
 
         // Automatically Approve
         $admission->update(['status' => 'approved']);
+
+        // Sync to legacy enrollment table
+        if ($admission->course_id) {
+            \App\Models\Enrollment::updateOrCreate(
+                ['user_id' => $admission->user_id, 'course_id' => $admission->course_id],
+                ['batch_id' => $admission->batch_id, 'status' => 'active', 'progress' => 0]
+            );
+        }
 
         return redirect()->route('admissions.index')->with('success', 'Payment successful! Welcome to the course.');
     }

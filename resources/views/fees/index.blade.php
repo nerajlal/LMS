@@ -91,9 +91,16 @@
                                     <div>
                                         <div class="text-[14px] font-[900] text-navy leading-tight mb-1 group-hover:text-primary transition-colors uppercase leading-none">{{ $fee->course->title ?? 'Platform Access' }}</div>
                                         <div class="flex flex-wrap items-center gap-2 mt-1.5">
-                                            <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">Batch: {{ $fee->user->admissions->where('course_id', $fee->course_id)->first()?->batch?->name ?? 'Sync Pending' }}</span>
+                                            @php 
+                                                $linkedAdmission = $fee->user->admissions->where('course_id', $fee->course_id)->first();
+                                                $batchName = $linkedAdmission?->batch?->name ?? 'Self-Paced Access';
+                                            @endphp
+                                            <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest flex items-center gap-1">
+                                                <i class="bi {{ $linkedAdmission?->batch_id ? 'bi-broadcast text-primary' : 'bi-play-circle-fill' }}"></i>
+                                                {{ $batchName }}
+                                            </span>
                                             <span class="hidden md:inline w-1 h-1 bg-slate-300 rounded-full"></span>
-                                            <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">ID: #FE-{{ str_pad($fee->id, 5, '0', STR_PAD_LEFT) }}</span>
+                                            <span class="text-[9px] text-slate-400 font-[800] uppercase tracking-widest">Invoiced: #FE-{{ str_pad($fee->id, 5, '0', STR_PAD_LEFT) }}</span>
                                         </div>
                                     </div>
                                     <div class="md:hidden">
