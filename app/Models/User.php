@@ -25,6 +25,8 @@ class User extends Authenticatable
         'whatsapp_number',
         'linkedin_url',
         'is_active',
+        'is_admin',
+        'is_trainer',
     ];
 
     /**

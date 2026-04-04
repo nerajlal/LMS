@@ -58,8 +58,10 @@
         <div x-show="activeTab === 'ongoing'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="space-y-6">
             @forelse($inProgress as $admission)
                 <div class="group bg-white rounded-[12px] border border-border shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col md:flex-row items-stretch">
-                    <div class="relative w-full md:w-[280px] h-[200px] md:h-auto overflow-hidden shrink-0">
-                        <img src="{{ $admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600' }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                    <div class="relative w-full md:w-[280px] h-[200px] md:h-auto overflow-hidden shrink-0 bg-gradient-to-br from-navy to-slate-800">
+                        <img src="{{ $admission->course?->thumbnail ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600' }}" 
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-90"
+                             onerror="this.style.display='none'">
                         <div class="absolute inset-0 bg-gradient-to-r from-navy/60 to-transparent flex flex-col justify-end p-6">
                             <span class="inline-flex px-3 py-1 bg-primary text-white text-[9px] font-[900] uppercase tracking-widest rounded-full shadow-lg w-fit">
                                 Self-Paced
@@ -108,8 +110,10 @@
         <div x-show="activeTab === 'done'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" class="grid grid-cols-1 md:grid-cols-2 gap-8">
             @forelse($completed as $admission)
                 <div class="bg-white p-6 rounded-[12px] border border-border shadow-sm flex items-center gap-6 group hover:border-emerald-500/20 transition-all">
-                    <div class="w-24 h-24 rounded-[12px] overflow-hidden shrink-0 grayscale group-hover:grayscale-0 transition-all shadow-md">
-                        <img src="{{ $admission->course?->thumbnail }}" class="w-full h-full object-cover">
+                    <div class="w-24 h-24 rounded-[12px] overflow-hidden shrink-0 grayscale group-hover:grayscale-0 transition-all shadow-md bg-gradient-to-br from-navy to-slate-800">
+                        <img src="{{ $admission->course?->thumbnail }}" 
+                             class="w-full h-full object-cover opacity-90"
+                             onerror="this.style.display='none'">
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="text-[10px] font-[900] text-emerald-500 uppercase tracking-widest mb-1">Course Completed</div>

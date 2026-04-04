@@ -92,7 +92,7 @@
         @endif
     @else
         <!-- AUTH SIDEBAR VIEW (EXACT MATCH) -->
-        <div class="min-h-screen flex" x-data="{ sidebarOpen: window.innerWidth > 768 }">
+        <div class="min-h-screen flex" x-data="{ sidebarOpen: window.innerWidth >= 1024 }">
             
             <!-- Backdrop for Mobile Overlay -->
             <div x-show="sidebarOpen && window.innerWidth < 768" 

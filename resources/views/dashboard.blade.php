@@ -86,9 +86,10 @@
                 <div class="p-4 flex-1">
                     @forelse($enrolledCourses as $course)
                     <div class="group bg-slate-50/30 hover:bg-white rounded-[14px] border border-transparent hover:border-border hover:shadow-xl p-3 mb-3 last:mb-0 transition-all duration-500 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-5">
-                        <div class="relative w-full md:w-[120px] aspect-video md:h-[75px] rounded-[10px] md:rounded-[12px] overflow-hidden shrink-0 shadow-lg">
+                        <div class="relative w-full md:w-[120px] aspect-video md:h-[75px] rounded-[10px] md:rounded-[12px] overflow-hidden shrink-0 shadow-lg bg-gradient-to-br from-navy to-slate-800">
                             <img src="{{ $course['thumbnail'] ?: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=300' }}" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90"
+                                 onerror="this.style.display='none'">
                             <div class="absolute inset-0 bg-navy/20 group-hover:bg-transparent transition-colors"></div>
                         </div>
                         <div class="flex-1 w-full min-w-0">
