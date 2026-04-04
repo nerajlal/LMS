@@ -118,11 +118,27 @@
                     <div class="flex-1 min-w-0">
                         <div class="text-[10px] font-[900] text-emerald-500 uppercase tracking-widest mb-1">Course Completed</div>
                         <h4 class="text-lg font-[800] text-navy truncate group-hover:text-emerald-600 mb-2">{{ $admission->course?->title }}</h4>
-                        <div class="flex items-center gap-4 text-[12px] font-[600] text-muted">
+                        <div class="flex flex-col md:flex-row items-center gap-3 text-[12px] font-[600] text-muted">
                             @if($admission->certificate_path)
-                                <a href="{{ asset('storage/' . $admission->certificate_path) }}" target="_blank" class="flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 hover:underline">
-                                    <i class="bi bi-award-fill text-lg"></i> Download Certificate
-                                </a>
+                                <div class="flex items-center gap-2 w-full md:w-auto">
+                                    <a href="{{ asset('storage/' . $admission->certificate_path) }}" target="_blank" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-[10px] text-[10px] font-[900] uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg active:scale-[0.95]">
+                                        <i class="bi bi-award-fill text-sm"></i> Download
+                                    </a>
+                                    
+                                    @php
+                                        $linkedInUrl = "https://www.linkedin.com/profile/add" . 
+                                            "?startTask=CERTIFICATION_NAME" . 
+                                            "&name=" . urlencode($admission->course?->title) . 
+                                            "&organizationName=" . urlencode("The Ace India") . 
+                                            "&issueYear=" . $admission->updated_at->year . 
+                                            "&issueMonth=" . $admission->updated_at->month . 
+                                            "&certUrl=" . urlencode(asset('storage/' . $admission->certificate_path)) . 
+                                            "&certId=" . $admission->id;
+                                    @endphp
+                                    <a href="{{ $linkedInUrl }}" target="_blank" class="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-[#0077b5] text-white rounded-[10px] text-[10px] font-[900] uppercase tracking-widest hover:bg-[#005c8a] transition-all shadow-lg active:scale-[0.95]">
+                                        <i class="bi bi-linkedin text-sm"></i> Share 
+                                    </a>
+                                </div>
                             @elseif($admission->latestExamResult && $admission->latestExamResult->status === 'passed')
                                 <span class="flex items-center gap-2 text-primary font-[900] uppercase tracking-widest text-[10px]">
                                     <i class="bi bi-hourglass-split animate-spin-slow"></i> Processing Certificate
