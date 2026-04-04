@@ -70,14 +70,23 @@ class AdminTrainerController extends Controller
     /**
      * Delete a trainer record.
      */
-    public function destroy(User $trainer)
+    public function destroy(Request $request, User $trainer)
     {
         if (!$trainer->is_trainer) {
             abort(403, 'Unauthorized action.');
         }
 
+        // Handle Optional Purge
+        if ($request->has('delete_batches')) {
+            \App\Models\LiveClassBranch::where('trainer_id', $trainer->id)->delete();
+        }
+
+        if ($request->has('delete_courses')) {
+            \App\Models\Course::where('instructor_name', $trainer->name)->delete();
+        }
+
         $trainer->delete();
 
-        return redirect()->route('admin.trainers.index')->with('success', 'Trainer account has been purged from the system.');
+        return redirect()->route('admin.trainers.index')->with('success', 'Trainer account and selected content have been purged.');
     }
 }
