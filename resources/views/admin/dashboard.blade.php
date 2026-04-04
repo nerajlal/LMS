@@ -96,11 +96,11 @@
                                 <td class="px-6 py-5">
                                     <div class="text-[14px] font-[800] text-navy group-hover:text-primary transition-colors leading-tight">{{ $admission->user->name }}</div>
                                     <div class="text-[10px] text-slate-400 font-[700] uppercase tracking-widest mt-1.5 md:hidden">
-                                        {{ $admission->course->title }}
+                                        {{ $admission->course?->title ?? 'Live Batch Program' }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-5 hidden md:table-cell">
-                                    <div class="text-[13px] font-[600] text-slate-500 truncate max-w-[200px]">{{ $admission->course->title }}</div>
+                                    <div class="text-[13px] font-[600] text-slate-500 truncate max-w-[200px]">{{ $admission->course?->title ?? 'Live Batch Program' }}</div>
                                 </td>
                                 <td class="px-6 py-5">
                                     <span class="inline-flex px-3 py-1 bg-orange-50 text-primary rounded-[6px] text-[10px] font-[900] uppercase tracking-widest border border-orange-100/50">

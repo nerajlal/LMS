@@ -115,7 +115,7 @@ Route::middleware(['auth', AdminMiddleware::class])->prefix('admin')->name('admi
 
     // Fees
     Route::get('fees', [AdminFeeController::class, 'index'])->name('fees.index');
-    Route::post('fees/{fee}/mark-paid', [AdminFeeController::class, 'markPaid'])->name('fees.markPaid');
+    Route::post('fees/{fee}/mark-paid', [AdminFeeController::class, 'markPaid'])->name('fees.mark-paid');
 
     // Live Classes
     Route::resource('live-classes', AdminLiveClassController::class);
